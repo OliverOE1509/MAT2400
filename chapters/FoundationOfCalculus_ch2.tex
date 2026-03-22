@@ -1,0 +1,534 @@
+% !TeX spellcheck = nb_NO
+% Kommentaren ovenfor gir instruks til editoren din om at den skal bruke norsk stavekontroll. Dette fungerer bl.a. i TeXstudio.
+
+\documentclass[a4paper,norsk]{article}
+% Norsk orddeling
+\usepackage[norsk]{babel}
+% AMS-pakkene er nyttige
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+% For å definere lister, som f.eks. deloppgaver
+\usepackage{enumitem}
+% Inneholder mye nyttig, slik som \coloneqq
+\usepackage{mathtools}
+% Penere kalligrafiske fonter
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{mathabx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{ifthen}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+\tcbset{before upper=\par, after upper=\par} % allows itemize and enumerate inside boxes
+
+\usepackage{hyperref}
+
+
+
+\tcbset{
+  % Better page breaking for all tcolorbox environments
+  enhanced,
+  breakable,
+  before skip=5pt plus 2pt minus 1pt,
+  after skip=5pt plus 2pt minus 1pt,
+  parbox=false,
+}
+\newtcbtheorem[]{definitionbox}{Definisjon}{
+  colback=blue!3,
+  colframe=blue!70!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{def}
+
+\newtcbtheorem[]{theorembox}{Teorem}{
+  colback=green!3,
+  colframe=green!50!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  arc=2mm,
+  enhanced,
+  breakable
+}{thm}
+
+\newtcbtheorem[]{oppgavebox}{Oppgave}{
+  colback=gray!5,
+  colframe=black!60,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  parbox=false
+}{oppg}
+
+\newtcolorbox{sectionbox}[1][]{
+  colback=white,
+  colframe=black!70,
+  boxrule=0.7pt,
+  arc=3mm,
+  top=2mm, bottom=2mm, left=2mm, right=2mm,
+  title=#1,
+  enhanced,
+  breakable
+}
+
+\newtcbtheorem[]{corollarybox}{Korollar}{
+  colback=purple!5,
+  colframe=purple!60!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip
+}{cor}
+
+\newtcbtheorem[]{lemmabox}{Lemma}{
+  colback=orange!5,
+  colframe=orange!70!black,
+  fonttitle=\bfseries,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{lem}
+
+\newtcbtheorem[]{propositionbox}{Proposisjon}{
+  colback=cyan!5,
+  colframe=cyan!60!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{prop}
+
+\newtcbtheorem[]{proofbox}{Bevis}{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=black,
+  title style={opacity=0.9},
+  boxrule=0.6pt,
+  arc=2mm,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  parbox=false, % Viktig for sidebryting
+  segmentation style={black,solid,opacity=0.2,line width=0.5pt}
+}{proof}
+
+\newlist{suboppgave}{enumerate}{1}
+\setlist[suboppgave,1]{
+  label=\textbf{(\alph*)},
+  ref=\theenumi\alph*,
+  leftmargin=1.5em,
+  itemsep=0.4em,
+  topsep=0.3em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+
+
+\setcounter{secnumdepth}{2}  % Sections and subsections numbered
+
+% Python style  
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    numbers=left,
+    frame=single
+}
+
+% Bruk bedre symboler for ≥, ≤, epsilon og phi
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\newcommand{\eps} {\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+% Definer de vanligste mengdene og funksjonene
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+% \L er definert som noe annet fra før av, så vi må redefinere \L
+\renewcommand{\L}{\mathcal{L}}
+% Rommet av polynomer
+\newcommand{\Pol}{{\mathcal{P}}}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Image}{im}
+\DeclareMathOperator{\Kernel}{ker}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\Diag}{diag}
+\DeclareMathOperator{\Proj}{proj}
+\newcommand{\basis}{{\mathcal{B}}}
+\newcommand{\basiss}{{\mathcal{C}}}
+\newcommand{\basisss}{{\mathcal{D}}}
+
+\newtcolorbox{algoritme}[1]{
+  title=Algoritme~#1,
+  colback=white,
+  colframe=black,
+  boxrule=0.5pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=1mm,
+  bottom=1mm
+}
+
+% Definer oppgavemiljøet
+\newenvironment{oppgave}[1]%
+	{\trivlist{}\item\relax\textbf{Løsning på #1.}\medspace}%
+	{\endtrivlist}
+% Deloppgavelister
+\newlist{deloppgave}{enumerate}{1}
+\setlist[deloppgave,1]{label=(\textbf{\alph*}),align=left}
+
+\title{Real Analysis \\ MAT2400 University of Oslo, Spring 2026}
+\author{Oliver Ekeberg}
+
+\begin{document}
+\tableofcontents
+
+
+\section*{2.1 Epsilon Delta and all that }
+\addcontentsline{toc}{section}{Epsilon Delta and all that}
+
+
+
+\section*{2.2 Completeness }
+\addcontentsline{toc}{section}{Completeness}
+
+
+The completeness principle is as follows;
+
+Assume that A is a nonempty subset of $ \mathbb{R} $. We say that $ A $ is bounded above if there is a number $ b \in \mathbb{R} $ such that $ b \geq a $  for all $ a \in A $, and we say that A is bounded below if there is a number $ c \in \mathbb{R} $ such that $ c \leq a $ for all $ a \in A $. We call $ b $ and $ c $ an upper and lower bound of A.
+
+If $ b $ is an upper bound for A, all larger numbers will also be upper bounds. How far can we push this? Is there a least upper bound, an upper bound $ d $ such that $ d < b $ for all other upper bounds $ b $ ?
+
+\begin{definitionbox}{The completeness principle}{}
+Every nonempty subset $ A $ of $ \mathbb{R} $ that is bounded above has a least upper bound. 
+
+The least upper bound of A is called the \textit{supremum} of A, and is denoted
+\[
+    sup A
+\]
+
+We shall sometimes use this notion, even when A is not bounded above, we then mean that 
+\[
+    sup A = \infty
+\]
+This is just a short way of expressing that A stretches all the way to $ \infty $. 
+\end{definitionbox}
+
+\begin{propositionbox}{2.2.1}{}
+Every non empty subset $ A $ of $ \mathbb{R} $ that is bounded below, as a greatest lower bound. This is called the infimum of A
+\[
+    inf A
+\]
+When A is not bounded below, i.e. it can be stretched no matter what, we say that 
+\[
+    inf A = - \infty
+\]
+\end{propositionbox}
+
+Examples
+
+\begin{enumerate}
+  \item $ A = \left[ 0, 1 \right]  $: We have $ sup A  = 1$ and $ inf A  = 0$. Note that both $ sup A $ and $ inf A $  are elements of A
+  \item $ A = \left( 0, 1 \right] $: We have $ sup A = 1 $ and $ inf A = 0 $, but note that $ sup A \in A $ and $ inf A \notin A $ 
+  \item $ A = \mathbb{N} $: We have $ sup A = \infty $ and $ inf A = 1 $. In this case, $ sup A \notin A $, since $ \infty $ isnt even a real number,  and $ inf A \in  A $ 
+\end{enumerate}
+
+
+The completeness principle tells us that a set $ A $ is bounded if there is a \textit{real} number that "surrounds" the set $ A $
+
+Another example:
+The set 
+\[
+    A = \left\{ x \in \mathbb{R} : x^2 < 2 \right\} 
+\]
+has a least upper bound of $ \sqrt{ 2 } $. Although $ \sqrt{ 2 } $ is not a part of A, it marks where the set $ A $ ends. 
+
+Consider
+\[
+    B = \left\{ x \in  \mathbb{Q} : x^2 < 2 \right\} 
+\]
+When we insist on working with $ \mathbb{Q} $, the least upper bound of $ \sqrt{ 2 } $ doesnt come natural, because $ \sqrt{ 2 } $ is not a rational number.
+
+
+
+
+Monotone sequences:
+
+A sequence $ \left\{ a_n \right\}  $ of real numbers, is increasing if $ a_{n+1} \geq a_n \: \forall n $, and its decreasing if $ a_{n+1} \leq a_n \: \forall n $. We say a sequence. is monotone if its either increasing or decreasing. We also say that $ \left\{ a_n \right\}  $ is bounded if theres a number $ M \in \mathbb{R} $ such that $ \left| a_n \right| \leq M \: \forall n  $
+
+\begin{theorembox}{2.2.2}{}
+Every monotone, bounded sequence in $ \mathbb{R} $ converges to a number in $ \mathbb{R} $ 
+
+\begin{proofbox}{2.2.2}{}
+  Consider an increasing, bounded sequence $ \left\{ a_n \right\}  $. Since this is bounded, the set consisting of all elements in the sequcen, is also bounded.
+  \[
+      A = \left\{ a_1, a_2, ..., a_n, ... \right\} 
+  \]
+  Therefore, there exists a least upper bound $ a = sup A $. To show that the sequence $ \left\{ a_n \right\}  $ converges to $ a $, must show that 
+  \[
+      \forall \epsilon > 0 \: \exists N \in \mathbb{N} \text{ such that } \left| a_n - a \right| < \epsilon  \: \forall  n\geq N
+  \]
+  As a is the least upper bound, $ a - \epsilon  $ cant be a least upper bound. Therefore, there exists an $ a_N $ such that $ a_N > a - \epsilon  $. Since the sequence is increasing, this means that $ a - \epsilon < a_n \leq a \: \forall n \geq N $. And hence, $ \left| a_n - a \right| < \epsilon  $ 
+  
+\end{proofbox}
+\end{theorembox}
+
+Given a sequence $ \left\{ a_k \right\}  $ of real numbers, we define two new sequences $ \left\{ M_n \right\}  $ and $ \left\{ m_n \right\}  $ given by
+\[
+    M_n = sup \left\{ a_k : k \geq n \right\} 
+\]
+and
+\[
+    m_n = inf \left\{ a_k : k \geq n \right\} 
+\]
+$ \left\{ M_n \right\}  $ measures how large the sequence $ \left\{ a_k \right\}  $ can become after n, and $ \left\{ m_n \right\}  $ measure in the same way how small $ \left\{ a_k \right\}  $ can become. 
+
+Observe that $ \left\{ M_n \right\}  $ is decreasing, because we take supremum over smaller and smaller sets. While $ \left\{ m_n \right\}  $ is increasing, because we take infimum over smaller and smaller sets. The logic behind this is, if $ A \subseteq B $, then $ B $ has more, and larger elements than $ A $, thus there is a greater number required for the supremum of $ B $. If we take smaller and smaller subsets of A, we get smaller and smaller supremums.
+
+Why is $ \left\{ m_n \right\}  $ an increasing sequence? because if we again start with a largest set, the smaller and smaller subsets of that set, contains fewer and smaller elements. From below, this means that the smallest value in the preceeding subsets, grow larger. Thus, $ \left\{ m_n \right\}  $ is an increasing sequence.
+
+
+
+We now define the \textit{limit superior} of $ \left\{ a_n \right\}  $ to be
+\[
+    \lim_{n \to \infty} \sup a_n = \lim_{n \to \infty} M_n 
+\]
+and the \textit{limit inferior} to be
+\[
+    \lim_{n \to \infty} \inf a_n = \lim_{n \to \infty} m_n
+\]
+
+
+\begin{propositionbox}{2.2.3}{}
+Let $ \left\{ a_n \right\}  $ be a sequence in real numbers. Then
+\[
+    \lim_{n \to \infty} a_n = b \;  \iff \; \lim_{n \to \infty} \sup a_n = \lim_{n \to \infty} \inf a_n = b
+\]
+
+\begin{proofbox}{2.2.3}{}
+  Assume first that $ \lim_{ n \to \infty} \sup a_n = \lim_{n \to \infty} \inf a_n = b   $. Since $ \lim_{n \to \infty} sup a_n = \lim_{n \to \infty} M_n  $ and $ \lim_{n \to \infty} inf a_n = \lim_{n \to \infty} m_n $, we have that $ m_n \leq a_n \leq M_n $, and this obviously means that $ \lim_{n \to \infty} a_n = b  $ 
+
+
+  Assume now that $ \lim_{n \to \infty} a_n = b $. This means that $ \forall \epsilon > 0 \: \exists N \in  \mathbb{N} $ such that $ \left| a_n - b \right| < \epsilon \: \forall n \geq N $. In other words, this means that
+  \[
+      b - \epsilon  < a_n < b + \epsilon 
+  \]
+  for all $ n \geq N $. But then
+  \[
+      b - \epsilon \geq m_n < b + \epsilon \\
+      b - \epsilon  < M_n \geq b + \epsilon 
+  \]
+  and since this holds for every $ \epsilon > 0 $, we have $ \lim_{n \to \infty} \sup a_n = \lim_{n \to \infty} \inf a_n = b  $   
+\end{proofbox}
+\end{propositionbox}
+
+
+
+
+We now go to \textbf{Cauchy sequences}. We extend the notion of completeness from $ \mathbb{R}   $ to $ \mathbb{R}^m $ 
+
+
+\begin{definitionbox}{2.2.4}{}
+A sequence $ \left\{ x_n \right\}  \in \mathbb{R}^n $ is a Cauchy sequence if for every $ \epsilon >0 $, there is an $ N \in \mathbb{N} $  such that $ \left\lVert x_n - x_k \right\rVert < \epsilon  $ when $ n, k\geq N $ 
+\end{definitionbox}
+
+Intuitively, a Cauchy sequence is a sequence where the terms are squeezed tighter and tighter the further out you go. 
+
+\begin{theorembox}{2.2.5}{}
+Completeness of $ \mathbb{R}^m $ 
+A sequence $ \left\{ x_n \right\} \in \mathbb{R}^m  $ converges if and only if its a Cauchy sequence.
+\end{theorembox}
+
+
+We will use the completeness principle to prove the theorem above, first for $ \mathbb{R} $ and then for $ \mathbb{R}^m $  . Note that this doesnt hold for $ \mathbb{Q} $ or $ \mathbb{Q}^m $  as the rational numbers contains "holes" inside its space. take for example $ \sqrt{ 2 } $ which is a irrational number. The sequence
+
+\[
+    1, 1.4, 1.41, 1.414, 1.4142, ...
+\]
+of approximations is a cauchy sequence in $ \mathbb{Q} $ that doesnt converge to a number in $ \mathbb{Q} $
+
+
+\begin{propositionbox}{2.2.6}{}
+All convergent sequences in $ \mathbb{R}^m $ are cauchy sequences
+
+\begin{proofbox}{2.2.6}{}
+  Assume that $ \left\{ a_n \right\}  $ converges to $ a $. Given $ \epsilon > 0 $, there is an $ N \in \mathbb{N} $ such that $ \left\lVert a_n - a \right\rVert < \epsilon \: \forall n \geq N $. If $ n, k \geq N $, we then have
+  \[
+      \left\lVert a_n - a_k \right\rVert = \left\lVert \left( a_k - a \right) + \left( a - a_n \right)  \right\rVert \leq \left\lVert a_k - a \right\rVert  + \left\lVert a - a_n \right\rVert < \epsilon + \epsilon = 2 \epsilon 
+  \]
+  and hence, $ \left\{ a_n \right\}  $ is a cauchy sequence
+  
+\end{proofbox}
+\end{propositionbox}
+
+\begin{lemmabox}{2.2.7}{}
+Every Cauchy sequence in $ \mathbb{R} $ is bounded
+
+\begin{proofbox}{2.2.7}{}
+  We can use definiton of cauchy sequences, and get that with $ \epsilon =1 $. According to definition, there is an $ N \in \mathbb{N} $  such that $ \left| a_n - a_k  \right| < 1 $ whenever $ n, k \geq N $. In particular, $ \left| a_n - a_N \right| < 1 \: \forall n \geq N  $. This means that 
+  \[
+      K = max \left\{ a_1, a_2, ..., a_{N-1}, a_N -1  \right\} 
+  \]
+  is an upper bound for the sequence and that 
+  \[
+      k = min \left\{ a_1, a_2, ..., a_{N-1}, a_N -1  \right\} 
+  \]
+  is a lower bound.
+  
+\end{proofbox}
+\end{lemmabox}
+
+We can now complete the first part of our program. The proof relies on the completeness prnciple through theorem 2.2.2 and proposition 2.2.3
+
+\begin{propositionbox}{2.2.8}{}
+All Cauchy sequences in $ \mathbb{R} $ converge
+
+\begin{proofbox}{2.2.8}{}
+  Let $ \left\{ a_n \right\}  $ be a cauchy sequence. Since $ \left\{ a_n \right\}  $ is bounded, the upper and lower limits
+  \[
+      M = \lim_{n \to \infty } \sup a_n \text{ and } m = \lim_{n \to \infty } \inf a_n  
+  \]
+  are finite, and according to proposition 2.2.3, it suffices to show that $ M = n $
+  
+  Given any $ \epsilon >0 \: \exists N \in \mathbb{N} $such that $ \left| a_n - a_k \right| < \epsilon \: \forall n,k \geq N $. In particular, we have that $ \left| a_n - a_N \right| < \epsilon \: \forall n \geq N  $ and hence, $ m_k \geq a_N - \epsilon  $ and $ M_k \leq a_N + \epsilon  $   for $ k \geq N $. Consequently, $ M_k - m_k \leq 2 \epsilon  $ for all $ k,n \geq N $. This means that $ M - m \leq 2 \epsilon  $, and since $ \epsilon  $ is an arbitrary positive number, this is only possible if $ M =m $.
+\end{proofbox}
+\end{propositionbox}
+
+\begin{proofbox}{Proof of theorem 2.2.5}{}
+  As we have already proved that all convergent sequences are Cauchy sequences, it only remains to prove that any Cauchy sequence $ \left\{ a_n \right\}  $ converges. If we write out the components, we get
+  \[
+      a_n = \left( a_n^{(1)}, a_n^{(2)}, ..., a_n^{(m)} \right) 
+  \]
+  The component sequences $ \left\{ a_n^{(k)} \right\}  $ are cauchy sequences in $ \mathbb{R} $ and hence convergent to the previous result. But if the components converge, then so does the original sequence $ \left\{ a_n \right\}  $ 
+\end{proofbox}
+
+\begin{oppgavebox}{2.2.1}{}
+Explain that $ \sup \left[ 0, 1 \right) = 1 $ and $ \sup \left[ 0, 1 \right] = 1 $. 
+\begin{proofbox}{2.2.1}{}
+  We have the the least upper bound of $ \left[ 0, 1 \right)  $ is the ceiling of the set. This is defined to be $ 1 $. For the closed set $ \left[ 0, 1 \right]  $, we have that $ \sup \left[ 0, 1 \right] $ is the least upper bound. We say that the supremum is $ 1 $ in both sets, because no element in either of the two sets are bigger than $ 1 $.
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{2.2.2}{}
+Prive proposition 2.2.1. Hint, define $ B = \left\{ -a : a \in A \right\}  $ and let $ b = \sup B $. Show that $ -b $ is the greatest lower bound of A
+\begin{proofbox}{Proof of proposition 2.2.1}{}
+  Assume that $ b = \sup B $, i.e. the least upper bound of B. Since for every element $ c \in B $, we have that $ c = -a $. So $ -b $ is the least upper bound of $ A $ from the completeness principle. So $ b = \sup B = - \sup A = \inf A $, thus b is the greatest lower bound of $ A $ 
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{2.2.3}{}
+Prove theorem 2.2.2 for decreasing sequences
+
+\begin{proofbox}{2.2.3}{}
+  Consider a decreasing bounded sequence $ \left\{ a_n \right\}  $. Since its bounded, the set 
+  \[
+      A = \left\{ a_1, a_2, ..., a_n, ... \right\} 
+  \]
+  is also bounded. Thus, there exists a greatest lower bound $ a = \inf A $. $ \left\{ a_n \right\}  $ converges to $ a $ as $ n \to \infty $ if $ \forall \epsilon > 0 \exists  N \in  \mathbb{N} $ such that $ \left| a_n - a \right| < \epsilon  \: \forall  n \geq N $. This means that $ a + \epsilon  $ cant be a greatest lower bound. Thus there exists an $ a_N $ such that $ a+ \epsilon > a_N$. Since its decreasing, $ a + \epsilon > a_n \geq a $ for all $ n \geq N $. This means that $ \left| a_n - a \right| < \epsilon  $ for all $ n\geq N $, and the monotone decreasing sequence is converging to $ a = \inf A $ 
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{2.2.4}{}
+Let $ a_n = \left( -1 \right) ^n$. Find $ \lim_{n \to \infty} \sup a_n $ and $ \lim_{n \to \infty} \inf a_n $
+
+\begin{proofbox}{2.2.4}{}
+  Since $ a_n $ is an oscillating sequence that takes values inside $ \left[ -1, 1 \right]  $, more accuratelt, 
+  \[
+      a_n = \begin{cases}
+      1, n = 2k, k \in \mathbb{N} \\
+      -1, n = 2k+1, k \in \mathbb{N}
+      \end{cases}
+  \]
+  , then
+  \[
+      \lim_{n \to \infty} \sup a_n = 1 \\
+      \lim_{n \to \infty} \inf a_n = -1
+  \]
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{2.2.5}{}
+Let $ a_n = \cos( \frac{ n \pi  }{ 2 })   $. Find $ \lim_{n \to \infty} \sup a_n $ and $ \lim_{n \to \infty} \inf a_n $ 
+
+\begin{proofbox}{2.2.5}{}
+  Since 
+  \[
+      a_n = \begin{cases}
+        \cos(k \pi ) = \left( -1 \right) ^n, k \in \mathbb{N} \\
+        \cos( \frac{ \left( 2k+1 \right) \pi  }{ 2 })   = 0, k \in \mathbb{N}
+      \end{cases}
+  \]
+  we get the same result as in 2.2.4, namely that
+  \[
+      \lim_{n \to \infty} \sup a_n = 1 \\
+      \lim_{n \to \infty} \inf a_n = -1
+  \]
+
+   
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{2.2.10}{}
+Asume that $ \left\{ a_n \right\}  $ is a sequence in $ \mathbb{R}^m $ and write the terms on component form
+\[
+    a_n = \left( a_n^{(1)}, a_n^{(2)}, ..., a_n^{(m)} \right) 
+\]
+Show that $ \left\{ a_n \right\}  $ converges if and only if all component sequences $ \left\{ a_n^{(k)} \right\}, k=1, 2, ... , m  $ converge.
+
+\begin{proofbox}{2.2.10}{}
+  Assume that $ \left\{ a_n \right\}  $ converges to $ a \in \mathbb{R}^m $. This means that $ \forall \epsilon > 0 \: \exists  N \in  \mathbb{N} $ such that $ \left| a_n - a \right| < \epsilon \: \forall n \geq N  $.
+  This means that $ \forall n \geq N $ 
+  \[
+      \left| a_n - a \right| = \left| \left( a_m^{(1)} - a_1, ... a_n^{(m)} - a_m \right)  \right| < \epsilon 
+  \]
+  This happens only if $ \left| \left( a_n^{(k)} - a_k \right)  \right| < \epsilon \: \forall n \geq N $ for $ k = 1, ..., m $. Thus $ \left\{ a_n \right\}  $ only converges to $ a \in \mathbb{R}^m $ if all $ \left\{ a_n^{(k)} \right\}  $ converges to $ a_k \in \mathbb{R} $ 
+
+
+  Assume now that $ \left\{ a_n^{(k)} \right\}  $ converges to $ a_k $ for all $ k= 1, ..., m $. This means that $ \forall \epsilon > 0 \: \exists  N \in \mathbb{N} $ such that
+  \[
+      \left| a_n^{(k)} \right| < \epsilon  \: \forall  n \geq N
+  \]
+  Thus $ \forall  n\geq N $ 
+  \[
+      \left| \left( a_n^{(1)} - a_1, ..., a_n^{(m)} - a_m \right)  \right| < \epsilon \
+  \]
+  This is equivalent with stating that $ a_n = \left( a_n^{(1)}, ..., a_n^{(m)} \right)  $ converges to $ a = \left( a_1, ..., a_m \right) \in  \mathbb{R}^m $ 
+  
+  
+\end{proofbox}
+
+\end{oppgavebox}
+
+\end{document}

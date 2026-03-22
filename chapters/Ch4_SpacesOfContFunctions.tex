@@ -1,0 +1,1258 @@
+% !TeX spellcheck = nb_NO
+% Kommentaren ovenfor gir instruks til editoren din om at den skal bruke norsk stavekontroll. Dette fungerer bl.a. i TeXstudio.
+
+\documentclass[a4paper,norsk]{article}
+% Norsk orddeling
+\usepackage[norsk]{babel}
+% AMS-pakkene er nyttige
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+% For å definere lister, som f.eks. deloppgaver
+\usepackage{enumitem}
+% Inneholder mye nyttig, slik som \coloneqq
+\usepackage{mathtools}
+% Penere kalligrafiske fonter
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{mathabx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{ifthen}
+\usepackage{parskip}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+\tcbset{before upper=\par, after upper=\par} % allows itemize and enumerate inside boxes
+
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+
+\tcbset{
+  % Better page breaking for all tcolorbox environments
+  enhanced,
+  breakable,
+  before skip=5pt plus 2pt minus 1pt,
+  after skip=5pt plus 2pt minus 1pt,
+  parbox=false,
+}
+\newtcbtheorem[]{definitionbox}{Definisjon}{
+  colback=blue!3,
+  colframe=blue!70!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{def}
+
+\newtcbtheorem[]{theorembox}{Teorem}{
+  colback=green!3,
+  colframe=green!50!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  arc=2mm,
+  enhanced,
+  breakable
+}{thm}
+
+\newtcbtheorem[]{oppgavebox}{Oppgave}{
+  colback=gray!5,
+  colframe=black!60,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  parbox=false
+}{oppg}
+
+\newtcolorbox{sectionbox}[1][]{
+  colback=white,
+  colframe=black!70,
+  boxrule=0.7pt,
+  arc=3mm,
+  top=2mm, bottom=2mm, left=2mm, right=2mm,
+  title=#1,
+  enhanced,
+  breakable
+}
+
+\newtcbtheorem[]{corollarybox}{Korollar}{
+  colback=purple!5,
+  colframe=purple!60!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip
+}{cor}
+
+\newtcbtheorem[]{lemmabox}{Lemma}{
+  colback=orange!5,
+  colframe=orange!70!black,
+  fonttitle=\bfseries,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{lem}
+
+\newtcbtheorem[]{propositionbox}{Proposisjon}{
+  colback=cyan!5,
+  colframe=cyan!60!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{prop}
+
+\newtcbtheorem[]{proofbox}{Bevis}{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=black,
+  title style={opacity=0.9},
+  boxrule=0.6pt,
+  arc=2mm,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  parbox=false, % Viktig for sidebryting
+  segmentation style={black,solid,opacity=0.2,line width=0.5pt}
+}{proof}
+
+\newlist{suboppgave}{enumerate}{1}
+\setlist[suboppgave,1]{
+  label=\textbf{(\alph*)},
+  ref=\theenumi\alph*,
+  leftmargin=1.5em,
+  itemsep=0.4em,
+  topsep=0.3em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+
+
+\setcounter{secnumdepth}{2}  % Sections and subsections numbered
+
+% Python style  
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    numbers=left,
+    frame=single
+}
+
+% Bruk bedre symboler for ≥, ≤, epsilon og phi
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\newcommand{\eps} {\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+% Definer de vanligste mengdene og funksjonene
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+% \L er definert som noe annet fra før av, så vi må redefinere \L
+\renewcommand{\L}{\mathcal{L}}
+% Rommet av polynomer
+\newcommand{\Pol}{{\mathcal{P}}}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Image}{im}
+\DeclareMathOperator{\Kernel}{ker}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\Diag}{diag}
+\DeclareMathOperator{\Proj}{proj}
+\newcommand{\basis}{{\mathcal{B}}}
+\newcommand{\basiss}{{\mathcal{C}}}
+\newcommand{\basisss}{{\mathcal{D}}}
+
+\newtcolorbox{algoritme}[1]{
+  title=Algoritme~#1,
+  colback=white,
+  colframe=black,
+  boxrule=0.5pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=1mm,
+  bottom=1mm
+}
+
+% Definer oppgavemiljøet
+\newenvironment{oppgave}[1]%
+	{\trivlist{}\item\relax\textbf{Løsning på #1.}\medspace}%
+	{\endtrivlist}
+% Deloppgavelister
+\newlist{deloppgave}{enumerate}{1}
+\setlist[deloppgave,1]{label=(\textbf{\alph*}),align=left}
+
+\title{Real Analysis \\ MAT2400 University of Oslo, Spring 2026}
+\author{Oliver Ekeberg}
+
+\begin{document}
+\tableofcontents
+
+
+\section*{4.1 Modes of continuity}
+\addcontentsline{toc}{section}{4.1 Modes of continuity}
+
+
+
+
+\section*{4.2 Modes of convergence}
+\addcontentsline{toc}{section}{4.2 Modes of convergence}
+
+
+We now begin to talk about different ways a function a sequence of functions $ f_n $ can converge to $ f $. This can happen \textit{pointwise} or \textit{uniform}. 
+
+\begin{definitionbox}{4.2.1}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be two metric spaces and let $ \left( f_n \right)  $ be a sequence of functions $ f_n : X \to Y $. We say that $ \left( f_n \right)  $ converges pointwise to a function $ f: X \to Y $  if $ \left( f_n (x)\right) \to f(x) \; \forall x \in X  $. This means that for each x and each $ \epsilon >0 $ there exists an $ N \in \mathbb{N} $ such that $ d_Y \left( f_n(x), f(x) \right) < \epsilon  \; \forall n \geq N $.
+\end{definitionbox}
+
+Note that the N in the last sentence depends on x. We may need a much larger N for other x, and much smaller N for other x. If we can use the \textit{same} N for all $ x \in X $, we have uniform convergence. 
+
+\begin{definitionbox}{4.2.2}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be two metric spaces and let $ \left( f_n \right)  $ be a sequence of functions $ f_n : X \to Y $. We say that $ \left( f_n \right)  $ converges uniformly to a function $ f : X \to Y $ if for each $ \epsilon >0 $ there is an $ N \in \mathbb{N} $ such that if $ n \geq N $, then $ d_Y \left( f_n(x), f(x) \right) < \epsilon  \; \forall x \in X $.
+\end{definitionbox}
+
+Note the last element in the definition, where we say that $ d_Y \left( f_n(x), f(x) \right) < \epsilon \; \forall x \in X $ 
+
+\begin{propositionbox}{4.2.3}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be two metric spaces and let $ \left( f_n \right)  $ be a sequence of functions $ f_n : X \to Y $. For any function $ f: X \to Y $ the following are equivalent
+\begin{itemize}
+  \item $ \left( f_n \right)  $ converges uniformly to f
+  \item $ \sup \left\{ d_Y \left( f_n(x), f(x) \right) : x \in X  \right\} \to 0  $ as $ n \to \infty $ 
+\end{itemize}
+
+\begin{proofbox}{ $ i) \Rightarrow ii) $ }{}
+  Assume that $ \left( f_n \right)  $ converges uniformly to $ f $. This means that $ \forall \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ \forall n \geq N \; d_Y \left( f_n(x), f(x) \right) < \epsilon \; \forall x \in X $. Now pick $ \epsilon > 0 $. Since $ d_Y \left( f_n(x), f(x) \right) < \epsilon \; \forall x \in X $, then $ \epsilon  $ becomes an upper bound. Hence
+  \[
+      \sup \left\{ d_Y \left( f_n(x), f(x) \right) : x \in X \right\} \leq \epsilon \; \forall n \geq N
+  \]
+  And since we have picked an arbitrary $ \epsilon > 0 $, there is no reason that we can pick an even smaller $ \epsilon >0 $. Hence
+  \[
+      \sup \left\{ d_Y \left( f_n(x), f(x) \right) : x \in X \right\} \to 0 \text{ as } n \to \infty
+  \]
+  
+
+\end{proofbox}
+\begin{proofbox}{ $ ii) \Rightarrow i) $ }{}
+  We can instead prove $ \neg i) \Rightarrow \neg ii) $
+  
+  Assume that $ \left( f_n \right)  $ does not converge uniformly to $ f $. Then 
+  \[
+      \forall N \in \mathbb{N} \; \exists \epsilon > 0 \; \&  \; x' \in X  \; \text{ s.t. } \; \forall  n\geq N \; \text{ then }  d_Y \left( f_n(x'), f(x') \right) \geq \epsilon  
+  \]
+  Hence $ \sup \left\{ d_Y \left( f_n(x'), f(x') \right) : x' \in X \right\} \geq \epsilon  $ can impossibly converge to $ 0 $  as $ n \to \infty $ 
+
+  
+\end{proofbox}
+
+\begin{proofbox}{ $ ii) \Rightarrow i) $ }{}
+  Assume that $ \sup \left\{ d_Y \left( f_n(x), f(x) \right) : x \in X \right\} \to 0  $ as $ n \to \infty $. This means that $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $   such that $ \forall n \geq N  $ and $ \forall x \in X $, then $ \sup \left\{ d_Y \left( f_n(x), f(x) \right) : x \in X \right\} \leq \epsilon   $. But then $ d_Y \left( f_n(x), f(x) \right) < \epsilon \; \forall n \geq N $ and $ \forall x \in X $. Hence $ \left( f_n \right)  $ converges uniformly to $ f $ 
+\end{proofbox}
+\end{propositionbox}
+
+
+
+\begin{propositionbox}{4.2.4}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be two metric spaces and assume that $ \left( f_n \right)  $ is a sequence of continuous functions $ f_n : X \to Y $ converging uniformally to a function f. Then f is continuous
+
+\begin{proofbox}{4.2.4}{}
+  Let $ a \in X $. Given $ \epsilon > 0 $, we must find a $ \delta > 0 $ such that when $ d_X \left( x, a \right) < \delta  \Rightarrow d_Y \left( f(x), f(a) \right) < \epsilon  $. 
+
+  Since $ \left( f_n \right)  $ converges uniformally, then $ \exists N \in \mathbb{N} $ such that $ \forall n \geq N $ then $ d_Y \left( f_n(x), f(x) \right) < \epsilon \; \forall  x \in X $. Since f is continuous, its continuous at all $ x \in X $, and since $ a \in X $, f is continuous at $ a $. This means that $ \exists \delta > 0 $ such that $ d_X \left( x, a \right) < \delta \Rightarrow d_Y \left( f(x), f(a) \right) < \epsilon  $. This means that
+
+  \[
+      d_Y \left( f(x), f(a) \right) \leq d_Y \left( f(x), f_n(x) \right) + d_Y \left( f_n(x), f_n(a) \right) + d_Y \left( f_n(a), f(a) \right) < 3 \epsilon
+  \]
+  Hence f is continous at $ a \in X \forall n \geq N $ 
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{oppgavebox}{4.2.1}{}
+Let $ f_n : \mathbb{R} \to \mathbb{R} $ be defined by $ f_n(x) = \frac{ x }{ n } $. Show that $ \left( f_n \right)  $ converges pointwise, but not uniformly to 0
+
+\begin{proofbox}{4.2.1}{}
+  Pick $ x' \in \mathbb{R} $. Then $ f \left( x' \right) = \frac{ x' }{ n } $. We have that 
+  \[
+      \lim_{n \to \infty} f_n(x') = \lim_{n \to \infty} \frac{ x' }{ n } = 0 
+  \]
+  Hence $ f_n(x) \to f(x) $ as $ n \to \infty$
+  
+  
+
+  To show that $ f_n $ is not uniformly convergent, let $ \epsilon := \frac{ 1 }{ 2 } $. Then $ \forall n \in \mathbb{N} $, we have that $ f_n(n) = 1 $. So $ \forall n > 0 $  we have that 
+  \[
+      \left| 1 - 0 \right| = 1 > \frac{ 1 }{ 2 } = \epsilon 
+  \]
+  Since $ \mathbb{N} \subseteq \mathbb{R} $, then there is a point when $ n \in \mathbb{R} $  where $ \left( f_n \right)  $ does not converge to $ 0 \; \forall x \in \mathbb{R} $.
+  
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.2.2}{}
+Let $ f_n : \left( 0, 1 \right) \to \mathbb{R} $ be defined by $ f_n(x) = x^n $. Show that $ \left( f_n \right)  $ converges pointwise but not uniformly to 0.
+
+\begin{proofbox}{4.2.2}{}
+  $ \left( f_n \right)  $ converges uniformly to 0 if $ \forall \epsilon > 0 \exists N \in \mathbb{N} $ such that $ \forall n \geq N \; d \left( f_n(x), 0 \right) < \epsilon \; \forall x \in X$. Let $ \epsilon > 0 $, then since $ x \in \left( 0, 1 \right)  $, we get that $ \lim_{n \to \infty} x^n = 0 $. Hence $ \exists N \in  \mathbb{N} $ such that $ \forall n \geq N \; \left| f_n(x) - 0 \right| < \epsilon  $ and $ \left( f_n \right)  $  converges pointwise to 0
+
+
+  To prove that $ \left( f_n \right)  $ is not uniformly convergent to 0, we see that from 4.2.3, uniform convergence is equivalent with 
+  \[
+      \sup \left\{ \left| f_n(x) - 0 \right| : x \in \left( 0, 1 \right)  \right\} \to 0 \text{ as } n \to \infty
+  \]
+
+  We have that $ \sup \left\{ x^n : x \in \left( 0, 1 \right)  \right\} = 1^n $. And since, $ \lim_{n \to \infty} 1^n = 1 \neq 0 $, we have non-uniform converge for $ \left( f_n \right)  $ towards 0.
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.2.5}{}
+Let $ f_n : \mathbb{R} \to \mathbb{R} $ and assume that the sequence $ \left( f_n \right)  $ of continous functions converges uniformly to $ f : \mathbb{R} \to \mathbb{R} $ on all intervals $ \left[ -k, k \right] , k \in \mathbb{N} $ . Show that f is continuous.
+
+\begin{proofbox}{4.2.5}{}
+  Let $ k \in \mathbb{N} $. Then $ f_n : \mathbb{R} \to \mathbb{R} $ converges uniformly to $ f: \mathbb{R} \to \mathbb{R} $ on $ \left[ -k, k \right]  $. This means that
+  \[
+      \sup_{x \in \left[ -k, k \right] } \left| f_n(x) - f(x) \right| \to 0 \text{ as } n \to \infty
+  \]
+  
+  Since $ k \in \mathbb{N} $, we can pick $ k := n $  and automatically get that f is continuous on all of $ \mathbb{R} $ 
+\end{proofbox}
+
+\begin{proofbox}{Last proof is wrong, corrected}{}
+  Let $ k \in \mathbb{N} $ be such that $ x_0 \in \left[ -k, k \right]  $. Since $ \left( f_n\right)  $ is uniformly convergent to $ f $ then given $ \epsilon  >0 \; \exists N \in \mathbb{N} $ s.t. $ \forall n \geq N \; \left| f_n(x) - f(x) \right| < \epsilon  \; \forall x \in \left[ -k, k \right]  $. 
+
+  Since $ \left( f_n \right)  $ is a sequence of continuous functions, then $ \forall n \in \mathbb{N} $, we have that $ \exists \delta > 0 $  s.t. $ \forall x \in \left[ -k, k \right] \; \left| x - x_0  \right| < \delta  \Rightarrow \left| f_n(x) - f_n(x_0) \right| < \epsilon  $.
+
+  Furthermore, since $ \left( f_n \right) \to f $ uniformly on $ \left[ -k, k \right]  $, then 
+  \[
+      \left| f_n(x_0) - f(x_0) \right| \leq \sup_{ x \in \left[ -k, k \right] } \left| f_n(x) - f(x) \right| < \epsilon 
+  \]
+
+
+
+  Now show that $ f  $ is continous at $ x_0 $. We are already given $ \epsilon > 0 \; \text{ and } \; \delta > 0 $, so $ \forall n \geq N $ we have that when $ \left| x - x_0 \right| < \delta  $ 
+  \[
+      \left| f(x) - f(x_0) \right| \leq \left| f(x) - f_n(x) \right| + \left| f_n(x) - f_n(x_0) \right| + \left| f_n(x_0) - f(x_0)  \right| < 3 \epsilon 
+  \]
+  
+
+  Now my only question is, isnt $ \mathbb{R}  $ supposed to be cont on all of $ \mathbb{R} $? How to show that if f is continous at a closed set $ \left[ -k, k \right]  $, then f is continous at all of $ \mathbb{R} $?
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.2.9}{}
+Let $ \left( X, d \right)  $ be a metric space and assume that the sequence of continuous functions $ \left( f_n \right)  $ converges uniformly to f. Show that if $ \left( x_n \right)  $ is a sequence converging to x, then $ f_n(x_n) \to f(x) $ as $ n \to \infty $. Find an example which shows that this is not necessarily the case if $ \left( f_n \right)  $  converges pointwise to f.
+
+\begin{proofbox}{4.2.9}{}
+  Let $ \left(  x_n \right)  $ be a sequence converging to $ x \in X $. Show that $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ s.t. $ d \left( f_n(x_n), f(x) \right) < \epsilon \; \forall n \geq N $. Since $ \left( f_n \right)  $ converges uniformly to $ f $. This means that forall $ n \in \mathbb{N} \; f_n  $ is continuous at $ x_n $. Hence given $ \epsilon > 0 \; \exists \delta > 0  $ such that $ \forall x \in X, d \left( x, x_n \right) < \delta \Rightarrow d \left( f_n(x_n), f_n(x) \right) < \epsilon   $
+  
+  Since $ f_n $ converges uniformly to f, then given $ \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ \forall n \geq N \; d \left( f_n(x), f(x) \right) < \epsilon \; \forall x \in X $  
+
+
+  Hence we get that $ \forall n \geq N $ and given $ \epsilon > 0 $, there exists a $ \delta > 0 $   such that
+  \[
+      d \left( f_n(x_n), f(x) \right) \leq d \left( f_n(x_n), f_n(x) \right) + d \left( f_n(x), f(x) \right) < 2 \epsilon 
+  \]
+
+  Hence $ \exists N \in \mathbb{N} $ such that $ \forall n \geq N $ we have that $ d \left( f_n(x_n), f(x) \right) < 2 \epsilon  $. And hence $ f_n \left( x_n \right) \to f(x) $ as $ n \to \infty $ 
+
+
+
+
+
+  Can we find an example that show that this is not necessarily the case if $ \left( f_n \right)  $ only converges pointwise to f? 
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{Define not bounded sets}{}
+\begin{proofbox}{}{}
+  Let $ A \subseteq X $. Then A is bounded if 
+\[
+    \exists M \in \mathbb{R} \; \forall x, y \in A \; d \left( x, y \right) \leq M
+\]
+
+A is not bounded if
+\[
+    \forall M \in \mathbb{R} \; \exists x, y \in A \text{ such that } d \left( x, y \right) > M
+\]
+\end{proofbox}
+ 
+\begin{proofbox}{}{}
+  Another definition is
+  $ \exists x_0 \in A $ such that $ \forall M > 0 \; \exists x \in A $with $ d \left( x, x_0 \right) > M $. This holds because of the triangle inuequality
+  \[
+      M < d \left( x, y \right) \leq d \left( x, x_0 \right) + d \left( x_0, y \right) 
+  \]
+\end{proofbox}
+
+\begin{proofbox}{}{}
+  Define $ \sup_{x, y \in A} \left\{ d \left( x, y \right)  \right\}  $, then $ A \subseteq X $ of metric space $ \left( X, d \right)$ is unbounded $ \iff  \sup_{x, y \in A} \left\{ d \left( x, y \right)  \right\} = \infty $ 
+\end{proofbox}
+
+\end{oppgavebox}
+
+\begin{oppgavebox}{Define a subset in metric space is not open}{}
+\begin{proofbox}{}{}
+  Let $ A \subseteq X $. A is open if
+  \[
+      \forall x \in A \; \exists \epsilon > 0 \text{ s.t. } B \left( x, \epsilon \right) \subseteq A 
+  \]
+
+  Equivilantly, $ A \subseteq X $ is not open if
+  \[
+      \forall \epsilon > 0 \; \exists x \in A \text{ s.t. } B \left( x, \epsilon   \right) \not\subseteq A 
+  \]
+\end{proofbox}
+
+\begin{proofbox}{}{}
+  $ A \subseteq X $ is not open if $ A^c $ is not closed.
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{Define a subset in metric space is not closed}{}
+\begin{proofbox}{}{}
+  Let $ A \subseteq X $ be closed, then 
+  \[
+      \forall \left( x_n \right) \in A \text{ s.t. } x_n \to x \in X \Rightarrow x \in A
+  \]  
+
+
+  Hence A is not closed if
+  \[
+      \exists \left( x_n \right) \in A \text{ s.t. } x_n \to x \in X \not \Rightarrow x \in A
+  \]
+  
+\end{proofbox}
+
+\begin{proofbox}{}{}
+  If A is not closed, then $ A^c $ is not open
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A sequence in a metric space does not converge}{}
+\begin{proofbox}{}{}
+  Let $ \left( x_n \right)  \in  X $, then $ \left( x_n \right)  $ converges to $ x \in X $ if $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $  such that $ d \left( x_n, x \right) < \epsilon \; \forall n \geq N $ 
+
+
+  $ \left( x_n \right)  $ does not converge if $ \forall N \in \mathbb{N} \exists \epsilon >0 $ such that $ \forall  n \geq N \; d \left( x_n, x \right) \geq \epsilon  $ 
+\end{proofbox}
+
+\begin{proofbox}{}{}
+  Let $ \left( x_n \right)  $ be a sequence in $ \left( X, d \right)  $, then $ \left( x_n \right)   $ does not converge to $ x \in X $, then $ x_n \not \to x $ as $ n \to \infty $  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{Define a function from one metric space to another is discontinous at a point}{}
+
+\begin{proofbox}{}{}
+  Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be two metric spaces. Define $ f : X \to Y $. Then f is continuous at $ a \in X $ if
+  \[
+      \forall \epsilon > 0 \; \exists \delta > 0 \text{ s.t. } \forall x \in X, d_X \left( x, a \right) < \delta \Rightarrow d_Y \left( f(x), f(a) \right) < \epsilon  
+  \]
+
+
+  Then f is discontinous at $ a \in X $ if 
+
+  \[
+      \forall \delta > 0 \; \exists \epsilon > 0 \text{ s.t. } \exists x \in X \text{ with } d_X \left( x, a \right) < \delta   \Rightarrow d_Y \left( f(x), f(a) \right) \geq \epsilon 
+  \]
+  
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{Define a sequence in a metric space is not cauchy}{}
+\begin{proofbox}{}{}
+  Let $ \left( X, d \right)  $ be a metric space, and $ \left( x_n \right) \in X $ a sequence. $ x_n $ is a cauchy sequence if $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that $ \forall n, m \geq N, d \left( x_n, x_m \right) < \epsilon  $
+  
+  
+  Then $ \left( x_n \right)  $ is not cauchy if $ \forall N \in \mathbb{N} \; \exists \epsilon > 0 $ such that $ d \left( x_n, x_m \right) \geq \epsilon \; \forall  n, m \geq N $   
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{Define a metric space is incomplete}{}
+\begin{proofbox}{}{}
+  A metric space is complete if all cauchy sequences converge. 
+
+  A metric space $ \left( X, d \right)  $  is incomplete if $ \exists  $ cauchy sequences $ \left( x_n \right) \in X  $  that do not converge
+\end{proofbox}
+\end{oppgavebox}
+
+
+\section*{4.3 Integrating and differentiating sequences}
+\addcontentsline{toc}{section}{4.3 Integrating and differentiating sequences}
+
+
+\begin{propositionbox}{4.3.1}{}
+Assume that $ \left( f_n \right)  $ is a sequence of continuous functions converging uniformly to f on $ \left[ a, b \right]  $. Then the functions 
+\[
+    F_n(x) = \int_{a}^{x} f_n(t) dt 
+\]
+converge uniformly to
+\[
+    F(x) = \int_{a}^{x} f(t) dt 
+\]
+on $ \left[ a, b \right]  $.
+
+
+\begin{proofbox}{4.3.1}{}
+  We must show that for a given $ \epsilon  > 0 $ we can always find an $ N \in \mathbb{N} $  such that $ \left| F(x) - F_n(x) \right| < \epsilon  $ for all $ n \geq  N $  and all $ x \in \left[ a, b \right]  $. Since $ \left( f_n \right)  $    converges uniformly to f, there is an $ N \in \mathbb{N} $ such that $ \left| f(t) - f_n(t) \right| < \frac{ \epsilon   }{ b-a } $ for all $ t \in \left[ a, b \right]  $. For $ n \geq N $, we then have for all $ x \in  \left[ a, b \right]  $ 
+  \[
+      \left| F(x) - F_n(x) \right| = \left| \int_{a}^{x} \left( f(t) - f_n(t) \right)   \right|  dt \leq  \int_{a}^{x} \left| f(t) - f_n(t) \right| dt <  \int_{a}^{x} \frac{ \epsilon   }{ b-a } dt \leq \int_{a}^{b} \frac{ \epsilon   }{ b-a } dt = \epsilon.  
+  \]
+
+  This shows that $ \left( F_n \right)  $ converges uniformly to F on $ \left[ a, b \right]  $  
+      
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{corollarybox}{4.3.2}{}
+Assume that $ \left( f_n \right)  $  is a sequence of continuous functions converging uniformly to f on the interval $ \left[ a, b \right]  $. For any $ x_0 \in \left[ a, b \right]  $, the functions
+\[
+    F_n(x) = \int_{x_0}^{x} f_n(t) dt 
+\]
+converge uniformly to $ F(x) = \int_{x_0}^{x} f(t) dt  $ on $ \left[ a, b \right]  $.
+
+\begin{proofbox}{4.3.2}{}
+  $ \int_{x_0}^{x} = \int_{x_0}^{x} f_n(t) dt = \int_{a}^{x} f_n(t) dt - \int_{a}^{x_0} f_n(t) dt     $. The first integral converges uniformly to $ \int_{a}^{x} f_n(t) dt  $, and the second integral converges uniformly to $ \int_{a}^{x_0} f_n(t) dt  $. Hence $ \int_{x_0}^{x} f_n(t) dt  $    converges uniformly to
+  \[
+      \int_{a}^{x} f(t) dt - \int_{a}^{x_0} f(t) dt = \int_{x_0}^{x} f(t) dt.   
+  \]
+  
+\end{proofbox}
+\end{corollarybox}
+
+
+\begin{corollarybox}{4.3.3}{}
+Assume $ \left( v_n \right)  $ is a sequence of continuous functions such that the series $ \sum_{n=0}^{\infty} v_n(x)   $   converges uniformly on the interval $ \left[ a, b \right]  $. Then for any $ x_0 \in  \left[ a, b \right]  $, the series $ \sum_{n=0}^{\infty} \int_{x_0}^{x} v_n(t) dt   $ converges uniformly and 
+\[
+    \int_{x_0}^{x} \sum_{n=0}^{\infty} v_n(t) dt = \sum_{n=0}^{\infty} \int_{x_0}^{x} v_n(t) dt     
+\]
+
+\begin{proofbox}{4.3.3}{}
+  Assume the series $ \sum_{n=0}^{\infty} v_n(x)  $  converges uniformly to the function f. This means the partial sums $ s_N(x) = \sum_{n=0}^{N} v_k(x)  $ converge uniformly to f, and hence by 4.3.2,
+  \[
+      \int_{x_0}^{x} \sum_{n=0}^{\infty} v_n(t) dt = \int_{x_0}^{x} f(t) dt = \lim_{N \to \infty} \int_{x_0}^{x} s_N(t) dt = \lim_{N \to \infty} \int_{x_0}^{x} \sum_{n=0}^{N} v_n(t) dt = \lim_{N \to \infty} \sum_{n=0}^{N} \int_{x_0}^{x} v_n(t) dt = \sum_{n=0}^{\infty} \int_{x_0}^{x} v_n(t) dt.
+  \]
+\end{proofbox}
+\end{corollarybox}
+
+
+\begin{propositionbox}{4.3.4 Weierstrass M test}{}
+Let $ \left( v_n \right)  $ be a sequence of functions $ v_n : A \to \mathbb{R} $ defined on a set A, and assume that there are convergent series $ \sum_{n=0}^{\infty} M_n   $ of nonnegative numbers, such that $ \left| v_n(x) \right| \leq M_n $ for all $ n \in \mathbb{N} $ and all $ x \in A $. Then the series $ \sum_{n=0}^{\infty} v_n(x) $ converges uniformly on A.
+
+\begin{proofbox}{4.3.4}{}
+  Let $ s_n(x) = \sum_{k=0}^{n} v_k(x)  $ be the partial sums of the original series. Since the series $ \sum_{n=0}^{\infty} M_n $ converges, we know its partial sums $ S_n = \sum_{k=0}^{n} M_k  $ form a cauchy sequence. Since for all $ x \in A $ and all $ m > n $,
+  \[
+      \left| s_m(x) - s_n(x) \right| = \left| \sum_{k=n+1}^{m} v_k(x)  \right| \leq  \sum_{k=n+1}^{m} \left| v_k(x) \right| \leq  \sum_{k=n+1}^{m} M_k = \left| S_m - S_n \right|, 
+  \]
+
+  we see that $ \left( s_n(x) \right)  $ is a cauchy sequence in $ \mathbb{R} $ for each $ x \in A $ and hence converges to a limit $ s(x) $. This defines pointwise limit function $ s: A \to \mathbb{R} $.
+
+
+  To prove that $ \left( s_n \right)  $ converges uniformly to s, note that for every $ \epsilon > 0 \; \exists N \in \mathbb{N} $ such that if $ S = \sum_{k=0}^{\infty} M_k   $, then
+  \[
+      \sum_{k=n+1}^{\infty} M_k = S - S_n < \epsilon       
+  \]
+  for all $ n \geq  N $. This means that for all $ n \geq N $,
+  \[
+      \left| s(x) - s_n(x) \right| = \left| \sum_{k=n+1}^{\infty} v_k(x)   \right| \leq  \sum_{k=n+1}^{\infty} \left| v_k(x) \right| \leq  \sum_{k=n+1}^{\infty} M_k < \epsilon   
+  \]
+  for all $ x \in A $, and hence $ \left( s_n \right)  $ converges uniformly to s on A. 
+       
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{oppgavebox}{4.3.1}{}
+Show that $ \sum_{n=0}^{\infty} \frac{ \cos(nx)   }{ n^2+1 }   $  converges uniformly on $ \mathbb{R} $ 
+
+\begin{proofbox}{4.3.1}{}
+  Since $ \frac{ \cos(nx)   }{ n^2+1 } \leq  \frac{ 1 }{ n^2+1 } $, then $ \sum_{n=0}^{\infty} \frac{ \cos(nx)   }{ n^2 +1 } \leq  \sum_{n=0}^{\infty} \frac{ 1 }{ n^2+1 }    $, which converges. Hence, $ \sum_{n=0}^{\infty} \frac{ \cos(nx)   }{ n^2+1 }   $ converges uniformly on $ \mathbb{R} $.  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{4.3.2}{}
+Show that $ \sum_{n=1}^{\infty} \frac{ x }{ n^2 }   $ converges uniformly on $ \left[ -1, 1 \right]  $
+
+\begin{proofbox}{4.3.2}{}
+  Let $ x \in \left[ -1, 1 \right]  $, then $ \left| x \right| \leq  1 $, and hence, $ \frac{ \left| x \right| }{ n^2 } \leq  \frac{ 1 }{ n^2 }  $. And because $ \lim_{n \to \infty} \frac{ 1 }{ n^ 2 }  =0$, we know that the series
+  \[
+      \sum_{n=1}^{\infty} \frac{ \left| x \right|  }{ n^2 } \leq  \sum_{n=1}^{\infty} \frac{ 1 }{ n^2 }   
+  \]
+
+  converges uniformly on $ \left[ -1, 1 \right]  $. 
+      
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.3.3}{}
+Let $ f_n : \left[ 0, 1 \right] \to \mathbb{R}  $ be defined by $ f_n(x) = nx \left( 1-x^2 \right)^n  $. SHow that $ f_n(x) \to  0$ for all $ x \in \left[ 0, 1 \right]  $, but that $ \int_{0}^{1} f_n(x) dx \to \frac{ 1 }{ 2 }  $
+
+\begin{proofbox}{4.3.3}{}
+  Since $ x \in  \left[ 0, 1 \right]  $, then $ \left( 1-x^2 \right) < 1 $, then $ \left( 1- x^2 \right)^n \to 0 $ as $ n \to \infty $. Hence $ nx \left( 1-x^2 \right) ^n \to 0 $.
+  
+  
+  $ \int_{0}^{1} nx \left( 1-x^2 \right) ^n dx = \int_{0}^{1} \frac{ -nx }{ 2x } u^n du  = \frac{ -1 }{ 2 } \int_{0}^{1} n u^n du = \frac{ -1 }{ 2 } \frac{ n }{ n+1 } \left[ 1-x^2 \right]_{0}^1 = \frac{ -1 }{ 2 } \frac{ n }{ n+1 } \left( - \left( 1 \right) ^n \right) = \frac{ 1 }{ 2 } \frac{ n }{ n+1 }  \to \frac{ 1 }{ 2 }  $ as $ n \to \infty $. I have used usub on $ 1-x^2 $ to integrate.  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.3.5}{}
+\begin{itemize}
+  \item a) Show that by summing a geometric series, that 
+  \[
+      \frac{ 1}{ 1 - e^{-x} } = \sum_{n=0}^{\infty} e^{-nx}      
+  \]
+  for $ x > 0 $.
+
+  \begin{proofbox}{4.3.5 a)}{}
+    
+  \end{proofbox}
+  \item Explain that we can differentiate the series above term by term to get 
+  \[
+      \frac{ e^{-x} }{ \left( 1 - e^{-x} \right)^2  } = \sum_{n=0}^{\infty} n e^{-nx}      
+  \]
+  for all $ x > 0 $.
+  \item Does the series $ \sum_{n=1}^{\infty} ne^{-nx}   $ converge uniformly on $ \left( 0, \infty \right)  $? 
+\end{itemize}
+\end{oppgavebox}
+
+\section*{4.5 Spaces of bounded, continuous functions}
+\addcontentsline{toc}{section}{4.5 Spaces of bounded, continuous functions}
+
+In this section, we shall consider the space of all bounded functions. This is important to prove existence of solutions to differential equations. If $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ are metric spaces, a function $ f : X \to Y $ is bounded if the set of values $ \left\{ f(x) : x \in X \right\}  $ is bounded. This means that if there is a number $ M \in \mathbb{R} $ such that $ d_Y \left( f(x), f(y) \right) \leq M  $ for all $ x, y \in X $. Its equivalent to say that for any $ a \in X $, there is a constant $ M_a $ such that $ d_Y \left( f(a), f(x) \right) \leq M_a $ for all $ x \in X $ 
+
+
+
+Note that if $ f,g : X \to Y $ are two bounded functions, then there is a number K such that $ d_Y \left( f(x), g(x) \right) \leq K $ for all $ u, v \in X $. To see this, fix a point $ a \in X $ and let $ M_a $ and $ N_a $ be numbers such that $ d_Y \left( f(a), f(x) \right) \leq M_a  $ and $ d_Y \left( g(a), g(x) \right) \leq N_a  $ for all $ a \in X $. Since the triangle inequality gives
+\[
+    d_Y \left( f(x), g(x) \right) \leq d_Y \left( f(x), f(a) \right)  + d_Y \left( f(a), g(a) \right) + d \left( g(a), g(x) \right) \leq M_a + d_y \left( f(a), g(a) \right)  + N_a
+\]
+we can define $ K := M_a + d_y \left( f(a), g(a) \right)  + N_a $ 
+
+
+
+
+We now let 
+\[
+    B \left( X, Y \right) = \left\{ f : X \to Y : \text{ is bounded } \right\}   
+\]
+be the collection of all bounded functions. We define the metric to be used on this set
+
+\[
+    \rho \left( f, g \right) = \sup \left\{ d_Y \left( f(x), g(x) \right) : x \in X  \right\} 
+\]
+Note that since both $ f, g \in B \left( X, Y \right)  $, then they are both bounded, which means that $ \rho \left( f, g \right) < \infty $. 
+
+\begin{propositionbox}{4.5.1}{}
+If $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ are two metric spaces, then 
+\[
+    \rho \left( f, g \right) = \sup \left\{ d_Y \left( f(x), g(x) \right) : x \in X \right\} 
+\]
+defines a metric on $ B \left( X, Y \right)  $. 
+
+\begin{proofbox}{4.5.1}{}
+  A metric $ d (f, g) $ is a metric on a metric space $ B \left( X, Y \right)  $  if
+  \begin{itemize}
+    \item $ \rho \left( f, g \right) \leq 0 $ and $ \rho(f,g) = 0 \iff f = g $ for all $ f, g \in B \left( X, Y \right)  $  
+    \item $ \rho \left( f, g \right) = \rho \left( g, f \right)   $ for all $ f, g \in B \left( X, Y \right)  $ 
+    \item for all $ f, g, h \in B \left( X, Y \right)  $ we have that $ \rho \left( f, g \right) \leq \rho \left( f, h \right) + \rho \left( h, g \right)  $.
+  \end{itemize}
+
+  We only prove tha last point
+
+  assume $ f, g, h \in B \left( X, Y \right)  $. Then 
+  \[
+      d_Y \left( f, g \right) \leq d_Y \left( f, h \right) + d_Y \left( h, g \right).
+  \]
+  Taking the supremum over this, we get that 
+  \[
+      \rho \left( f, g \right) \leq \rho \left( f, h \right) + \rho \left( h, g \right).
+  \]
+\end{proofbox}
+\end{propositionbox}
+
+
+How do we define convergence in this metric space? Easy, with uniform convergence. 
+
+\begin{propositionbox}{4.5.2}{}
+A sequence $ \left( f_n \right)  $ converges to f in $ \left( B \left( X, Y \right), \rho \right)   $ if and only if $ f_n $ converges uniformly to $ f $ 
+
+\begin{proofbox}{4.5.2}{}
+  A sequence of functions $ \left( f_n \right)  $ converges to $ f $ if and only if 
+  \[
+      \sup \left\{ d_Y \left( f_n(x), f(x) \right) : x \in X \right\} \to 0.
+  \]
+  This just means that $ \rho \left( f_n, f \right) \to 0 $ as $ n \to \infty $, which is what we wanted to show. This comes from proposition 4.2.3. The same is the other way, if we assume that $ f_n $  converges uniformly to $f $, we just go via proposition 4.2.3
+  
+\end{proofbox}
+\end{propositionbox}
+
+\begin{theorembox}{4.5.3}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be metric spaces and assume that $ \left( Y, d_Y \right)  $ is complete. Then $ \left( B \left( X, Y \right) , \rho \right)  $ is also complete.
+
+\begin{proofbox}{4.5.3}{}
+  
+\end{proofbox}
+\end{theorembox}
+
+
+\begin{oppgavebox}{4.5.1}{}
+Let $ f, g : \left[ 0, 1  \right] \to \mathbb{R} $ be given by $ f(x) =x$ and $ g(x) = x^2 $. Find $ \rho \left( f, g \right)  $
+
+\begin{proofbox}{4.5.1}{}
+  We are supposed to find the maximum value between f and g on the domain $ \left[ 0, 1 \right]  $. Since this domain is compact, we know that they both attain max values, and therefore, the supremum between the two functions is finite. 
+
+  \[
+      \rho \left( f,g,  \right) = \sup \left\{ \left| f(x) - g(x) \right| : x \in \left[ 0, 1 \right]  \right\} 
+  \]
+  Since they are both continious, they are differentiable. 
+  \[
+      \frac{ d }{ dx } \left| f(x) - g(x) \right| = \frac{ d }{ dx } \left| x - x^2 \right| = \left| 1 - 2x \right| = 0 \Rightarrow x = \frac{ 1 }{ 2 }
+  \]
+
+  Inserting $ x = \frac{ 1 }{ 2 } $ into the function $ \left| f(x) - g(x) \right|  $ we get $ \frac{ 1 }{ 2 } - \frac{ 1 }{ 4 } = \frac{ 1 }{ 4 } $. So 
+
+  \[
+      \rho \left( f, g \right) = \frac{ 1 }{ 4 }
+  \]
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{4.5.2}{}
+Let $ f, g : \left[ 0, 2\pi  \right] \to \mathbb{R}  $ be given by $ f(x) = \sin(x)  $ and $ g(x) = \cos(x)   $. Find $ \rho \left( f, g,  \right)  $  
+\begin{proofbox}{4.5.2}{}
+  \[
+      \rho \left( f,g  \right) = \sup \left\{ \left| f(x) - g(x) \right| : x \in \left[ 0, 2\pi  \right]   \right\}
+  \]
+
+  Its easy to observe that this is 1, because $ f(0) =0 $ and $ g(0) =1  $. Hence
+  \[
+      \sup \left\{ \left| f(x) - g(x) \right| : x \in \left[ 0, 2\pi  \right]   \right\} = 1
+  \]
+\end{proofbox}
+
+
+\end{oppgavebox}
+
+\begin{oppgavebox}{4.5.7}{}
+For $ f \in B \left( \mathbb{R}, \mathbb{R} \right)  $ and $ r \in \mathbb{R} $, we define $ f_r $ as $ f_r(x) = f(x+r) $ 
+\begin{itemize}
+  \item a) Show that if f is uniform continuous, then $ \lim_{r \to 0} \rho \left( f_r, f \right) =0 $ 
+  \begin{proofbox}{4.5.7 a)}{}
+    Let $ f $ be uniform continuous. Want to show that $ \lim_{r \to 0} \rho \left( f_r, f \right) = 0  $. That is, show that 
+    \[
+         \sup \left\{ \left| f_r(x) - f(x) \right| : x \in X \right\} \to 0  \text{ as } r \to 0.
+    \]
+    
+    Given $ r \in \mathbb{R} $, we have that  $ \rho \left( f_r, f \right) =  \sup \left\{ \left| f(x+r) - f(x) \right| x \in X \right\}   $. Since f is uniform continuous, then given $ \epsilon > 0 $, we can find $  \delta > 0 $ such that for all $ x+r, x \in \mathbb{R} $  we have that $ \left| \left( x+r \right) - x   \right| < \delta \Rightarrow \left| f(x+r) - f(x) \right| < \epsilon    $. If $ \left| r \right| < \delta  $, we are guaranteed that $ \left| f(x+r) - f(x) \right| < \epsilon  $ for all $ x+r, x \in \mathbb{R} $, because $ \left| \left( x+r \right) - x \right| = \left| r \right| < \delta $. Hence, we know that $ \rho \left( f_r, f \right) < \epsilon  $. Then we get that when $ r \to 0  $, we can pick smaller and smaller $ \delta  $, which implies we can pick smaller and smaller $ \epsilon  $, and hence
+    \[
+        \lim_{r \to 0} \rho \left( f_r, f \right) = 0.
+    \]
+    
+  \end{proofbox}
+  \item Show that the function $ g $ defined by $ g(x) = \cos(\pi x^2  )   $ is not uniformally continuous on $ \mathbb{R} $
+  \begin{proofbox}{4.5.7 b)}{}
+    $ \cos( \pi x^2)   $ oscillates faster the farther out in the domain you go. So we must find two sequences $ x_n $ and $ y_n $ such that 
+    \[
+        \left| x_n - y_n \right| \to 0 
+    \]
+    but
+    \[
+        \left| g(x_n) - g(y_n) \right| \not \to 0
+    \]
+
+    Define $ x_n = \sqrt{ n+1 } $ and $ y_n = \sqrt{ n } $. Then we can rewrite $ x_n - y_n  = \sqrt{ n+1 } - \sqrt{ n } $ as $ \frac{ 1 }{ \sqrt{ n+1 } + \sqrt{ n } } $ by multiplying 
+    \[
+        \frac{ \sqrt{ n+1 } - \sqrt{ n } }{ 1 } \cdot \frac{ \sqrt{ n+1 } + \sqrt{ n } }{ \sqrt{ n+1 } + \sqrt{ n } }.
+    \]
+    
+    We then get that 
+    \[
+        \left| x_n - y_n \right| \to 0
+    \]
+    as $ n \to \infty $. But $ \left| g(x_n) - g(y_n) \right| = \left| \cos( \pi \left( n+1 \right) )  - \cos( \pi n)    \right| = \left| \left( -1 \right) ^n - \left( -1 \right) ^{n+1} \right| = 2    $. So if we pick $ \epsilon = 1 $, then we can get that for large enough N, then for all $ n \geq N , \left| x_n - y_n \right| < \delta $, but $ \left| g(x_n) - g(y_n) \right| > \epsilon  = 1 $. Hence g is not uniformly continuous.
+  \end{proofbox}
+  \item Is it true that $ \lim_{r \to 0} \rho \left( f_r,f  \right) = 0   $ for all $ f \in B \left( \mathbb{R}, \mathbb{R} \right)  $ ?
+  \begin{proofbox}{4.5.7 c)}{}
+    Obviously not, since $ g(x) = \cos( \pi x^2) \in B \left( \mathbb{R}, \mathbb{R} \right)    $
+  \end{proofbox} 
+
+
+  \item c) Is it true that 
+  \[
+      \lim_{r \to 0} \rho \left( f_r, f \right) = 0  
+  \]
+
+  for all $ f \in  B \left( \mathbb{R}, \mathbb{R} \right)  $?
+
+  \begin{proofbox}{4.5.7 c)}{}
+    Obviously, since $ g(x) = \cos(\pi  x^2) \in  B \left( \mathbb{R}, \mathbb{R} \right)    $, then the statement that 
+    \[
+        \lim_{r \to 0} \rho \left( f_r, f \right) = 0 \;  \forall f \in  B \left( \mathbb{R}, \mathbb{R} \right) 
+    \]
+    is false
+    
+  \end{proofbox}
+  
+\end{itemize}
+\end{oppgavebox}
+
+
+\section*{4.6 6Spaces of bounded, continuous functions}
+\addcontentsline{toc}{section}{4.6 Spaces of bounded, continuous functions}
+
+As before, we assume that $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $   are metric spaces, and define 
+\[
+    C_b \left( X, Y \right) := \left\{ f: X \to Y : \text{ f is bounded and continuous } \right\} 
+\]
+This set gives us a lot more to work with. Observe that
+\[
+    C_b \left( X, Y  \right) \subseteq B \left( X, Y \right) 
+\]
+
+and then the metric $ \rho \left( f, g \right) = \sup \left\{ d_Y \left( f(x), g(x)  \right) : x \in X  \right\}  $ is inherited to the metric space $ C_b \left( X, Y \right)  $. We make this very crucial observation
+
+
+\begin{propositionbox}{4.6.1}{}
+$ C_b \left( X, Y \right)  $ is a closed subset of $ B \left( X, Y \right)  $. 
+
+\begin{proofbox}{4.6.1}{}
+  Its easiest to show that for every sequence $ \left( f_n \right) \in C_b \left( X, Y \right)  $ converging to $ f \in B \left( X, Y \right)  $, then $ f \in C_b \left( X, Y \right)  $. From proposition 4.5.2, we have that for a sequence $ \left( f_n \right)  $ converes to $ f \in \left( B \left( X, Y \right) ,\rho \right)  $ if and only if it converges uniformly to f. From proposition 4.2.4, we have that a sequence of continuous functions $ \left( f_n \right)  $ converging uniformly to a funtion f, then f is also continuous. 
+  
+  For our arbitrary sequence of functions $ \left( f_n \right)  $, we have found it converges uniformly to f, and that f is also continuous. Then $ f \in C_b \left( X, Y \right)  $, and for every convergent sequence $ \left( f_n \right) \in C_b \left( X, Y \right)   $   converging to $ f \in B \left( X, Y \right)  $, then f is also continuous, which implies that $ C_b \left( X, Y \right)  $ is closed.   
+\end{proofbox}
+\end{propositionbox}
+
+\begin{theorembox}{4.6.2}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be metric spaces and assume $ \left( Y, d_Y \right)  $ is complete, then $ \left( C_b \left( X, Y \right) , \rho \right)  $ is also complete
+
+\begin{proofbox}{4.6.2}{}
+  Recall 3.4.4 that a closed subset of a complete space is itself complete. Since $ B \left( X, Y \right)  $ is complete from theorem 4.5.3, and $ C_b \left( X, Y \right)  $ is a closed subset of $ B \left( X, Y \right)  $  by the proposition above, it follows that $ C_b \left( X, Y \right)  $ is also complete 
+\end{proofbox}
+\end{theorembox}
+
+
+
+The reason we have so far restricted ourselves to the space $ C_b \left( X, Y \right)  $ of bounded continuous functions, is that the supremum 
+\[
+    \rho \left( f, g \right) = \sup \left\{ d_Y \left( f(x), g(x)  \right) : x \in X  \right\} 
+\]
+can take infinite values if f and g are assumed to be only continuous. AS a metric is not allowed to take infinite values, it leads to problems in our theory. The solution is to also restrict ourselves to bounded and continous functions. This problem doesnt occur when X is compact
+
+\begin{propositionbox}{4.6.3}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $  be metric spaces, and assume $ X $ is compact, then all continuous functions from X to Y are bounded
+
+\begin{proofbox}{4.6.3}{}
+  Assume that $ f : X \to Y $, and pick an arbitrary $ a \in X $. It suffices to show that $ h(x) = d_Y \left( f(x), f(a) \right)  $ is continuous. By the inverse triangle inequality, we get that 
+  \[
+      \left| d_Y \left( f(x), a \right) - d_Y \left( a, f(y) \right)  \right| \leq d_Y \left( f(x), f(y) \right)  
+  \]
+  and since f is continuous, so is h, and any $ \delta $ that works for f, will also work for h 
+    
+\end{proofbox}
+\end{propositionbox}
+ 
+
+If we define
+\[
+    C \left( X,Y \right) = \left\{ f : X \to Y : \text{ f is continuous } \right\}  
+\]
+
+the proposition above tells us that for compact X, the spaces $ C \left( X, Y \right)  $ and $ C_b \left( X, Y \right)  $ coincide. In most applications, we shall use $ \left[ a, b \right]  $ and we shall then just be working with the space $ C \left( X, Y \right)  $. The following theorem sums up the result above for compact X
+
+\begin{theorembox}{4.6.4}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be metric spaces, and assume that X is compact, then
+\[
+    \rho \left( f, g \right) = \sup \left\{ d_Y \left( f(x), g(x) \right) : x \in X \right\} 
+\]
+defines a metric on $ C \left( X, Y \right)  $. If $ \left( Y, d_Y \right)  $ is complete, then so is $ \left( C \left( X, Y \right) , \rho \right)  $
+  
+\end{theorembox}
+
+
+\begin{oppgavebox}{4.6.1}{}
+Let $ X, Y = \mathbb{R} $. Find $ f, g \in C \left( X, Y \right)  $ such that
+\[
+    \rho \left( f, g \right) = \infty
+\]
+
+\begin{proofbox}{4.6.1}{}
+  Let $ f(x) = \frac{ 1 }{ x } $ and let $ g(x) = 1 $, then 
+  \[
+      \sup \left\{ d_Y \left( \frac{ 1 }{ x }, 1   \right): x \in \mathbb{R}  \right\} = \infty.
+  \]
+  Hence, I have found $ f, g \in C \left( X, Y \right)  $ such that $ \rho \left( f, g \right) = \infty $.
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{4.6.2}{}
+Assume $ X \subset \mathbb{R}^n $ is not compact. Show that there is an unbounded continuous function $ f : X \to \mathbb{R} $.
+
+\begin{proofbox}{4.6.2}{}
+  We have that X is compact $ \Rightarrow  $  X is closed and X is bounded.
+  
+
+  So if X is not compact, its either not closed or not bounded. We have to consider both cases separately
+
+
+
+  X not closed:
+  If X is not closed, there exists a limit point $ a \notin X $. Define the function $ f(x) = \frac{ 1 }{ \left| x-a \right|  } $. Since $ a \notin X $, and a is a limit point of X, then we can make the distance $ \left| x-a \right|  $ arbitrarily small, allowing for f to blow up. 
+  
+  
+  Its also continuous, because for all $ \epsilon > 0 $, we can find a $ \delta > 0 $  such that when $ \left| x-y \right| < 0  $, then $ \left| f(x) - f(y)\right| < \epsilon   $. Let $ \left| x - y \right| < \delta  $. Then $ \left| \frac{ 1 }{ \left| x-a \right| } - \frac{ 1 }{ \left| y-a \right|  } \right| = \left| \left| x-a \right| - \left| y-a \right|  \right| \leq \left| x-y \right| < \delta   $. So $ f(x) = \frac{ 1 }{ x-a } $ is continuous. 
+
+
+
+  X not bounded
+  To consider the boundedness case, consider the function $ f(x) = \left| x \right|  $. This is continuous, because if $ x, y \in X $ and $ \left| x-y \right| < \delta  $, then $ \left| f(x) - f(y) \right| = \left| \left| x \right| - \left| y \right|  \right| = \left| x - y \right| < \delta    $. It also blows up, because we dont have any restriction on X, so $ \left| x \right|  $ can grow arbitrarily large.
+  
+
+
+  Hence, I have showed that when X is not compact, then there exists a continuous function f that is unbounded.
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.6.3}{}
+Assume that $ f : \mathbb{R} \to \mathbb{R} $ is a bounded continuous function. If $ u \in C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $, we define $ L \left( u \right) : \left[ 0, 1 \right] \to \mathbb{R} $ to be the function
+
+\[
+    L \left( u \right) \left( t \right) := \int_{0}^{1} \frac{ 1 }{ 1+t+s }f \left( u(s) \right) ds
+\]
+
+\begin{itemize}
+  \item a) Show that L is a function from $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ to $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $.
+  
+  \begin{proofbox}{4.6.3 a)}{}
+    We want to prove that L is continuous in t. So we must for $ \epsilon > 0 $ find a $ \delta > 0 $ such that $ \left| t - t_0 \right| < \delta  \Rightarrow \left| L \left( u \right) (t) - L \left( u \right) (t_0)  \right| < \epsilon   $ for all $ t \in \left[ 0, 1 \right]  $. We first assume that $ \left| t - t_0  \right| < \delta  $. Then 
+    \[
+        \left| L (u) (t) - L (u) (t_0)  \right| = \left| \int_{0}^{1} \left( \frac{ 1 }{ 1 +t+s } - \frac{ 1 }{ 1+t_0+s } \right) f \left( u(s) \right) ds    \right|.
+    \]
+    
+    This is 
+    \begin{align*}
+      \int_{0}^{1} \left| \frac{ t - t_0 }{ \left( 1+t+s \right) \left( 1+t_0+s \right)  } \right| f (u(s)) ds \leq \int_{0}^{1} \left| t - t_0 \right| f(u(s)) ds    
+    \end{align*}
+    
+    Since f is a bounded continuous function, we know that $ \exists M \in \mathbb{R} $ such that  $ f(u(s)) \leq  M $ for $ s \in \left[ 0, 1 \right]  $ . So 
+    
+    \begin{align*}
+      \int_{0}^{1} \left| t - t_0 \right| f(u(s)) ds   \leq M \cdot \left| t - t_0 \right| \int_{0}^{1} ds = M \cdot \left| t-t_0 \right| < M \delta.
+    \end{align*}
+    So if we pick $ \delta := \frac{ \epsilon    }{ M } $, then we get that when $ \left| t-t_0 \right| < \delta  $, then $ \left| L(u)(t) - L(u)(t_0) \right| < \epsilon  $, and thus L is continuous. Hence, L is a function that takes in a continuous function, and spits out another continuous function.    
+    
+  \end{proofbox}
+
+  \item Assume that 
+  \[
+      \left| f(u) - f(v) \right| \leq \frac{ C }{ ln (2) } \left| u - v \right| 
+  \]
+  for all $ u, v \in \mathbb{R} $ for some number $ C < 1 $. Show that the equation $ Lu = u $ has a unique solution in $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $.
+  \begin{proofbox}{4.6.3 b)}{}
+    This looks a lot like a contraction. If we prove that L is a contraction, then we can use Banachs fixed point theorem to state that $ Lu=u $ has a unique solution in $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $. But we first have to prove that $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ is complete. This happens if all cauchy sequences converge. I will make this proof below. For now, assume that $ C \left( \left[ 0, 1  \right] , \mathbb{R} \right)  $ is complete. 
+    
+    
+    For a $ t \in \left[ 0, 1 \right]  $, we have that 
+    \begin{align*}
+      \left| Lu(t) - Lv(t) \right| \leq \int_{0}^{1} \frac{ 1 }{ 1+t+s } \left| f(u(s))-f(v(s)) \right| ds \leq  \frac{ C }{ ln2 } \int_{0}^{1} \frac{ 1 }{ 1+t+s } \left| u(s) - v(s) \right| ds   
+    \end{align*}
+
+    Since $ u: \left[ 0, 1 \right] \to \mathbb{R} $, we have that  $ \left| u(s) - v(s)  \right| < \rho \left( u, s \right)   $ for all $ s \in \left[ 0, 1 \right]  $. Hence
+    
+    \begin{align*}
+      \frac{ C }{ ln2 }  \rho \left( u, v \right) \int_{0}^{1} \frac{ 1 }{ 1+t+s }&= 
+      \frac{ C }{ ln2 } \rho \left( u, v \right) \cdot ln \left( \frac{ 2+t }{ 1+t  } \right) \\
+      & \leq \frac{ C }{ ln2 } \rho \left( u, v \right) ln2 = C \rho \left( u, v \right)   
+    \end{align*}
+    
+    Observe now that \[
+        \sup \left\{ \left| Lu(t) - Lv(t) \right| : t \in \left[ 0, 1 \right]  \right\} \leq  \sup \left\{ \left| C \rho \left( u, v \right)  \right| : t \in \left[ 0, 1 \right]   \right\} =   C \rho \left( u, v \right) 
+    \]
+
+    then we get that $ \rho \left( Lu, Lv \right) \leq C \rho \left( u, v \right)  $. And since $ C < 1 $, we get that L is a contraction. And by Banachs fixed point theorem, there exists a unique point in $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ such that $ Lu=u $   
+  \end{proofbox}
+\end{itemize}
+
+\end{oppgavebox}
+
+\begin{proofbox}{Proof that $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ is complete }{}
+  A metric space is complete if all cauchy sequences converge. Let $ \left( f_n \right)  $ be a cauchy sequence in $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $. By definition, $ \forall   \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ \forall n, m \geq  N \; \rho \left( f_n, f_m \right) < \epsilon  $. 
+  
+  We have for all $ x \in  \left[ 0, 1 \right]  $ that $ \left| f_n(x) - f_m(x) \right| \leq  \rho \left( f_n, f_m \right)  $, so $ f_n(x) $ is a cauchy sequence of real numbers. Since $ \mathbb{R} $  is complete, we can define 
+  \[
+      f(x) := \lim_{n \to \infty} f_n(x).
+  \]
+  Thus $ f: \left[ 0, 1 \right] \to \mathbb{R} $  is a well defined point wise limit of $ f_n $. 
+  
+  
+  
+  Now to deal with the uniform convergence. Fix $ n \geq  N $. For any $ x \in \left[ 0, 1 \right]  $   and $ m \geq  N $, then
+  \[
+      \left| f_n(x) - f_m(x) \right| < \epsilon.
+  \]
+  Let $ m \to \infty $ and get that $ \left| f_n(x) - f(x)  \right| < \epsilon  \; \forall x \in \left[ 0, 1 \right]  $. This is the definition of uniform convergence for a sequence. So $ \rho \left( f_n, f \right) \to 0 $ as $ n \to \infty $. Hence all cauchy sequences converge, and $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ is complete.
+  
+\end{proofbox}
+
+
+\section*{4.8 Compact sets of continuous functions}
+\addcontentsline{toc}{section}{4.8 Compact sets of continuous functions}
+
+\begin{oppgavebox}{4.8.3}{}
+Assume $ \left( X, d \right)  $ is a complete metric space, and that A is a dense subset of X. 
+
+\begin{itemize}
+  \item a) Assume that $ f : A \to \mathbb{R} $ is uniformly cont. Explain that if $ \left( a_n \right)  $ is a sequence from A converging to a point $ x \in X $, then $ \left( f(a_n) \right)  $ converges. Show that the limit is the same for all such sequences $ \left( a_n \right)  $ converging to the same point x.
+  \item b ) Define $ \bar{f} : X \to \mathbb{R} $ by putting $ \bar{f}(x) = \lim_{n \to \infty} f(a_n)  $ where $ \left( a_n \right)  $ is a sequence from a converging to x. We call f the continuous extension of f to X. Show that $ \bar{f} $ is uniformly continuous.
+  \item c) Let $ f : \mathbb{Q} \to \mathbb{R} $ be defined by 
+  \[
+      f(x) = \begin{cases}
+      0, q < \sqrt{ 2 }\\
+      1, q > \sqrt{ 2 }
+      \end{cases}.
+  \]
+  Show that f is continuous on Q. Is f uniformly continuous?
+  \begin{proofbox}{4.8.3 c)}{}
+    Since $ \mathbb{Q} $ is dense in $ \mathbb{R} $, we have that for all $ \delta > 0 $ that there is a $ q \in \mathbb{Q} $ such that $ q \in B \left( \sqrt{ 2 }, \delta  \right)  $. Let $ \left( q_n \right)  $ be a sequence in $ \mathbb{Q} $ converging to $ \sqrt{ 2 } $. Let $ \frac{ 1 }{ N } < \delta  $, then for all $ n \geq N $, we have that $ B \left( \sqrt{ 2 }, \frac{ 1 }{ n } \right) \subseteq B \left( \sqrt{ 2 }, \delta  \right)   $. Hence,
+    \[
+        \varliminf_{n \to \infty} \mathbb{Q} \cap B \left( \sqrt{ 2 }, \frac{ 1 }{ n } \right) = \sqrt{ 2 }
+    \]
+    Since $ q_n \in \mathbb{Q} \cap B \left( \sqrt{ 2 }, \frac{ 1 }{ n } \right)  $ for all n, then 
+    \[
+        \left| q_n - \sqrt{ 2 } \right| < \frac{ 1 }{ n }
+    \]
+    
+    
+  \end{proofbox}
+
+
+  \begin{proofbox}{4.8.3 c)}{}
+    Let $ \left( q_n \right)  $ converge to $ q < \sqrt{ 2 } $ from below. So for all $ \delta > 0 $ there exists $ N \in \mathbb{N} $ such that $ \forall n \geq N $, $ \left| q_n - q \right| < \delta   $
+
+    Since both $ q_n  $ and $ q $ are $ < \sqrt{ 2 } $, then $ f(q_n), f(q) = 0 $. This means that as long as $ \epsilon > 0 $, then $ \exists \delta > 0 $ such that $ \left| q_n - q \right| < \delta  \Rightarrow \left| f(q_n) - f(q) \right| < \epsilon  $. Hence f is continuous at q.
+
+
+
+    For the other case, assume $ \left( q_n \right)  $ converges to $ q > \sqrt{ 2 } $ from above. This means that $ \forall \delta  > 0 \exists N \in \mathbb{N} $ such that $ \left| q_n - q \right| < \delta \; \forall n \geq N $. Since both $ q $ and $ q_n $ are bigger than $ \sqrt{ 2 } $ for all $ n \geq N $, then there exists a $ \delta > 0 $ such that  $ \left| q_n - q  \right| < \delta  \Rightarrow \left| f(q_n) - f(q) \right| < \epsilon    $.
+
+
+    Hence f is continuous for all $ q \in \mathbb{Q} $.
+
+
+
+
+    Is f uniform continuous? No, because if $ q_1 < \sqrt{ 2 } $  and $ q_2 > \sqrt{ 2 } $, then given $ \delta  > 0 $, there exists $ \epsilon > 0 $  such that $ \left| q_1 - q_1 \right| < \delta  \Rightarrow \left| f(q_1) - f(q_2) \right| = 1 \geq \epsilon$. Hence, f is not uniformly continuous. 
+  \end{proofbox}
+
+  \item d) Show that f has no continuous extension.
+  \begin{proofbox}{4.8.3 d)}{}
+    We have that $ f : \mathbb{Q} \to \mathbb{R} $ is defined for all $ q \in \mathbb{Q} $. Assume for contradiction that f has a continuous extension. Since $ \mathbb{Q} $ is dense in $ \mathbb{R} $, we can let $ \bar{f} : \mathbb{R} \to \mathbb{R} $  be the continuous extension of f, defined by $ \bar{f}(x) = \lim_{n \to \infty} f(q_n)  $ where $ \left( q_n \right)  $ is a sequence from $ \mathbb{Q} $ converging to $ x \in \mathbb{R} $. 
+
+
+    Let $ \left( q_n^1 \right)  $ be a sequence converging to $ \sqrt{ 2 } $ from below, and $ \left( q_n^2 \right)  $  be a sequence converging to $ \sqrt{ 2 } $ from above. Since
+    \[
+        \lim_{n \to \infty} f(q_n^1) = \sqrt{ 2 } = \lim_{n \to \infty} f(q_n^2),
+    \]
+    then $ 0 = f( \sqrt{ 2 }) = 1$ since $ q_n^1 < \sqrt{ 2 } $ and $ q_n^2 > \sqrt{ 2 } $ for all $n \in \mathbb{N} $. Hence, $ \bar{f} $ can impossibly be continuous at $ x =\sqrt{ 2 } $, and $ f : \mathbb{Q} \to \mathbb{R} $ cannot have a continuous extension.
+    
+  \end{proofbox}
+  
+\end{itemize}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.8.6}{}
+Assume that $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ are metric spaces and let $ \sigma _{ } : \left[ 0, \infty \right) \to  \left[ 0, \infty \right)  $ be a nondecreasing, continuous function such that $ \sigma _{ } (0) = 0 $. We say that $ \sigma _{ }  $ is a modulus of continuity for a function $ f : X \to Y $ if
+\[
+    d_Y \left( f(u), f(v) \right) \leq \sigma _{ } \left( d_X \left( u, v \right)  \right) \; \forall  u, v \in X
+\]
+\begin{itemize}
+  \item a) Show that a family of function with the same modulus of continuity is equicontinuous. 
+  
+
+  \begin{proofbox}{4.8.6 a)}{}
+    Let $ \mathcal{F} = \left\{ f_1, f_2, ... \right\}  $ be a family of functions, with the same mode of continuity. We need to show that $ \forall \epsilon > 0 \; \delta > 0 $, then for all $ f \in \mathcal{F} $, we have that  $ d_X \left( x, y \right) < \delta  \Rightarrow d_Y \left( f(x), f(y) \right) < \epsilon  $. 
+
+    Let $ \epsilon > 0 $, we can define $ \sigma _{ } ( \delta ) = \epsilon  $. Then we have that when $ \delta  > 0 $, then $ \sigma _{ } \left( d_X(x, y) \right) < \sigma _{ } \left( \delta  \right) = \epsilon    $ because $ \sigma _{ }  $ is an increasing function. So then,  $ d_Y \left( f(x), f(y) \right) \leq \sigma _{ } \left( d_X \left( x, y \right)  \right) < \sigma _{ } ( \delta ) = \epsilon    $. So for all functions in a family, sharing the same mode of continuity, then the family of functions is equicontinuous.
+  \end{proofbox}
+
+
+  \item b) Assume that $ \left( X, d_X \right)  $ is compact, and let $ x_0 \in X $. Show that if $ \sigma _{ }  $ is a modulus of continuity, then the set
+  \[
+      \mathbb{K} = \left\{ f : X \to \mathbb{R}^n : f(x_0) = 0 \text{ and  } \sigma _{ }  \text{ is modulus of continuity for f }  \right\} 
+  \]
+
+  \begin{proofbox}{4.8.6 b)}{}
+
+    We alredy have that K is equicontinuous, because K consists of functions with the same mode of continuity. From a), we learned that such sets are equicontinuous.
+
+    I show here that K is bounded
+    Since $ f : X \to \mathbb{R}^m $, where X is compact, then f attains a minimum and a maximum. So there exists $ m, M \in X $ such that 
+    \[
+        \left\lVert f(m) \right\rVert \leq \left\lVert f(x) \right\rVert \leq f(M) \; \forall x \in X
+    \]
+    We have to show that all functions in K is bounded. For $ x_0, x \in X $, we have that 
+    \[
+        \left\lVert f(x) - f(x_0) \right\rVert = \left\lVert f(x) \right\rVert \leq \sigma _{ } \left( d_X \left( x, x_0 \right)  \right)  
+    \]
+
+    Is $ d_X : X \to \mathbb{R} $ defined by $ d(x) := d_X \left( x, x_0 \right)  $ continuous? If it does, then $ d(x) $ is bounded. It is, because for $ x, y \in X $, we have that 
+    \[
+        \left| d(x) - d(y) \right| = \left| d_X \left( x, x_0 \right) - d_X \left( y, x_0 \right)   \right| \leq  d_X(x, y)
+    \]
+    so $ d(x) $ is Lipschitz continuous. Hence, $ \sigma _{ } \left( d(x)  \right) = \sigma _{ } \left( d_X \left( x, x_0 \right)  \right) \leq \sigma _{ } \left( M \right)    $. Thus, K is bounded. 
+    
+    
+    
+  \end{proofbox}
+  \item c) Show that alll functions in $ C \left( \left[ a, b \right] , \mathbb{R}^m \right)  $ has a modulus of continuity.
+  
+\end{itemize}
+
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{4.8.7}{}
+A metric space $ \left( X, d \right)  $ is locally compact if for each $ a \in X $, there is a closed ball $ \overline{B} \left( a, r \right) = \left\{ x \in X : d \left( x, a \right) \leq r \right\}   $ that is compact. Show that $ \mathbb{R}^m $ is locally compact, but that $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ is not locally compact
+
+\begin{proofbox}{ $ \mathbb{R}^m $ is locally compact }{}
+  Pick any $ a \in \mathbb{R}^m $. Show that $ \overline{B} \left( a, r \right)  $ is compact. Since any closed subset of $ \mathbb{R}^m $ is compact, we just see that the closed ball $ \overline{B} \left( a, r \right)  $ is a closed set, and this is bounded by r. So $ \mathbb{R}^m $ is locally compact
+\end{proofbox}
+
+\begin{proofbox}{ $ C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ is NOT locally compact }{}
+  Let $ f \in C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $. Then the ball centered at f is 
+  \[
+      \overline{B} \left( f, r \right) = \left\{ g \in C \left( \left[ 0, 1 \right] , \mathbb{R} \right) : \rho \left( f, g \right) \leq r \right\}.
+  \]
+
+  A set of functions is compact if its closed, bounded and equicontinuous. Its definetly bounded. We only have to prove existence of a sequence that is not equicontinuous. 
+
+
+  Equicontinuity of a sequence of functions would mean $\forall \epsilon > 0 \; \exists \delta > 0 $ such that $ \forall n \geq N  \; \left| x - y \right| < \delta \Rightarrow \left| f_n(x) - f_n(y) \right| < \epsilon $ 
+
+  
+
+  
+
+  Let $ \epsilon  = \frac{ 1 }{ 2 } $. Must show that for n large enough, and any $ \delta > 0 $ we can get $ x_n $ to be arbitrarily close to 1, but $ f_n(x_n) $ and $ f_n(1) $ will be larger than or equal to $ \epsilon  $ away from eachother.
+
+
+  Let $ x_n = \left( \frac{ 1 }{ 2 } \right)^{ \frac{ 1 }{ n }}  $. As $ n \to \infty $, then obviously, $ x_n \to 0 $. Let $ \left| x_n - 1 \right| < \delta $ for all $ n \geq N \in \mathbb{N} $. If we pick $ f_n(x) = x^n $, then $ f_n(x_n) = \frac{ 1 }{ 2 } $  for all n. We then have 
+
+  \[
+      \left| x_n - 1 \right| < \delta  \Rightarrow \left| f_n(x_n) - f_n(1) \right| = \left| \frac{ 1 }{ 2 } - 1 \right| = \frac{ 1 }{ 2 } = \epsilon 
+  \]
+
+  which proves that no matter what $ \delta  $ we choose, we always get that the distance between $ f_n $  valued at $ x_n $ and 1, will always be $ \frac{ 1 }{ 2 } $ for all n. Thus, the sequence $ \left( f_n \right)  $ is not equicontinuous.
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A metric space is compact}{}
+Let $ \left( X, d \right)  $ be a metric space. 
+
+\begin{itemize}
+  \item $\mathbf{Def1:}$ X is compact is for all sequences $ \left( x_n \right)  $ in X, then all subsequences of $ \left( x_n \right)  $ converges to an element $ x \in X $.
+  \item $\mathbf{Def2:}$ X is compact if it is closed and bounded
+  \item $\mathbf{Def3:}$ X is compact if there exists a finite subcover such that 
+  \[
+      X = \cup_{i=1}^n B \left( x_i, r \right) 
+  \]
+  
+\end{itemize}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A subset of a metric space is compact}{}
+\begin{itemize}
+  \item $ \mathbf{Def1:}$ Let $ A \subseteq X $ where X is a metric space. Then A is compact if X is compact. 
+  \item $ \mathbf{Def2:} $ A is compact if $ \forall \left( x_n \right) \in A \; \exists  \left( x_{n_k} \right) $     such that $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ where $ \forall k \geq N $, then $ d \left( x_{n_k}, x \right) < \epsilon   $  implies that $ x \in A $ 
+  \item $ \mathbf{Def3:} $ A is compact if its closed and bounded. If X is also closed and bounded, then that implies a subset is also closed and bounded. That is $ \forall \left( x_n \right)   $ where $ \lim_{n \to \infty} x_n = x \Rightarrow  x \in A  $ and $ \exists M \in \mathbb{R} $ such that $ d(x, y) \leq M \; \forall x,  y \in A $.
+\end{itemize}
+
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{A set is dense in a metric space}{}
+Let $ \left( X, d \right)  $ be a metric space.
+\begin{itemize}
+  \item $ \mathbf{Def1:} $ Assume $ A \subset X $. A is dense in X if $ \forall x \in X \; \exists \left( x_n \right) \in A $ such that $ \lim_{n \to \infty} x_n = x  $. 
+  \item $ \mathbf{Def2:} $ Assume $ A \subset X $. A is dense in X if $ \forall x \in X $ we have that $ \forall  \epsilon > 0 \exists N \in \mathbb{N} $  such that $ \forall n \geq N $ then $ d \left( x_n, x \right) < \epsilon  $.  
+  \item $ \mathbf{Def3:} $ Assume $ A \subset X $. A is dense in X if $ \overline{A} = X $.
+  \item $ \mathbf{Def4:} $ Assume $ A \subset X $. A is dense in X if $ \forall x \in X \exists \left( x_n \right) \in  A  $   such that $ x_n \to x $ as $ n \to \infty $.
+\end{itemize}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{A metric space is separable}{}
+Let $ \left( X, d \right)  $ be a metric space
+\begin{itemize}
+  \item $ \mathbf{Def1:} $ X is called separable if it has a dense and countable subset A.
+  \item $ \mathbf{Def2:} $ X is called separable if $ \forall x \in X \; \exists \left( x_n \right) \in  A  $ such that $ x_n \to x $ as $ n \to \infty $  and if there exists an injective function $ f : A \to \mathbb{N} $.
+\end{itemize}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{A function from one metric space to another is bounded}{}
+\begin{itemize}
+  \item $ \mathbf{Def1:} $ Let $ f : X \to Y $ be bounded. Then X is compact
+  \item $ \mathbf{Def2:} $ Let $ f: X \to Y $ be bounded. Then $ \exists M \in \mathbb{R} $ such that $ d \left( f(x), f(y) \right) \leq M \; \forall x, y \in X $.
+\end{itemize}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A series of functions is uniformly convergent}{}
+Let $ \sum_{ k=1 }^{ n } f_k(x)  $ be a series of functions
+\begin{itemize}
+  \item $ \mathbf{Def1:} $ $ \sum_{}^{} f_n(x)  $ converges uniformly to a limit function $ S(x) $ on E if the partial sums $ S_n = \sum_{ k=1 }^{ n } f_k(x) $ converge to $ S(x) $ at the same rate across the entire domain E.
+  \item $ \mathbf{Def2:} $ $ \sum_{ k=1 }^{ n } f_k(x)  $ converges uniformly if $ \sup \left\{ \left| S_n(x) - S(x) \right| : x \in E \right\} \to 0 $  as $ n \to \infty $. 
+\end{itemize}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{Equicontinuity}{}
+\begin{itemize}
+  \item $ \mathbf{EquicontinuitySequence} $ Let $ \left( X, d \right)  $  and $ \left( Y, \rho \right)  $ be metric spaces. The sequence $ \left( f_n \right)  $ is equicontinuous if $ \forall x_0 \in  X $ and $ \forall \epsilon > 0 \; \exists  \delta > 0 $  such that $ d \left( x, x_0 \right) < \delta  \Rightarrow \rho \left( f_n(x), f_n(x_0 \right) < \epsilon \; \forall n \in \mathbb{N} $. The key point is that when n is large enough, we can find a $ \delta > 0  $ that is independent of the point x.
+\end{itemize}
+\end{oppgavebox}
+
+\end{document}

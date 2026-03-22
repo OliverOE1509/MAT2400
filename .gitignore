@@ -1,0 +1,8 @@
+venv/
+Principles*
+*.fls
+*.out
+*.aux
+*.toc
+*.synctex.gz
+*.log

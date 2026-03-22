@@ -1,0 +1,1950 @@
+% !TeX spellcheck = nb_NO
+% Kommentaren ovenfor gir instruks til editoren din om at den skal bruke norsk stavekontroll. Dette fungerer bl.a. i TeXstudio.
+
+\documentclass[a4paper,norsk]{article}
+% Norsk orddeling
+\usepackage[norsk]{babel}
+% AMS-pakkene er nyttige
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+% For å definere lister, som f.eks. deloppgaver
+\usepackage{enumitem}
+% Inneholder mye nyttig, slik som \coloneqq
+\usepackage{mathtools}
+% Penere kalligrafiske fonter
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{mathabx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{ifthen}
+\usepackage{parskip}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+\tcbset{before upper=\par, after upper=\par} % allows itemize and enumerate inside boxes
+
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+
+\tcbset{
+  % Better page breaking for all tcolorbox environments
+  enhanced,
+  breakable,
+  before skip=5pt plus 2pt minus 1pt,
+  after skip=5pt plus 2pt minus 1pt,
+  parbox=false,
+}
+\newtcbtheorem[]{definitionbox}{Definisjon}{
+  colback=blue!3,
+  colframe=blue!70!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{def}
+
+\newtcbtheorem[]{theorembox}{Teorem}{
+  colback=green!3,
+  colframe=green!50!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  arc=2mm,
+  enhanced,
+  breakable
+}{thm}
+
+\newtcbtheorem[]{oppgavebox}{Oppgave}{
+  colback=gray!5,
+  colframe=black!60,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  parbox=false
+}{oppg}
+
+\newtcolorbox{sectionbox}[1][]{
+  colback=white,
+  colframe=black!70,
+  boxrule=0.7pt,
+  arc=3mm,
+  top=2mm, bottom=2mm, left=2mm, right=2mm,
+  title=#1,
+  enhanced,
+  breakable
+}
+
+\newtcbtheorem[]{corollarybox}{Korollar}{
+  colback=purple!5,
+  colframe=purple!60!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip
+}{cor}
+
+\newtcbtheorem[]{lemmabox}{Lemma}{
+  colback=orange!5,
+  colframe=orange!70!black,
+  fonttitle=\bfseries,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{lem}
+
+\newtcbtheorem[]{propositionbox}{Proposisjon}{
+  colback=cyan!5,
+  colframe=cyan!60!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{prop}
+
+\newtcbtheorem[]{proofbox}{Bevis}{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=black,
+  title style={opacity=0.9},
+  boxrule=0.6pt,
+  arc=2mm,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  parbox=false, % Viktig for sidebryting
+  segmentation style={black,solid,opacity=0.2,line width=0.5pt}
+}{proof}
+
+\newlist{suboppgave}{enumerate}{1}
+\setlist[suboppgave,1]{
+  label=\textbf{(\alph*)},
+  ref=\theenumi\alph*,
+  leftmargin=1.5em,
+  itemsep=0.4em,
+  topsep=0.3em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+
+
+\setcounter{secnumdepth}{2}  % Sections and subsections numbered
+
+% Python style  
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    numbers=left,
+    frame=single
+}
+
+% Bruk bedre symboler for ≥, ≤, epsilon og phi
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\newcommand{\eps} {\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+% Definer de vanligste mengdene og funksjonene
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+% \L er definert som noe annet fra før av, så vi må redefinere \L
+\renewcommand{\L}{\mathcal{L}}
+% Rommet av polynomer
+\newcommand{\Pol}{{\mathcal{P}}}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Image}{im}
+\DeclareMathOperator{\Kernel}{ker}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\Diag}{diag}
+\DeclareMathOperator{\Proj}{proj}
+\newcommand{\basis}{{\mathcal{B}}}
+\newcommand{\basiss}{{\mathcal{C}}}
+\newcommand{\basisss}{{\mathcal{D}}}
+
+\newtcolorbox{algoritme}[1]{
+  title=Algoritme~#1,
+  colback=white,
+  colframe=black,
+  boxrule=0.5pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=1mm,
+  bottom=1mm
+}
+
+% Definer oppgavemiljøet
+\newenvironment{oppgave}[1]%
+	{\trivlist{}\item\relax\textbf{Løsning på #1.}\medspace}%
+	{\endtrivlist}
+% Deloppgavelister
+\newlist{deloppgave}{enumerate}{1}
+\setlist[deloppgave,1]{label=(\textbf{\alph*}),align=left}
+
+\title{Real Analysis \\ MAT2400 University of Oslo, Spring 2026}
+\author{Oliver Ekeberg}
+
+\begin{document}
+\tableofcontents
+
+
+\section*{3.1 Definitions and examples}
+\addcontentsline{toc}{section}{Defs and examples}
+
+
+\begin{definitionbox}{3.1.1}{}
+A metric space $ \left( X, d \right)  $ consists of a nonempty set X and a function 
+\[
+    d: X \times X \rightarrow \left[ 0, \infty \right)
+\]
+such that 
+\begin{itemize}
+    \item $ \forall x, y \in X $ we have $ d(x, y) \geq 0 $ and $ d(x,y) = 0 \iff x=y $ 
+    \item $ \forall x, y \in X $ we have $ d(x,y) = d(y,x) $ 
+    \item $ \forall x, y, z \in X $ we have $ d(x,y) \leq d(x,z) + d(z,y) $ 
+\end{itemize}
+A function d statisfying these conditions is called a metric on X
+\end{definitionbox}
+
+\begin{oppgavebox}{3.1.1}{}
+We shall now take a look at an example of a different kind. Assume that we want to send messages in a language with N symbols (letters, numbers, punctuation marks, space, etc.). We assume that all messages have the same length K (if they are too short or too long, we either fill them out or break them into pieces). We let X be the set of all messages, i.e., all sequences of symbols from the language of length K. If x = (x1,x2,...,xK) and y = (y1,y2,...,yK) are two messages, we define
+$$d(x, y) = \text{the number of indices n such that } x_n = y_n. $$
+It is not hard to check that d is a metric. It is usually referred to as the Hamming- metric, and is much used in communication theory, where it serves as a measure of how much a message gets distorted during transmission.
+
+\begin{proofbox}{3.1.1}{}
+    This set X can be called a metric space if it satisfies the three conditions of def 3.1.1. We have that the distance between x and y is the number of indices n such that $ x_n \neq y_n $. We have that d satisfies the first condition if and only if $ x_n = y_n $ for all indeces n. This means that $ x = y $ where
+    \[
+        x = \left( x_1, x_2, ..., x_K \right) 
+        y = \left( y_1, y_2, ..., y_K \right) 
+    \]
+    And this is equivalent with $ d(x,y) = 0 $. Since $ x=y \Rightarrow d(x,y) = d(x,x) = 0 $ \\
+
+    We now prove the second condition. $ \forall x, y \in X $, $ d(x, y) = d(y, x) $.
+    
+    If $ d =  $ \# of indices s.t. $ x_n \neq y_n $, we have that 
+    \[
+        d(x, y) = \text{\# of indices such that } x_n \neq y_n
+    \]
+    which is equivalent with 
+    \[
+        d(y, x) = \text{\# of indices such that } y_n \neq x_n
+    \]
+    So $ d(x, y) = d(y, x) $\\
+
+    Now for the third condition. $ \forall x, y, z \in X $ we have $ d(x, y) \leq d(x, z) + d(z, y) $.
+    \begin{align*}
+      x &= \left( x_1, x_2, ..., x_K \right) \\
+      y &= \left( y_1, y_2, ..., y_K \right) \\
+      z &= \left( z_1, z_2, ..., z_n \right) 
+    \end{align*}
+    Then 
+    \begin{align*}
+      d(x, y) &= \text{\# of indices s.t. } x_n \neq y_n\\
+      d(x, z) = \text{\# of indices s.t. } x_n \neq z_n
+      d(z, y) = \text{\# of indices s.t. } z_n \neq y_n
+    \end{align*}
+    We know that if $ d(x, z) = k, d(z, y) = r $ and $ g = d(x, y) $, then $ r + k \geq g $ and $ r+k=g \quad \iff \quad x=y $. 
+    
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{1.3.2}{}
+Prove that $ \left( \mathbb{R}^n, d \right)  $ is a metric space, with 
+\[
+    d(x, y) = \left\lVert x - y \right\rVert = \sqrt{ \sum_{ n }^{ i=1 } \left( x_i - y_i \right) ^2  }
+\]
+
+
+\begin{proofbox}{1.3.2}{}
+  \begin{itemize}
+    \item The first condition is that $ d(x, y) \geq 0 $ and that $ d(x, y) = 0 \iff x = y $. We know that $ d(x, y)  $  is obviously larger than 0, and 
+    \[
+        d(x, x) = \sqrt{ \sum_{ n }^{ i=1 } \left( x_i - x_i \right)^2  } = \sqrt{ \sum_{ n }^{ i=1 } 0  } = 0
+    \]
+
+    \item The second condition is that $ d(x, y) = d(y, x) $. 
+    \begin{align*}
+      d(x, y) &= \sqrt{ \sum_{ n }^{ i=1 } \left( x_i - y_i \right) ^2 } \\
+      &= \sqrt{ \sum_{ n }^{ i=1 } \left( -1 \right)^2  \left( y_i - x_i \right) ^2 } \\
+      &= d(x, y)
+    \end{align*}
+     
+    \item For the third condition, we have that 
+    \begin{align*}
+      d(x, y) &= \left\lVert x - y \right\rVert \\
+      &= \left\lVert \left( x - z \right) + \left( z - y \right)  \right\rVert \leq \left\lVert x-z \right\rVert + \left\lVert z-y \right\rVert \\
+      &= d(x,z) + d(z,y)
+    \end{align*}
+    
+  \end{itemize}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{propositionbox}{3.1.4}{Inverse Triangle inequality}
+$ \forall x, y, z \in X $ with $ \left( X, d \right)  $ metric space, 
+\[
+    \left| d(x, y) - d(x,z) \right| \leq d(y, z)
+\]
+
+\begin{proofbox}{3.1.4}{}
+  We have that $ d(x, y) \leq d(x, z) + d(z, y) $. Then $ d(x, y) - d(x, z) \leq d(y, z) $. Now we need to prove the negative.
+
+  \[
+      d(x, z) \leq d(x, y) + d(y, z) \Rightarrow d(x, z) - d(x, y) \leq d(y, z)
+  \]
+  and thus
+  \[
+      d(x, y) - d(x, z) = d(x, z) - d(x, y) \leq d(y, z) \Rightarrow \left| d(x, y) - d(x, z)  \right| \leq d(y, z)
+  \]
+\end{proofbox}
+\end{propositionbox}
+
+\begin{oppgavebox}{3.1.6}{}
+If V is a vector space over R or C, a function $ \left\lVert \cdot \right\rVert : V \rightarrow \mathbb{R} $  is called a norm if the following conditions are satisfied:
+\begin{itemize}
+  \item (i) $ \forall x \in V, \left\lVert x \right\rVert \geq 0$ and $ \left\lVert x \right\rVert = 0 \iff x=0 $ 
+  \item $ \left\lVert \alpha_{}^{} x \right\rVert  = \left| \alpha_{}^{}  \right| \left\lVert x \right\rVert \quad \forall x \in V $ and $ \alpha_{}^{} \in \mathbb{K} $ 
+  \item $ \left\lVert x + y \right\rVert \leq \left\lVert x \right\rVert + \left\lVert y \right\rVert \quad \forall x, y \in V $  
+\end{itemize}
+
+
+\begin{proofbox}{3.1.6}{}
+  \begin{itemize}
+    \item Since $ \left\lVert \cdot \right\rVert : V \rightarrow \mathbb{R}  $, then it satisfies all three conditions for a norm. To show that it satisfies the first condition of a metric, then
+
+  \[
+    \left\lVert x \right\rVert = d(x, 0) = \left\lVert x - 0 \right\rVert \geq 0
+  \]
+  and this becomes similar to the prove for norm
+
+  \item Have to now show that $ d(x, y) = d(y, x) $ 
+  \begin{align*}
+    d(x, y) &= \left\lVert x - y \right\rVert \\
+    &= \left\lVert \left( -1 \right) \left( y - x \right)  \right\rVert \\
+    &= \left| \left( -1 \right) \right| \left\lVert y - x \right\rVert \\
+    &= \left\lVert y - x \right\rVert = d(y, x)
+  \end{align*}
+
+  \item Have to now show that $ d(x, y) \leq d(x, z) + d(z, y) $ 
+  \begin{align*}
+    d(x, y) &= \left\lVert x - y \right\rVert \\
+    \left\lVert \left( x - z \right) + \left( z-y \right)  \right\rVert \leq \left\lVert x-z \right\rVert + \left\lVert z-y \right\rVert \\
+    &= d(x, z) + d(z, y)
+  \end{align*}
+  
+  And the proof is finished
+  \end{itemize} 
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.1.7}{}
+Show that if $ \left( x_1, x_2, ..., x_n \right)  $ are points in a metric space, then 
+\[
+    d(x_1, x_n) \leq d(x_1, x_2) + d(x_2, x_3) + ... + d(x_{n-1} , x_n)
+\]
+
+\begin{proofbox}{3.1.7}{}
+  We use induction to prove this. Assume that 
+  \[
+      d(x_k, x_{k+2}) \leq d(x_k, x_{k+1}) + d(x_{k+1}, x_{k+1})
+  \]
+  Then for $ k=0 $, we get that 
+  \[
+      d(x_1, x_3) \leq d(x_1, x_2) + d(x_2, x_3)
+  \]
+  
+  For $ k=k $ we assume that 
+  \[
+      d(x_k, x_{k+2}) \leq d(x_k, x_{k+1}) + d(x_{k+1}, x_{k+1})
+  \]
+  and now we apply our hypothesis, that 
+  \[
+      d(x_k, x_{k+3}) \leq d(x_k, x_{k+2}) + d(x_{k+2}, x_{k+3})
+  \]
+  since $ d(x_k, x_{k+2}) \leq d(x_k, x_{k+1}) + d(x_{k+1}, x_{k+1}) $, we do get that 
+  
+  \[
+      d(x_k, x_{k+3}) \leq d(x_k, x_{k+2}) + d(x_{k+2}, x_{k+3})
+  \]
+  and this will now apply for all k. Thus the statement that 
+  \[
+      d(x_1, x_n) \leq d(x_1, x_2) + ... + d(x_{n-1}, x_n)
+  \]
+  is indeed true  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\section*{3.2 Convergence and continuity}
+\addcontentsline{toc}{section}{Convergence and continuity}
+
+\begin{definitionbox}{3.2.1}{}
+Let $ \left( X, d \right)  $ be a metric space. A sequence $ \left\{ x_n \right\} _{ n \in \mathbb{N} } $ converges to a point $ a \in X $ if there for every $ \epsilon > 0 $ exists an $ N \in \mathbb{N} $ such that $ d(x_n, a) < \epsilon \forall n \geq N $ 
+\end{definitionbox}
+
+\begin{lemmabox}{3.2.2}{}
+A sequence $ \left\{ x_n \right\} _{n \in \mathbb{N} } $ in a metric space $ \left( X, d \right)  $ converges to a point a, if and only if $ d(x_n, 0)  $ converges to zero
+
+\begin{proofbox}{3.2.2}{}
+  The sequence $ d( \left\{ x_n \right\} , a) $ converges to a point $ 0 \in X $ if there is for every $ \epsilon > 0 \quad \exists N \in  \mathbb{N} $ such that $ \forall n \geq N $, $ d(x_n, a) < \epsilon  $  
+\end{proofbox}
+\end{lemmabox}
+
+Can a sequence converge towards multiple points? 
+
+\begin{propositionbox}{3.2.3}{}
+A sequence in a metric cannot converge to more than one point.
+
+\begin{proofbox}{3.2.3}{}
+  Assume that $ \lim_{n \to \infty} x_n = a  $ and $ \lim_{n \to \infty} x_n = b $. If we take the triangle inequality on $ d(a, b) $, we get
+  
+  \[
+    d(a, b) \leq d(a, x_n) + d(x_n, b)
+  \]
+  We know that the sequences $ d(a, x_n) = d(x_n, a) $ and $ d(x_n, b) $  converges to zero if $ x_n $ converges to a and b respectively. This
+
+  \begin{align*}
+    d(a, b) \leq \lim_{n \to \infty} d(x_n, a) + d(x_n, b) \\
+    &= 0+0
+  \end{align*}
+  And surely, $ d(a, b) $ cannot be less than zero. Thus, $ d(a, b) = 0 \iff a=b $
+\end{proofbox}
+\end{propositionbox}
+
+
+
+\begin{definitionbox}{3.2.4}{}
+Assume $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ are two metric spaces. A function $ f: X \rightarrow Y $ is continuous at a point $ a \in X $ if for every $ \epsilon > 0 \exists \delta > 0 $ s.t. $ d_X (x, a) < \delta \Rightarrow d_Y (f(x), f(a)) < \epsilon $  
+\end{definitionbox}
+
+\begin{propositionbox}{3.2.5}{}
+The following is equivalent for a function $ f: X \rightarrow Y $ for two metric spaces.
+
+\begin{itemize}
+  \item f is continuous at a point $ a \in X $ 
+  \item For all sequences $ \left\{ x_n \right\}  $ converging to a, the sequences $ \left\{ f(x_n) \right\}  $ are converging to $ f(a) $  
+\end{itemize}
+
+\begin{proofbox}{3.2.5}{}
+  First we show that $ i) \Rightarrow ii) $. Assume that f is continuous at a. We want to show that 
+  \[
+      \forall \delta > 0, \exists N \in \mathbb{N} \text{ such that } \forall n\geq N, d_X(x_n, a) < \delta
+  \]
+   
+  We know that $ \forall \epsilon > 0 \exists \delta > 0  $ s.t. $ d_X \left( x_n, a \right) < \delta \Rightarrow d_Y \left( f(x_n), f(a) \right) < \epsilon   $. Since $ x_n \rightarrow a $, we know that $ \exists N \in \mathbb{N} $ such that $ \forall n \geq N, d_X(x_n, a) < \delta $. But then $ d_Y (f(x_n), f(a)) < \epsilon  $. So $ f:X \rightarrow Y $ preserves convergence\\
+
+  Second we want to prove that $ \neg i) \Rightarrow ii) $ to show a contradiction. Assume that f is \textit{not} continuous at a. Want to show that for all converging sequences $ \left\{ x_n \right\}  $ to a, in the metric space X, the sequence $ \left\{ f(x_n) \right\}  $ does not converge to $ f(a) $ in the metric space Y. 
+
+  We know that $ x_n $ converges to a. This means that for evey $ \epsilon >0 \exists N \in \mathbb{N} $ such that $ d_X(x_n, a) < \epsilon. \forall n \geq N $. Since f is not cont at a, 
+  
+  \[
+      \exists \epsilon > 0 \text{ such that } \forall \delta > 0, \exists x \in X \text{ such that } d_X(x_n, a) < \delta \Rightarrow d_Y(f(x_n), f(a)) \geq \epsilon   
+  \]
+
+  Because of the fact that f is not continuous at a, we can pick $ \delta = \epsilon  $ and get that $ \forall \epsilon > 0, \exists N \in \mathbb{N} $ such that $ d_Y(f(x_n), f(a)) \geq \epsilon  \quad \forall n \geq N$ 
+  
+\end{proofbox}
+\end{propositionbox}
+
+\begin{oppgavebox}{3.2.1}{}
+Assume that $(X, d)$ is a discrete metric space (recall Example 6 in Section 3.1). Show that the sequence $ \left\{ x_n \right\} $ converges to a if and only if there is an $ N \in \mathbb{N} $  such that $ x_n = a \forall n \geq N $. 
+
+\begin{proofbox}{3.2.1}{}
+  We have two events 
+  \begin{itemize}
+    \item A: THe sequence $ \left\{ x_n \right\}  $ converges to a. 
+    \item B: There is an $ N \in \mathbb{N} $ such that $ x_n = a\forall n \geq N $ 
+  \end{itemize}
+  Our task is to prove $ A \iff B $. We begin with $ A \Rightarrow B $  Assume first that the sequcence $ \left\{ x_n \right\}  $ converges to a. This means that for every $ \epsilon > 0 $ there exists some $ N \in \mathbb{N} $ such that $ \forall n \geq N $, we have that 
+  \[
+      d(x_n, a) < \epsilon 
+  \]
+
+  where $ d(x_n, a) = \begin{cases}
+    0, x_n =a \\
+    1, x_n \neq a
+  \end{cases} $ 
+  We can pick $ 0 < \epsilon < 1 $ and get that $ \forall n \geq N $, $ d(x_n, a) < 1 $, but then $ d(x_n, a) = 0 $ due to the discrete metric. And since a metric is equal to 0 if and only if $ x_n = a $, then there is an $ N \in  \mathbb{N} $ such that $ \forall n \geq N $, we have that $ x_n = a $         \\
+
+  We now prove $ B \Rightarrow A $. Since $ \exists N \in  \mathbb{N} $ such that $ x_n = a \quad \forall n \geq N $, then $ \forall \epsilon > 0 $, we have that  $ d(x_n, a) = 0 \quad < \epsilon  \forall n \geq N$, and therefore, the sequence $ \left\{ x_n \right\}  $ converges to a
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.2.2}{}
+Prove proposition 3.2.6 without using proposition 3.2.5.
+
+\begin{propositionbox}{3.2.6}{}
+Let $ \left( X, d_X \right), \left( Y, d_Y \right) , \left( \mathbb{Z}, d_Z \right)   $ be three metric spaces. Assume that 
+\begin{itemize}
+  \item $ f: X  \rightarrow Y $ 
+  \item $ g : Y  \rightarrow Z $ 
+  \item $ h : X  \rightarrow Z $ 
+\end{itemize}
+be the composition $ h(x) = g \left( f(x) \right)  $. SHow that if f is continious at $ a \in X $, and that g is continious at  $ b = f(a) $, then h is continuous at a
+
+\begin{proofbox}{3.2.6}{}
+  If f is continous at $ a \in X $, then $ \forall \epsilon > 0 \quad \exists \delta > 0 s.t. \forall x \in X, d_X(x, a) < \delta \Rightarrow d_Y( f(x), f(a) ) < \epsilon  $. If g is continuous at $ b = f(a) \in Y $, then $ \forall \epsilon > 0 \quad \exists \delta > 0 s.t. \forall y \in Y, d_Y(y, b) < \delta \Rightarrow d_Z(g(y), g(b)) < \epsilon  $. \\
+
+  This means that $ h :=  g \circ f : X \Rightarrow Z $ is continuous if $ \forall \epsilon > 0 \exists \delta > 0 s.t. \forall x \in X, d_X(x, a) < \delta \Rightarrow d_Z (h(x), h(a)) < \epsilon  $ where $ h(a) = g(f(a)) = g(b) $ 
+\end{proofbox}
+\end{propositionbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.2.5}{}
+Let $ \left( X, d \right)  $ be a metric space and choose $ a \in X $. Show that $ f: X \Rightarrow \mathbb{R} $ given by $ f(x) = d(x, a) $ is continuous. Use the metric $ d_{ \mathbb{R}} (x, y) = \left| x - y \right|  $ 
+
+\begin{proofbox}{3.2.5}{}
+  f is continious at $ a \in X $ if $ \forall \epsilon  > 0 \exists \delta > 0 s.t. \forall x \in  X, d_X(x,a) < \delta \Rightarrow d_{ \mathbb{R}}(f(x), f(a)) < \epsilon  $. 
+  \begin{align*}
+    d(x, a) &= \left| x - a \right| 
+  \end{align*}
+
+  \begin{align*}
+    d( f(x), f(a)) &= \left| \left| x-a \right|  - \left| a-a \right|  \right| \\
+    &= \left| x-a \right| 
+  \end{align*}
+  So we get that f is continuous at a if $ \forall \epsilon > 0 \exists \delta > 0 s.t. \forall x \in X, \left| x-a \right| < \delta \Rightarrow \left| x-a \right| < \epsilon  $. Just pick $ \delta = \epsilon  $, and the proof is complete.
+  
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.2.6}{}
+Let $ \left( X, d_X \right) , \left( Y, d_Y \right)  $ be two metric spaces. A function $ f: X \rightarrow Y $ is said to be a Lipschitz function if $ \exists K \in \mathbb{K}  $ such that 
+\[
+    d_Y (f(u), f(v)) \leq K d_X (u, v) \quad \forall u, v \in X
+\]
+Show that all Lipschitz functions are continuous
+\begin{proofbox}{3.2.6}{}
+  We have that 
+  \begin{itemize}
+    \item A = f is Lipschitz
+    \item B = f is continuous
+  \end{itemize}
+  We are tasked to prove $ A \Rightarrow B $. Assume that $ f: X \rightarrow Y $ is Lipschitz. This means that $ \exists K \in \mathbb{R}, K > 0 $ such that $ d_Y (f(u), f(v)) \leq K d_X( y, v) \forall u, v \in X $. A function is continuous at $ v \in X $  if $ \forall \epsilon > 0 \exists \delta > 0 s.t. \forall u \in X, d_X(u, v) < \delta \Rightarrow d_Y (f(u), f(v)) < \epsilon   $. We can pick $ \delta = \frac{ \epsilon }{ K } $ and get that 
+  \[
+      \forall \epsilon > 0 \exists \delta > 0 s.t. \forall u \in X, d_X (u, v) < \delta = \frac{ \epsilon  }{ K } \Rightarrow d_Y (f(u), f(v)) \leq K d_X(u, v) < K \frac{ \epsilon }{ K } = \epsilon 
+  \]
+  Therefore, f is continous at v.
+\end{proofbox}
+
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.2.8}{}
+\begin{itemize}
+  \item a) Assume that $ \left\{ x_n \right\}  $ is a sequence in X converging to x. Show that $ d(x_n, y) \rightarrow d(x, y) $
+  \begin{proofbox}{3.2.8 a)}{}
+    Since $ \left\{ x_n \right\}  $ is a sequence converging to $ x \in X $, it is equivalent with saying that $ d(x, x_n) \rightarrow 0 $. This is because if $ \left\{ x_n \right\}  $ is a sequence converging to $ x \in X $, then 
+    \[
+        \forall \epsilon > 0, \exists N \in \mathbb{N} \text{ such that } \forall n \geq N, \text{da er } d(x_n, x) < \epsilon 
+    \]
+    And since we can make $ \epsilon  $ arbitrarily small, we say that the sequence $ \left\{ d \left( x_n, x \right)  \right\}  $ converges to $ 0 $ . To show equivalence the other way, assume that $ \left\{ d \left( x_n, x \right)  \right\}  $ converges to $ 0 $. Then 
+    \[
+        \forall \epsilon > 0, \exists N \in \mathbb{N} \text{ such that } \forall n \geq N, \left| d(x_n, x) - 0 \right| = d(x_n, x) < \epsilon  
+    \]
+    which from the definition of a converging sequence, is equivalent with stating that $ x_n \rightarrow x $ as $ n \rightarrow \infty $\\
+
+    From the inverse triangle inequality, we can then state that
+    \[
+        \left| d(x_n, y) - d(x, y) \right| \leq d(x_n, x) 
+    \]
+    and since $ \left\{ d \left( x_n, x \right)  \right\} \rightarrow 0  $ as $ n \rightarrow \infty $, then we can pick $ \epsilon  := d \left( x_n, x \right) $ and get
+    
+    \[
+        \forall \epsilon > 0, \exists N \in \mathbb{N} \text{ such that } \forall n \geq N, \left| d(x_n, y) - d(x, y) \right| \leq \epsilon  
+    \]
+    This means that $ d \left( x_n y \right) \rightarrow d(x, y)   $ as $ n \rightarrow \infty $. 
+    
+    
+
+
+     
+  \end{proofbox}
+  \item b) Assume that $ \left\{ x_n \right\}  $ and $ \left\{ y_n \right\}  $ are two sequences in X convergeing respectively to $ x $ and $ y $. Show that $ d(x_n, y_n) \rightarrow d(x, y) $ 
+  \begin{proofbox}{3.2.8 b)}{}
+    We have from the inverse triangle inequality that
+
+    \begin{align*}
+      \left| d(x_n, y_n) - d(x, y) \right| \leq \left| \left( d(x_n, x) + d(x, y_n)\right) - \left( d(x, x_n) + d(x_n, y) \right)   \right|  \\
+      &= \left| d(x, y_n) - d(x_n, y) \right| 
+    \end{align*}
+    We have already proved that $ d(x_n, y) \rightarrow d(x, y) $ and $ d(x, y_n) \rightarrow d(x, y) $ as $ n \rightarrow \infty $, so we get that 
+
+    \[
+        \left| d(x, y_n) - d(x_n, y) \right| \rightarrow \left| d(x,y) - d(x,y) \right| = 0
+    \]
+    So we have an upper bound 
+    \[
+        \left| d(x_n, y_n) - d(x,y) \right| \leq 0 \Rightarrow d(x_n y_n) \rightarrow d(x,y) \text{ as } n \rightarrow \infty 
+    \]
+    
+    
+    
+  \end{proofbox}
+\end{itemize}
+\end{oppgavebox}
+
+
+\section*{3.3 Open and closed sets}
+\addcontentsline{toc}{section}{Open and closed sets}
+
+\begin{definitionbox}{3.3.1}{}
+Let a be a point in the metric space $ \left( X, d \right)  $ and assume that r is a positive real number. The open ball is the set
+\[
+    B \left( a, r \right) := \left\{ a \in X : d(a, x) < r \right\} 
+\]
+The closed ball is the set
+\[
+    \bar{B} \left( a, r \right) := \left\{ a \in X : d(a, x) \leq r \right\}  
+\]
+\end{definitionbox}
+
+Given a point $ x \in X $ where $ \left( X, d \right)  $ is a metric space, there are three intuitive possibilites given a subset $ A \subseteq X $ 
+\begin{enumerate}
+  \item There is a ball $ B \left( x, r \right)  $ around x which is contained inside A. In this case, x is an \textit{interior point} in $ A $ 
+  \item There is a ball $ B \left( x, r \right)  $ around x which is \textit{not} contained inside $ A $ . In other words, its contained inside $ A^c $ (all complements are with respect to X, hence $ A^c = X \ A $  . In this case, x is an \textit{exterior point} of A
+  \item There is a ball $ B \left( x, r \right)  $ around x which is \textit{both inside and outside} A. So a point $ x \in X $ is contained both inside $ A $ and $ A^c $   . In this case, x is a boundary point
+\end{enumerate}
+
+\begin{definitionbox}{3.3.2}{}
+A subset $ A $ of a metric space is \textit{open} if it does not contain any of its boundary points, and $ A $ is closed if it contains all of its boundary points
+\end{definitionbox}
+
+The empty set $ Ø $ and the entire metric space $ X $ are both open and closed, as they do not have any boundary points.
+
+
+
+\begin{oppgavebox}{A random number, self made exercise}{}
+Prove that the set $ \left( c, d \right)  $ is open, with $ c < d $ 
+\begin{proofbox}{}{}
+  Assume that $ x \in \left( c, d \right)  $. The set $ \left( c, d \right)  $ is considered \textit{open} if for all $ x \in  \left( c, d \right)  $, there exists  an \textit{open} ball centered at $ x $  with radius $ \epsilon > 0 $ . We have that any open ball can be described as
+
+  \[
+      B \left( x, \epsilon   \right) = \left\{ y \in \left( c, d \right) : d(x, y) < \epsilon   \right\} 
+  \]
+  So if we assume that $ x \in \left( c, d \right)  $, then we can pick $ \epsilon  := min \left\{ x-c, x-d \right\}  $, and we are guaranteed to have an open ball.
+
+
+  If we now consider the contrary, we can show that the set $ \left[ c, d \right]  $ is not open. $ \left[ c, d \right]  $ is not open if $ \exists  x \in \left[ c, d \right] $ such that $ \forall \epsilon > 0 $, we have that $ B(x, \epsilon ) \not \subseteq \left[ c, d \right]  $. Its easy to see that if we pick $ \epsilon := min \left\{ x-c, x-d \right\}  $, then at $ x = d $ or $ x = c $, we have a radius of 0. But this doesnt satisfy the distance condition of an open ball
+  
+  \[
+      d(x, y) < \epsilon 
+  \]
+  And if $ \epsilon =0 $, then $ d(x, y) < 0 $  which is impossible for a metric. Thus, the set $ \left[ c, d \right]  $ is \textit{not} open
+  
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+
+\begin{propositionbox}{3.3.3}{}
+A subset $ A $ of a metric space $ X $ is open $ \iff $ $ A $ only consists of interior points. In other words, $ \forall a \in A $, there is a ball $ B \left( a, r \right)  $ around a, which is completely contained inside $ A $ 
+\end{propositionbox}
+
+Observe that a set $ A $ and its complement $ A^c $ have exactly the same boundary points. This leads to the following useful proposition
+
+\begin{propositionbox}{3.3.4}{}
+A subset $ A $ of a metric space $ X $ is open $ \iff $ $ A^c $ is closed
+
+\begin{proofbox}{3.3.4}{}
+  Assume first that $ A $ is open, then $ A $ does not contain any of its boundary points, and hence, $ A^c $ must be closed. 
+  \vspace{0.5cm}
+
+  Conversely, assume that $ A^c $ is closed, then it contains all of its boundary points, and thus, the boundary points of $ A^c $ cant be contained inside $ A $ and $ A $ must as a result be open.
+\end{proofbox}
+\end{propositionbox}
+
+
+We can extract the boundary points and interior points of an arbitrary set $ A $ 
+
+\begin{itemize}
+  \item We define 
+  \[
+      int(A) := \left\{ x : \text{x is an interior point} \right\} 
+  \]
+  \item and the closure of $ A $ as
+  \[
+      cl(A) := \left\{ x : x \in A \text{ or x is a boundary point of A} \right\} 
+  \]
+\end{itemize}
+
+To denote the boundary of a set $ A $, we write
+\begin{itemize}
+  \item $ \partial A = \left\{ \text{all boundary pts of A} \right\}  $
+\end{itemize}
+
+We write the closure of a set A as 
+$ cl(A) = \bar{A} = A \cup \partial A $ 
+
+We know that a set $ A $ is open if it can be written as
+\begin{itemize}
+  \item $ A = int(A) $ 
+  \item and $ A $ is open if the following statement is true; $ A \cap \partial A = \emptyset $ 
+\end{itemize}
+
+Furthermore, we know if a set $ A $ is closed if 
+\begin{itemize}
+  \item $ A = int(A) $ 
+  \item $ \partial A \subseteq A $ 
+\end{itemize} 
+
+\begin{propositionbox}{3.3.5}{}
+$ int(A) $ is an open set, and $ cl(A) $ is a closed set
+
+
+\begin{proofbox}{3.3.5}{}
+  
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{lemmabox}{3.3.6}{}
+All open balls $ B \left( a, r \right)  $ are open sets and all closed balls $ \bar{B} \left( a, r \right)  $  are closed sets
+
+\begin{proofbox}{3.3.6}{}
+  Assume that $ x \in B \left( a, r \right)  $. We need to show that $ \exists B \left( x, \epsilon  \right) \subseteq B \left( a, r \right)  $. If we choose 
+  \[
+      \epsilon := r - d \left( x, a \right) 
+  \]
+  then we see that if $ y \in B \left( x, \epsilon  \right)  $, then by the triangle inequality that
+  \[
+      d(y, a) \leq d(y, x) + d(x, a)
+  \]
+  Now remember that since $ y \in B \left( x, \epsilon  \right)  $, we know that 
+  \begin{align*}
+    d(y, a) \leq d(y, x) + d(x, a) < \epsilon + d(x, a) \\
+    &= r - d(x, a) + d(x, a) \\
+    &= r
+  \end{align*}
+  thus we have proved that $ d(y, a) < r $, which means that $ B \left( x, \epsilon  \right) \subseteq B \left( a, r \right)  $. We come to this conclusion since $ y \in B \left( x, \epsilon \right)  $
+
+  \vspace{0.5cm}
+
+  Now we prove that a closed ball is a closed set. There are multiple ways to approach this. We can use the fact that if $ \left\{ x_n \right\}  $ is a convergent sequence in $ \bar{B} \left( a, r \right)  $, then it must converge towards $ x \in \bar{B} \left( a, r \right) $. Another proof is to show that the set $ X \setminus \bar{B} \left( a, r \right)  $ is an open set. 
+
+  \vspace{0.5cm}
+
+  We define $ F = \bar{B} \left( a, r \right)  $ which is the closed ball. So we need to show that  $ F^c $ is open. A set is open if any $ y \in F^c $ has the property $ d(y, a) > r $. Since $ y \notin F $ , then $ d(y,a) > r $. And from the triangle inequality, we get that 
+  \[
+      d(y, a) \leq d(y,x) + d(x, a)
+  \]
+  We now define 
+  \[
+      B \left( y, \epsilon  \right) = \left\{ x \in X : d(y, x) < \epsilon  \right\} 
+  \]
+  and claim that $ B \left( y, \epsilon  \right) \subseteq F^c  $ where $ \epsilon := d(y, a) - r $. let $ x \in B \left( y, \epsilon  \right) $ and get that $ d(x, y) < \epsilon  $ .  Then
+  \[
+      d(y, a) \leq d(y, x) + d(x, a) \Rightarrow d(y, a) < \epsilon  + d(x, a)
+  \]
+  So 
+  \[
+      d(y, a) - \epsilon  < d(x,a) \Rightarrow d(y, a) - d(y, a) + r < d(x, a) \Rightarrow r < d(x, a)
+  \]
+
+  Which proves that $ x \notin F $. Therefore, $ x \in F^c $ and our claim that $ B \left( y, \epsilon  \right) \in F^c $ is therefore true
+  
+\end{proofbox}
+\end{lemmabox}
+
+
+\begin{propositionbox}{3.3.7}{}
+Assume that $ F $ is a subset of a metric space $ X $, then TFAE
+\begin{itemize}
+  \item F is closed
+  \item $ \forall $ convergent sequences $ \left\{ x_n \right\} _{ n \in  \mathbb{N}} $ of elememts in F, the limit $ a = \lim_{n \to \infty} x_n  $ also belongs to F
+\end{itemize}
+
+\begin{proofbox}{3.3.7}{}
+  Assume that $ F $  is closed, and that $ a $  is not in $ F $ . Since $ F $  is closed, it contains all of its boundary points. Which means that $ a $  has to be an exterior point. And hence there is a ball around $ a $ that only has elements inside $ F^c $, but then, $ \left\{ x_n \right\}  $ can never converge to $ a $, and we have a contradiction
+
+
+  Assume now that $ F $ is not closed. 
+\end{proofbox}
+\end{propositionbox}
+
+
+
+
+\begin{propositionbox}{3.3.9}{}
+Let $ f: X \rightarrow Y $ be a function between metric spaces, and let $ x_0 \in X $. Then the following are equivalent
+
+\begin{itemize}
+  \item f is continious at $ x_0 $ 
+  \item For all neighbourhoods $ V $ of $ f(x_0) $, there is a neighbourhood $ U $ of $ x_0 $ such that $ f(U) \subseteq V $ 
+\end{itemize}
+\end{propositionbox}
+
+\begin{propositionbox}{3.3.10}{}
+The following are equivalent for a function $ f : X \rightarrow Y $ between two metric spaces.
+\begin{itemize}
+  \item f is continuous
+  \item Whenever V is an open subset of Y, the inverse image $ f^{-1} (V)  $ is an open set in X
+\end{itemize}
+\end{propositionbox}
+
+\begin{propositionbox}{3.3.11}{}
+The following are equivalent for a function $ f : X \rightarrow Y $ between two metric spaces.
+\begin{itemize}
+  \item f is continuous
+  \item Whenever F is an closed subset of Y, the inverse image $ f^{-1} (F)  $ is an closed set in X
+\end{itemize}
+\end{propositionbox}
+
+\begin{propositionbox}{3.3.12}{}
+Let $ \left( X, d \right)  $ be a metric space
+\begin{enumerate}
+  \item If $\mathcal{G}$ is a finite or infinite collection of open sets, then the union
+  \[
+      \cup_{G \in \mathcal{G}} G
+  \]
+  is open
+  \item If $ G_1, G_2, ..., G_n $ is a finite collection of open sets, then the intersection 
+  \[
+      G_1 \cap G_2 \cap ... \cap G_n
+  \]
+  is open
+\end{enumerate}
+\end{propositionbox}
+
+
+\begin{propositionbox}{3.3.13}{}
+Let $ \left( X, d \right)  $ be a metric space
+\begin{enumerate}
+  \item If $ \mathcal{F} $ is a finite or infinite collection of closed sets, then the intersection $ \cap_{F \in \mathcal{F}} F $ is closed
+  \item If $ F_1, F_2, ..., F_n $ is a finite collection of closed sets, then the intersection 
+  \[
+      F_1 \cup F_2 \cup ... \cup F_n
+  \]
+  is closed
+\end{enumerate}
+\end{propositionbox}
+
+\begin{oppgavebox}{3.1.1}{}
+Consider $ X = \mathbb{R} $ with the canonical metric $ d(x, y) = \left| x - y \right|  $. SHow that the interval $ \left( a, b \right)  $ is open, and that $ \left[ a, b \right]  $ is closed for any $ a,b \in \mathbb{R} $ with $ a \leq b $. What happens when $ a=b $ ? Explain why $ \left( a, b \right] $ is neither open nor closed when $ a < b $ 
+
+\begin{proofbox}{3.3.1}{}
+  First task is to show that the interval $ \left( a,b \right)  $ is open. To prove this, we show that the open ball centered at $ x \in  \left( a, b \right)  $ defined by 
+  \[
+      B \left( x, r \right) = \left\{ y \in \mathbb{R} : \left| x - y \right| < r \right\} 
+  \]
+  is contained within $ \left( a, b \right)  $ 
+
+  We define 
+  \[
+      r := \left| a - b \right|  - \left| x - \frac{ a+b }{ 2 } \right| 
+  \]
+  then if $ y \in B \left( x, r \right)  $, we have that 
+  \[
+      \left| y - \frac{ a+b }{ 2 } \right| \leq \left| y - x  \right| + \left| x - \frac{ a+b }{ 2 } \right|  
+  \]
+  But since $ y \in  B \left( x, r \right)  $ we have that 
+  $$ \left| x-y \right| < r = \left| a-b \right| + \left| x - \frac{ a+b }{ 2 } \right|  $$ 
+
+  and so 
+  \[
+      \left| y - \frac{ a+b }{ 2 } \right| < \left| a-b \right| - \left| x - \frac{ a+b }{ 2 } \right| + \left| x - \frac{ a+b }{ 2 } \right| 
+  \]
+  and so
+  \[
+      \left| y - \frac{ a+b }{ 2 } \right| < \left| a-b \right| 
+  \]
+  which means that $ y \in \left( a,b \right)  $. Thus the ball $ B \left( x, r \right) \subseteq \left( a,b \right)  $ 
+
+
+
+  Now we prove that $ \left[ a, b \right]  $ is a closed set. We look at the complement and observe that $ \left( - \infty , a \right)   \cup \left( b, \infty \right)  $  is an open set. So for a $ x \in  \left[ a, b \right] ^c $, we need to prove that $ B \left( x, r \right) \subseteq \left[ a, b \right] ^c  $ 
+  
+  Assume $ y \in  B \left( x, r \right)  $, then $ \left| y - m \right| > \left| m - a \right|   $ where $ m := \frac{ a+b }{ 2 } $. Now define
+  \[
+      r := \left| x - m \right| - \left| a - m \right|  
+  \]
+  From the inverse triangle inequality, we get
+  \[
+      \left| x - m \right| \leq \left| x - y \right| + \left| y - m \right| 
+  \]
+  But since $ y \in B \left( x, r \right)  $, we have that $ \left| x - y  \right| < r  $ so 
+  \begin{align*}
+    \left| x - m \right| < r + \left| y - m \right| \\
+    \left| x - m \right| - r < \left| y - m \right| \\
+    \left| x - m \right| - \left| x - m \right| + \left| a-m \right| < \left| y - m \right| \\
+    \left| a - m \right| < \left| y - m \right| 
+  \end{align*}
+  so we get that $ y \notin \left[ a,b \right]  $, so $ y \in \left[ a, b \right] ^c $. Thus, since $ y \in B \left( x, r \right)  $, we conclude that $ B \left( x, r \right) \subseteq \left[ a, b \right] ^c $. We have now proved that the complement of $ \left[ a, b \right]  $ is open, because it contains every open circle with center inside of it. I.e. it contains all interior points and is thus open. From this, we can conclude the $ \left[ a, b \right]  $ is a closed set.
+
+
+
+  Now consider the case $ \left[ a, b \right]  $ when $ a=b $. In this case, we have the empty set, which doesnt have any boundary points, but also doesnt contain any points. Thus it is both open and closed.
+
+
+  Furthermore, we have that $A = \left( a, b \right] $ is neither open nor closed. Its not open since it contains the boundary point $ b $, and its closed if it contains its interior points as well as boundary points. Since it does not contain the boundary point $ a $, its not closed. If A is not open, then
+
+  \[
+      \exists x \in \left(a, b\right] \text{ such that } \forall \epsilon > 0, B(x, \epsilon ) \not \subset \left(a, b\right]
+  \]
+  We know that $ b $ is a part of the set $ A $. If we pick for example $ B \left( b, \epsilon  \right) $, then $ \exists y \in B (b, \epsilon ) $  where $ y \notin A $, thus $ A $  is not open.
+
+
+  To show that A is not closed, assume that A is closed. Then $ A^c $ is open. 
+  \[
+      A^c = \left( \infty, a \right] \cup \left( b, \infty \right) 
+  \]
+  This set is not open, since we can select $ x $ close to $ a $ and make $ \epsilon  $ such that $ B(x, \epsilon ) $ contains elements not in $ A^c $  
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{3.3.1}{}
+Assume that $ \left( X, d \right)  $ is a discrete metric space
+\begin{itemize}
+  \item a) Show that an open ball in X is either a set with only one element, a singleton, or all of X
+  \item b) Show that all subsets of X are both open and closed
+  \item c) Assume that $(Y, d_Y )$ is another metric space. Show that all functions $f : X \rightarrow Y$ are continuous.
+\end{itemize}
+\begin{proofbox}{3.3.1 a)}{}
+  We have that 
+  \[
+      d(x,y) = \begin{cases}
+        0, x=y\\
+        1, x\neq y
+      \end{cases}
+  \]
+  
+  Any open ball in X is such that 
+  \[
+      \forall x \in X \exists \epsilon > 0 \text{ such that } B(x, \epsilon ) = \left\{ y \in X : d(x, y) < \epsilon  \right\} 
+  \]
+  
+  Assume now that $ y \in X $, then $ d(x, y) < \epsilon  $. We can pick $ \epsilon  $ such that
+  \[
+      \epsilon < 1
+  \]
+  But then $ d(x, y) < 1 $. This means that the ball $ B(x, \epsilon ) = \left\{ y \in X : d(x, y) = 0 \right\}   $  which is only one unique point. Therefore, the ball is a singleton
+
+
+  We can now pick $ \epsilon > 1 $  and get that $ d(x, y) < \epsilon  \forall x, y \in  X$. This means that the ball $ B(x, \epsilon  )$ contains all of X. 
+    
+\end{proofbox}
+
+\begin{proofbox}{3.3.1 b)}{}
+  Assume that $ A \subseteq X $. A is open if 
+  \[
+      \forall x \in A \exists \epsilon > 0 \text{ such that } B(x, \epsilon ) \subseteq A
+  \]
+  Since A can either be a singleton or all of X, it is easy to see that such an $ \epsilon > 0 $ exists given $ x \in A $. Consider when A is a singleton. Then all points in A is the point where $ x=y $. In this case, any $ \epsilon > 0 $ will give us $ d(x, y) < \epsilon  $. This means that any $ y \in B(x, \epsilon ) $ also has the propery that $ y \in A $  . Consider now the case when A is all of X. We can pick $ \epsilon < 1 $ and get that all points inside $ y \in B(x, \epsilon ) $ also has the property that $ y \in A $ and thus, A is open.
+
+
+  Now to show that A is closed, we know that the following are equivalent
+  \begin{itemize}
+    \item A is closed
+    \item $ \forall \left\{ x_n \right\} \in X $ converging to $ x \in X $, then $ x \in A $
+  \end{itemize}
+  We have proved from section 3.2 that 
+  \[
+      d(x_n, y) \rightarrow d(x,y) \text{ as } n \rightarrow \infty
+  \]
+  . Assume that $ \left( x_n \right)  $ converges to $ x \in X $. This is equivalent with saying that $ d(x_n, y ) \rightarrow d(x, y) $ as $ n \rightarrow \infty $ . We need to show that $ x \in A $. 
+
+  Since $ d(x, y) < \epsilon   $, we can pick $ \epsilon  $ to be bigger than or less than 1, depending on if A is a singleton or all of X. If A is a singleton, then any $ \epsilon  $ will make $ x \in A $. Same for if A is all of X, then we can pick $ \epsilon > 1 $ and get that for all converging sequences $ \left( x_n \right) \in X $ converging to $ x \in X $, then $ x \in A $, which is equivalent with saying that A is closed.
+\end{proofbox}
+\begin{proofbox}{3.3.1 b)}{}
+  Assume that $ A \subseteq X $ where $ \left( X, d \right)  $ is the discrete metric space given by 
+  \[
+      d(x, y) = \begin{cases}
+      0, x=y\\
+      1, x\neq y
+      \end{cases}
+  \]
+  Lets first prove that A is an open subset. A set is open if for any $ x \in A $ , there exists $ \epsilon  > 0 $ such that the ball $ B \left( x, \epsilon  \right) \subseteq A $. Assume that $ x \in A $. We can pick $ \epsilon  = \frac{ 1 }{ 2 } $ and see that for the ball
+  \[
+      B \left( x, \frac{ 1 }{ 2 }  \right) = \left\{ y \in X : d(x, y) < \frac{ 1 }{ 2 }  \right\} 
+  \]
+  Pick any $ y \in X $ , then y is in A if $ d(x, y) < \frac{ 1 }{ 2 } $, but this implies that $ d(x, y) = 0 $ as we are in a discrete metric space. This means that $ x=y $, and $ B \left( x, \epsilon  \right) = \left\{ x \right\}  \subseteq A  $ because we assumed that $ x \in A $ 
+
+
+  
+  To prove that $ A $ is a closed set, we prove that $ A^c $ is open. Assume that $ x \in A^c $, then the ball centered at $ B \left( x, \epsilon  \frac{ 1 }{ 2 } \right) = \left\{ x \right\} \subseteq A^c $ 
+  
+\end{proofbox}
+
+\begin{proofbox}{3.3.1 c)}{}
+  To prove that any $ f : X \rightarrow Y $ if
+  \[
+      \forall \epsilon > 0 \exists \delta > 0 \text{ such that } \forall x \in X, d(x, y) < \delta \Rightarrow d(f(x), f(y) ) < \epsilon 
+  \]
+   We have that $ \left( Y, d_Y \right)  $ is another general metric space. We have that 
+   \[
+       d(x, y) = \begin{cases}
+       0, x=y\\
+       1, x\neq y
+       \end{cases}
+   \]
+   So we can pick $ \delta = 1 $ and get that when $ d(x, y) < \delta $, we have that $ d(x, y) < 1 \Rightarrow d(x,y) = 0 \iff x=y $. So in this case,
+   $ d( f(x), f(y)) = d( f(x), f(x)) < \epsilon  $. Thus, f satisfies the continuity definition, and any $ f: X\rightarrow Y $ is continuous.
+   
+\end{proofbox}
+
+\begin{proofbox}{3.3.1 c)}{}
+  An alternative is to use proposition 3.3.9. Assume that $ x_0 \in X $. Then any ball $ B \left( x_0, 1 \right) = \left\{ x_0 \right\}  $. From proposition 3.3.9, we have that 
+  \[
+      \forall \text{ neighbourhoods V of } f(x_0), \exists U \text{ of } x_0 \text{ such that } f(x_0) \subseteq V.
+  \]   
+
+  Take now $ U \subseteq X $ and $ V \subseteq Y $, then U is open and any ball $ B \left( x_0, 1 \right) = \left\{ x_0 \right\} =U  $. This means that 
+  \[
+      \left\{ f(x_0) \right\} \subseteq V
+  \]
+  and this is equivalent with $ f $ being continuous at $ x_0 $.  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.3.2}{}
+Give a geometric description of the ball $ B \left( a, r \right)  $ in the Manhattan metric. Make a drawing of a typical ball. Show that the Manhattan metric and the usual metric in $ \mathbb{R}^2 $ have exactly the same open sets.
+
+\begin{proofbox}{3.3.2}{}
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.3.3}{}
+Assume that F is a nonempty, closed and bounded subset of R (with the usual metric $d(x, y) = \left| y - x \right| $). Show that $sup F \in  F$ and $inf F \in  F$ . Give an example of a bounded, but not closed set F such that $supF \in  F$ and $inf F \in  F$.
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.3.7}{}
+Assume $ A \subseteq \left( X, d \right)  $. Show that interior pts of A are exterior pts of $ A^c $, and that interior pts of $ A^c $ are exterior pts of $ A $. Show also that the boundary pts of $ A $ are the boundary pts of $ A^c $ 
+
+\begin{proofbox}{3.3.7}{}
+  Assume that $ x \in  A $. x is an interior point if any ball centered at x is contained within A. So
+  
+  \[
+      B(x, \epsilon ) = \left\{ y \in  A : d(x, y) < \epsilon  \right\} \subseteq A
+  \]
+  From definition, a point x' is an exterior point if there exists a ball $ B \left( x', \epsilon  \right) \not \subseteq A  $. To show that an interior point of A is an exterior point of $ A^c $, we know that since $ B \left( x, \epsilon  \right) \subseteq A  $, then $ B \left( x, \epsilon  \right)  $ is not contained inside $ A^c $, and is thus an exterior point of $ A^c $       
+  
+
+  Now we show that an interior point of $ A^c $ is an exterior point of $ A $  Assume that  $ x \in A^c $. x is an interior point of $ A^c $ if any open ball centered at an interior point of $ A^c $ is contained within $ A^c $. 
+  \[
+      B \left( x, \epsilon \right) = \left\{ y \in A^c : d(x, y) < \epsilon   \right\} \subseteq A^c
+  \]
+  Since $ B \left( x, \epsilon  \right) \subseteq A^c  $, we know that $ x \notin A $, and is therefore an exterior point of $ A $ 
+
+
+  Now we show that the boundary points of $ A $ are the boundary points of $ A^c $. Assume that $ x, y \in B \left( z, \epsilon  \right)  $ where $ z \in A $ and $ x \in A, y \in A^c $. A point in $ A $  is a boundary point if the centered at that point contains both elements in $ A $ and $ A^c $. Since $ x \in A $ and $ y \in A^c $, we know that z is a boundary point. And since the ball centered at $ z $ contains both elements inside $ A $ and inside $ A^c $, we know that $ z \in A $ and $ z \in A^c $ 
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.3.11}{}
+Prove proposition 3.3.12. Find an example of an infinite collection of sets $ G_1, G_2, ... $ whose intersection is not open.
+
+\begin{proofbox}{}{}
+  \begin{itemize}
+    \item a) We have that $ G_1, G_2, ... G_n, ... $   are all open sets. Assume that $ x  $ is inside one of $ G_1, G_2, ... G_n, ... $, then $ x \in  \cup_{G \in \mathcal{G}} G$ where $ \mathcal{G} $ is the family of sets of all Gs. Since x is inside at least one of these sets, and all these sets are open, then $\cup_{G \in \mathcal{G}} G$ is an open set.
+    \item b) If $ G_1, ..., G_n $ is a finite collection of open sets, then
+    \[
+        G_1 \cap ... \cap G_n = \left\{ g : \text{g belongs to all} G_k \forall k \in K \right\} 
+    \]
+    where $ K $ is some index set. If we assume $ g \in G_k  \forall k \in K$, then $ g \in \cap_{k=1}^{n} G_K $, which means that $ g $ belongs to all $ G $. Since all $ G_k \forall k \in K $ are open, $ \cap_{k=1}^{n} G_K $ is also open
+    
+  \end{itemize}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{section 3.3}{}
+Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be metric spaces, $ f : X \rightarrow Y $ be a continuous function, let $ y \in Y $ be some given point, and consider the problem of finding an $ x \in X $ such that $ f(x) = y $. Prove that the set of solutions of this equation is a closed set.
+
+\begin{proofbox}{}{}
+  If we assume that $ y \in Y $ is given to us as a point to the equation $ f(x) = y $, then the singleton $ \left\{ y \right\}  $  is a closed subset where $ \left\{ y \right\} \subseteq Y $. From prop. 3.3.11, we have that since $ f $ is a continuous function, then $ f^{-1} \left( \left\{ y \right\}  \right)  $ is a closed set in X.
+\end{proofbox}
+\end{oppgavebox}
+
+A singleton is a set that contains a single element. So
+
+\[
+    \left\{ 1, 2, 3, 4 \right\} 
+\]
+are not a singleton set. But
+\[
+    \left\{ \left\{ 1 \right\} , \left\{ 2 \right\} , \left\{ 3 \right\} , \left\{ 4 \right\}  \right\} 
+\]
+is a set of singletons. Also, if $ x \in \left\{ 1, 2, 3, 4 \right\}  $, its the same as saying that 
+
+\[
+    x \in  \left\{ 1 \right\} \cup \left\{ 2 \right\} \cup \left\{ 3 \right\} \cup \left\{ 4 \right\} = \cup_{k=1}^{n} \left\{ i \right\} 
+\]
+
+\begin{oppgavebox}{section 3.3}{}
+Consider $ X = \mathbb{R} $ with canonical metric $ d(x,y) = \left| x -y \right|  $. The support of a function $ f : \mathbb{R} \rightarrow \mathbb{R} $ is the set of points x where $ f(x) \neq 0 $  . The support of a function is defined to be the closure of the above set, which is of course closed, not open.
+
+\begin{proofbox}{}{}
+  Assume that $ x \in supp(f) = \left\{ x \in \mathbb{R} : f(x) \neq 0 \right\}  $. Then $ f(x) \neq 0 $ and $ d(f(x), 0) = \left| f(x) \right| = \left| f(x) \right|  $. Since f is continuous, we have that $ \forall y \in \mathbb{R} $ 
+  \[
+      \left| f(x) - f(y) \right| < \epsilon 
+  \]
+  for some $ \epsilon > 0 $ when 
+  \[
+      \left| x - y \right| < \delta
+  \]
+
+  By the inverse triangle inequality, we have that
+  \[
+      d(f(x), f(y)) = \left| f(x) - f(y) \right|  \leq \left| f(x) \right| + \left| f(y) \right| 
+  \]
+  which means that by the inverse triangle inequality, 
+  \[
+      \left| \left| f(x) - f(y) \right| - \left| f(y) \right|   \right| \geq \left| f(x) \right| > 0
+  \]
+  
+  So any neighborhood around $ x \in supp(f) $ is an open ball inside $ supp(f) $, proving that $ supp(f) $ is an open set.
+  
+\end{proofbox}
+
+\begin{proofbox}{Alternative to support of f is open}{}
+  The above proof is incorrect.
+
+  We can instead view the support of f as the set 
+
+  \[
+      supp(f) = \left\{ x \in \mathbb{R} : x \neq f^{-1}(0) \right\} =   f^{-1} \left(  \mathbb{R} \setminus \left\{ 0 \right\}  \right) 
+  \]
+  since $ \mathbb{R} $ is an open set (we can place any open circle inside it, and still have it a subset of $ \mathbb{R} $), and we are subtracting finite singletons, we get that $ supp(f) $ is an open set.
+  
+\end{proofbox}
+
+\begin{proofbox}{Another alternative to support of f being open}{}
+  If we define
+  \[
+      V := \mathbb{R} \setminus f^{-1} \left(  \left\{ 0 \right\} \right)   = supp(f)
+  \]
+  Now we can just show that $ V $ is open. V is open because 
+  $ V = \left( - \infty, 0 \right) \cup \left( 0, \infty \right)   $ is the union of two open sets, and is therefore open in itself. Since f is continuous, and V is an open subset of $ \mathbb{R} $, then the inverse image $ f^{-1} (V) $ is an open subset in $ \mathbb{R} $. And the proof is concluded. 
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\section*{3.4 Complete Spaces}
+\addcontentsline{toc}{section}{Complete Spaces}
+
+The main reason that calculus in $ \mathbb{R} $ and $ \mathbb{R}^n $ is so successfull, is because $ \mathbb{R} $ is complete. We will now generalize this notion of completeness to metric spaces.
+
+\begin{definitionbox}{3.4.1}{}
+A sequence $ \left\{ x_n \right\}  $ in a metric space $ \left( X, d \right)  $ is a cauchy sequence if $ \forall  \epsilon > 0 \: \exists N \in \mathbb{N} $ such that $ d(x_n, x_m) < \epsilon \: \forall n, m \geq N $ 
+\end{definitionbox}
+
+\begin{propositionbox}{3.4.2}{}
+Every convergent sequence is a Cauchy sequence
+
+\begin{proofbox}{3.4.2}{}
+  Assume that $ \left\{ x_n \right\}  $ is a convergenet sequence to  $x \in  X $. Then $ \forall \epsilon > 0 \: \exists  N \in \mathbb{N} $ such that $ d(x_n, x) < \epsilon \: \forall n \geq N $. But then we can just pick another $ m \geq N $ and get that $ d(x_m, x) < \epsilon \: \forall m \geq N $. Then from the triangle inequality, we get that
+
+  \[
+      d(x_n, x_m) \leq d(x_n, x) + d(x_m, x) < \epsilon + \epsilon = 2 \epsilon 
+  \]
+  But then $ \left\{ x_n \right\}  $ is a cauchy sequence, since we can pick two indeces above $ N $ and they both satisfy
+  \[
+      d(x_n, x_m) < \epsilon \: \forall n, m \geq N
+  \]
+  
+\end{proofbox}
+\end{propositionbox}
+
+\begin{definitionbox}{3.4.3}{}
+A metric space is called \textit{complete} if all cauchy sequences converge.
+\end{definitionbox}
+
+As an example, we know that all cauchy sequences in $ \mathbb{R}^n $ converge, but that $ \mathbb{Q} $ does not
+
+
+The reason we care about complete metric spaces, is that we often want to approximate solutions. When our approximation converges to the right solution, we typically need a complete metric space to avoid the "holes" in the metric space
+
+
+\begin{propositionbox}{3.4.4}{}
+Assume $ \left( X, d \right)  $ is a complete metric space. If $ A $ is a subset of $ X $, then $ \left( A, d_A \right)  $ is complete if and only if $ A $ is closed
+
+\begin{proofbox}{3.4.4}{}
+  Assume first A is closed. If $ \left\{ a_n \right\}  $ is a cauchy sequence in A. $ \left\{ a_n \right\}  $ is also a cauchy sequence in X, and since $ X $ is complete, $ \left\{ a_n \right\}  $ converges to a point $ a \in X $. SInce $ A $ is closed, proposition 3.3.7 tells us that $ a \in A $. But then $ \left\{ a_n \right\}  $ converges to $ a \in \left( A, d_A \right)  $, and hence, $ \left( A,d_A \right)  $ is complete.
+
+  If A is not closed, there is a boundary point $ a  $ that does not belong to $ A $. Each ball $ B \left( a, \frac{ 1}{ n } \right)  $ must contain an element $ a_n $ from A. In $ X $, the sequence $ \left\{ a_n \right\}  $ converges to a, and must be a cauchy sequence. However, since $ a \notin A $, the sequence $ \left\{ a_n \right\}  $ does not converge to a point in A. Hence, we have found a cauchy sequence in $ \left( A, d_A \right)  $ that does not converge to a point in A, hence $ \left( A, d_A \right)  $ is incomplete.
+\end{proofbox}
+\end{propositionbox}
+
+
+
+We now want to find solutions by repeated approximation, and we use the completion property to help us. If we start with the initial point $ x_0 $, then we define a function $ f : X \to X $  such that
+\[
+    x_{k+1} = f(x_k)
+\]
+This can be viewed as an evolving system. This system has reached equilibrium if $ x_{k+1} $ is a fixed point. That is if
+\[
+    x_k = f(x_k)
+\]
+
+
+To reformulate, we need a few more definitons. A function $ f: X \to X $ is called a \textit{contraction} if there is a positive number $ s < 1 $ such that
+\[
+    d \left( f(x), f(y) \right) \leq s d(x, y) \; \forall x, y \in X
+\]
+
+We call s a contraction factor for f. I will prove later that all contractions are continuous (Lipschitz continuity). We get that by induction,
+
+\[
+    d \left( f^{\circ n} (x), f^{\circ n} (y) \right) \leq s^n d(x, y)
+\]
+
+where $ f^{\circ n} (x) = f \left( f \left( f \left( ...f(x) ... \right)  \right)  \right)  $ is the result of iterating f exactly n times. 
+
+
+\begin{theorembox}{3.4.5 \textbf{Banachs Fixed Point theorem}}{}
+Assume $ \left( X, d \right)  $ is a complete metric space and that $ f: X \to X $ is a contration. Then f has a unique fixed point a, and no matter which starting point $ x_0 \in X $ we choose, the sequence
+
+\[
+    x_0, x_1 =f(x_0), x_2 = f^{\circ 2} (x_0), ..., x_n = f^{\circ n} (x_0)
+\]
+converges to $ a $ 
+
+\begin{proofbox}{3.4.5}{}
+  Let $ x_0 \in  X $. Define $ x_1, x_2, ..., \in  X $ as 
+  \[
+      x_{n+1} = f(x_n)
+  \]
+  \[
+      x_n = f^{\circ n} (x_0)
+  \]
+  Let $ n \in \mathbb{N} $, then
+  \[
+      d \left( x_n, x_{n+1} \right) = d \left( f(x_{n-1}), f(x_n) \right) \leq s \dot d \left( x_{n-1}, x_n \right)  \leq ... \leq s^n d \left( x_0, x_1 \right) 
+  \]
+  Next, for $ n \in \mathbb{N} $ and $ d \in \mathbb{N} $, then we get from the triangle inequality that
+  \[
+      d(x_n, x_{n+d}) \leq \sum_{k=0}^{d-1} d \left( x_{n+k}, x_{n+k+1} \right) 
+  \]
+
+  \[
+      d \left( x_n, x_{n+d} \right) \leq \sum_{k=0}^{d-1} d \left( x_{n+k}, x_{n+k+1} \right)  \leq \sum_{k=0}^{d-1} s^{n+k} d \left( x_0, x_1 \right) = d \left( x_0, x_1 \right) s^n \frac{ 1 }{ 1-s }
+  \]
+  The last step, comes from the fact that
+  \[
+      \sum_{k=0}^{\infty} s^k = \frac{ 1 }{ 1-s }
+  \]
+  since $ s \in \left[ 0, 1 \right]  $. Hence, if $ n, m \geq N $, then
+  \[
+      d \left( x_n, x_m  \right) \leq \frac{ d \left( x_0, x_1 \right)  }{ 1-s } \dot s^N \to 0 \text{ as } N \to \infty
+  \]
+  So $ \left\{ x_n \right\}  $ is cauchy. Hence $ x_n \to x $ as $ N \to \infty $ 
+
+  What about uniqueness?
+
+  x is a fixed point since, 
+  \[
+      x_{n+1} = f(x_n) \; \forall n
+  \]
+  \[
+      x = \lim_{n \to \infty} x_{n+1} = \lim_{n \to \infty} f(x_n) = f \left( \lim_{n \to \infty} x_n \right) = f(x)
+  \]
+  
+  Let $ x $ and $ y $  be fixed points. 
+  \[
+      x = f(x), \; y = f(y)
+  \]
+  \[
+      d(x,y) = d \left( f(x), f(y) \right) \leq s d \left( x, y \right) 
+  \]
+  so either $ d \left( x, y  \right) = 0 $ or $ 1 \leq s $. The latter is impossible, so $ d \left( x, y = 0 \right) \iff x = y  $, hence uniqeness is proved.
+  
+\end{proofbox}
+\end{theorembox}
+
+\begin{oppgavebox}{section 3.4}{}
+Prove that $ \left( \mathbb{Z}, d \right)  $ where $ d \left( x, y \right) = \left| x-y \right|  $ 
+
+\begin{proofbox}{}{}
+  A metric space is called complete if all cauchy sequences converge. All convergent sequences are convergent. Take any $ \left\{ x_n \right\} \in \mathbb{Z}  $. I must prove that any $ \left\{ x_n \right\} \in  \mathbb{Z} $  is convergent. $ \left\{ x_n \right\}  $ is convergent to $ x \in \mathbb{Z} $ if $ \forall \epsilon  > 0 \: \exists N \in \mathbb{N} $ such that 
+  \[
+      \left| x -y  \right| < \epsilon  \; \forall  n \geq N
+  \]
+  Pick $ \epsilon  \in  \left( 0, 1 \right)  $, then $ \left| x_n-x \right| < \epsilon  $ implies that $ x=y $, since $ x, y \in \mathbb{Z} $. Thus, $ \exists N \in \mathbb{N} $ such that $ \forall \epsilon \in \left( 0, 1 \right) \; \left| x_n - x \right| < \epsilon \: \forall n \geq N  $ that implies that $ x_n = x \: \forall n \geq N $. Hence $ \left\{ x_n \right\}  $ is convergent, this also a cauchy sequence. Since all convergent sequences in $ \mathbb{Z} $ are cauchy sequences, $ \left( \mathbb{Z}, d \right)  $ is a complete metric space.
+\end{proofbox}
+
+\begin{proofbox}{Alternative proof section 3.4}{}
+  The first proof uses the implication that $ convergent \Rightarrow Cauchy $. According to chatgpt, its not enough. Must use that $ Cauchy \Rightarrow convergent $. Why this matters, is because every convergent sequence in $ \mathbb{Q} $   is cauchy. Yet $ \mathbb{Q} $ is not complete, because there exists cauchy sequences (for example approximations to $ \sqrt{ 2 } $ ) that do not converge in $ \mathbb{Q} $
+
+
+  Instead, take any cauchy sequence inside $ \left( \mathbb{Z}, d \right)  $. It is convergent if $ \forall \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ \left| x_n - x_m \right| < \epsilon  \; \forall n,m \geq N  $. Pick now any $ \epsilon \in \left( 0, 1 \right)  $, then since $ x_n $ and $ x_m \in  \mathbb{Z} $, then $ \left| x_n - x_m  \right| < \epsilon  $ implies that $ x_n = x_m \; \forall n,m \geq N$ 
+
+  Since any cauchy sequence converges to a point, we have that the metric space $ \left( \mathbb{Z}, d \right)  $ is complete.
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.4.2}{}
+Assume that $ \left( X, d_X \right)  $ and $ \left( Y d_Y \right)  $ are complete spaces, and give $ X \times Y $ the metric 
+\[
+    d \left( \left( x_1, x_2 \right), \left( y_1, y_2 \right)   \right) = d_X \left( x_1, x_2 \right) + d_Y \left( y_1, y_2 \right)  
+\]
+Show that $ \left( X \times Y, d \right)  $ is complete.
+
+\begin{proofbox}{3.4.2}{}
+  Since $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ are complete metric spaces, all cauchy sequences converge. 
+  
+  This means that for a cauchy sequence $ \left\{ x_{n_1} \right\}  $  in $ \left( X, d_X \right)  $, we have  $ \forall \epsilon_1 > 0 \; \exists N_1 \in \mathbb{N} $ such that $ d_X (x_{n_1}, x_{m_1}) < \epsilon_1 \; \forall n_1, m_1 \geq N_1 $ 
+
+  And that for a cauchy sequence $ \left\{ y_{n_2} \right\}  $ in $ \left( Y, d_Y \right)  $, we have $ \forall \epsilon_2 > 0 \; \exists  N_2 \in \mathbb{N} $ such that $ d_Y \left( y_{n_2}, y_{m_2} \right) < \epsilon_2  \; \forall n_2, m_2 \geq N_2 $ 
+
+
+  The new metric space $ \left( X \times Y, d \right)  $ with metric 
+  \[
+      d \left( \left( x_1, x_2 \right), \left( y_1, y_2 \right)   \right) = d_X \left( x_1, x_2 \right) + d_Y \left( y_1, y_2 \right)  
+  \]
+  is complete if $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that 
+  \[
+      d \left( \left( x_n, x_m \right), \left( y_n, y_m \right)   \right) < \epsilon  \; \forall n,m \geq N
+  \]
+
+  If we now pick $ \epsilon := \epsilon _1 + \epsilon _2 $, we get that $ \forall n_1, m_1, n_2, m_2 \geq N $ 
+  \begin{align*}
+    d \left( \left( x_{n_1}, x_{m_1} \right) , \left( y_{n_2}, y_{m_2} \right)  \right) &= d_X \left( x_{n_1}, x_{m_1} \right) + d_Y \left( y_{n_2}, y_{m_2} \right) < \epsilon _1 + \epsilon _2 = \epsilon 
+  \end{align*}
+
+  Thus any cauchy sequence in $ X \times Y  $ is convergent, hence proves that $ \left( X \times Y, d \right)  $ is a complete metric space.
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{3.4.4}{}
+Assume that $ d_1 $ and $ d_2 $ are two metrics on the same space $ X $. We say that $ d_1 $ and $ d_2 $ are equivalent if there are constants $ K $ and $ M $ such that $ d_1 \left( x, y \right) \leq K d_2 \left( x, y \right)  $ and $ d_2 \left( x, y \right) \leq M d_1 \left( x, y \right) \; \forall x, y \in X $. Show that if $ d_1 $ and $ d_2 $ are equivalent, and one of the spaces $ \left( X, d_1 \right), \left( X, d_2 \right)   $ are complete, then so is the other.
+
+\begin{proofbox}{3.4.4}{}
+  Assume that $ \left( X, d_1 \right)  $ is complete. That is, for some $ \left\{ x_n \right\} \in  \left( X, d_1 \right)  $ we have that $ \forall \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ d_1(x_n, x_m) < \epsilon  \; \forall  n,m \geq N $. But since $ d_1 $ and $ d_2 $ are equivalent, we have that for some constant $ M $ that
+  \[
+      d_2(x,y) \leq M d_1(x,y)
+  \]
+  and hence, we also have that $ d_2 \left( x_n, x_m \right) < \epsilon  \; \forall n, m \geq N $. This means that $ \left( X, d_2 \right)  $ is also complete when $ \left( X, d_1 \right)  $ is complete.
+
+
+  Assume the opposite, that $ \left( X, d_2 \right)  $ is complete. That is, for some $ \left\{ x_n  \right\} \in  \left( X, d_2 \right)  $, we have that $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that $ d_2 \left( x_n, x_m  \right) < \epsilon  \; \forall n, m \geq N  $. But since $ d_1 $ and $ d_2 $ are equivalent, we have that for some constant $ K $ that 
+  \[
+      d_1 \left( x, y \right) \leq K d_2 \left( x, y \right) 
+  \]
+  and hence, we also have that $ d_1 \left( x_n, x_m \right) < \epsilon  \; \forall  n, m \geq N $. This means that $ \left( X, d_1 \right)  $ is also complete when $ \left( X, d_2 \right)  $ is complete. 
+
+
+  This exercise a different metric doesnt necessarily change the complete property of the metric space, as long as the metrics are equivalent.
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.4.5}{}
+Assume that $ f : \left[ 0, 1 \right] \to \left[ 0, 1 \right]  $ is a differentiable function and that there is a number $ s< 1 $ such that $ \left| f'(x) \right| < s  \; \forall  x \in \left( 0, 1 \right)   $ . Show that there is exactly one point $ a \in \left[ 0, 1 \right]  $ such that $ f(a) = a $ 
+
+\begin{proofbox}{3.4.5}{}
+  The first task is to show that f is a contraction, that is $ \exists  s < 1 $ such that $ d \left( f(x), f(y)  \right) \leq s d \left( x, y \right) \; \forall x,y \in X $.
+
+  Consider now the metric space $ \left( \left[ 0, 1 \right], d \left( x, y \right) = \left| x - y \right|    \right)  $. Since f is differentiable, we have that 
+
+  \[
+      f(x) = \int_{0}^{x} f' \left( \theta \right) d \theta - f(0)
+  \]
+  So 
+  \[
+      \left| f(x) - f(y) \right| = \left| \int_{0}^{x} f' \left( \theta \right) d \theta - \int_{0}^{y} f' \left( \phi \right) d \phi     \right| 
+  \]
+
+  We assume that $ \exists  s < 1 $ such that $ \left| f ' (x) \right| < s \; \forall x \in \left[ 0, 1 \right]  $. So
+  \[
+      \left| f(x) - f(y) \right| = \left| \int_{y}^{x} f'(t) dt  \right| \leq \int_{y}^{x} \left| f'(t) \right| dt < s \int_{y}^{x} dt = s \left| x -y\right|   
+  \]
+  Derfor er f en kontraksjon. Må nå bruke Banachs fikspunkt teorem å vise at det finnes en unik $ a \in \left( 0, 1 \right)   $ slik at $ f(a) = a $. Dette følger direkte fordi f er en kontraksjon, i tillegg til at $ \left[ 0, 1 \right]  $ er et komplett metrisk rom (fordi det er lukket)
+\end{proofbox}
+
+\begin{proofbox}{3.4.5 alternative}{}
+  With the mean value theorem, we have a $ c \in \left[ 0, 1 \right]  $ such that
+  \[
+      f'(c) = \frac{ f(x) - f(y) }{ x-y } \Rightarrow \left| f'(c) \right|  = \frac{ \left| f(x) - f(y) \right|  }{ \left| x - y \right|  } \Rightarrow \left| f(x) - f(y) \right| = \left| f'(c) \right| \cdot \left| x - y \right| 
+  \]
+  This means that 
+  \[
+      d \left( f(x), f(y)  \right) = \left| f'(c) \right| \cdot d \left( x, y \right) < s d \left( x, y \right) 
+  \]
+  
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.4.6}{}
+You are standing with a map in your hand inside the area depicted on the map. Explain that there is exactly one point on the map that is vertically above the point it depicts.
+
+\begin{proofbox}{3.4.6}{}
+  If we are standing with a map of the area we are standing in, then we can think of $ f : X \to X$ as a contraction, where $ X \subseteq \mathbb{R}^2 $ is the map, and $ f(x), x \in X $ is the depicted point on the ground. So take two points $ x, y \in X $, then their distance on the ground is $ d \left( x, y \right)  $. On the map, the distance between the depicted points are a lot shorter than the points on the ground. Thus, $ f(x) $ represents the depicted point on the map. Thus, we scale down the number $ d \left( x, y \right)  $ by a constant $ s \in \left[ 0, 1 \right) $, and get that $ f : X \to X $ is a contraction
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.4.8}{}
+A subset $ D $  of a metric space  $ X $  is dense if for all $ x \in X $  and all $ \epsilon \in \mathbb{R}_+ $ there is an element $ y \in D $  such that $d(x,y) < \epsilon $. Show that if all Cauchy sequences $ \left\{ y_n \right\} $ from a dense set $ D $ converge in $ X $ , then $ X $  is complete.
+
+\begin{proofbox}{3.4.8}{}
+  Take any $ \left\{ y_n \right\}  $ cauchy sequence in $ D $. Assume D is dense. $ \left\{ y_n \right\}  $ is a convergent cauchy sequence if $ \forall y_n \in D $, $ \exists y_m \in X $ such that $ d \left( y_n, y_m \right) < \epsilon $. Since $ \left\{ y_m \right\}  $  is another sequence in $ D $, we have that 
+\end{proofbox}
+
+\end{oppgavebox}
+
+
+
+\section*{3.5 Compact sets}
+\addcontentsline{toc}{section}{Compact sets}
+
+Assume we have a sequence $ \left( x_n \right) _{n \in \mathbb{N}} $. Then we can define the subsequences
+\[
+    \left\{ y_k \right\} = \left\{ x_{n_k} \right\} 
+\]
+where $ \left\{ x_{n_k} \right\}  $ is a subsequence. If we consider the indeces $ n_1 < n_2 < ... < n_k < ... $ of the sequence. Then any subsequence will naturally just be the elements of the original sequences, but a few items dropped
+
+\begin{propositionbox}{3.5.1}{}
+If the sequence $ \left\{ x_n \right\}  $ converges to $ a $ , then so do all subsequences
+
+\begin{proofbox}{3.5.1}{}
+
+  Assume that $ \left\{ x_n \right\}  $ converges to $ a $, then $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that $ d \left( x_n, a \right) < \epsilon  \; \forall n \geq N $. 
+  
+  \[
+      x_n = \left( x_1, x_2, ..., x_n, ... \right) 
+  \]
+  if we take a subsequence of $ x_n $ we get $ \left( x_{n_k} \right)  $ where $ n_1 < n_2 < ... < n_k < ... $. Since $ n_k $ is an increasing sequence, there exists $ K $ such that $ n_K \geq N \; \forall k \geq K$. But since $ n \geq N $, we have that $ d \left( x_{n_k}, a \right) < 0 \; \forall n_k \geq N $. Thus $ \left( x_{n_k} \right)  $  is also converging towards $ a $. We get this justification because $ \left( n_k \right)  $ is an increasing sequence.
+
+  Take for instance the sequence
+
+  \[
+      x_n = \left( 0, 1, 0, 1, ...,0, 1, 0, .... \right) 
+  \]
+  And pick the subsequence
+  \[
+      x_{n_k} = \left( 0, 0, 0, 0, ... \right) 
+  \]
+  which is every other element. Then obviously, we have that $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that $ \forall n \geq N \; d \left( x_{n_k}, 0 \right) < \epsilon   $.
+
+
+  If we pick $ x_n $ to already be a converging sequence, for. example
+  \[
+      x_n = \frac{ 1 }{ n }
+  \]
+  then $ n = \left( 1,2, 3, 4,.... \right)  $ and $ n_k = \left( 3, 5,  7,9,... \right)  $ then of course, $ x_{n_k} = \left( \frac{ 1 }{ 3 }, \frac{ 1 }{ 5 }, \frac{ 1 }{ 7 }, \frac{ 1 }{ 9 },... \right)  $ also converges to $ 0 $, just as $ x_n $ does
+  
+  
+  
+  
+  
+\end{proofbox}
+\end{propositionbox}
+
+\begin{definitionbox}{3.5.2}{}
+A subset $ K $ of a metric space $ \left( X, d \right)  $ is called a compact set if every sequence in $ K $ has a subsequence converging to a point in $ K $. The space $ \left( X, d \right)  $ is compact if $ X $ is a compact set. i.e. if all sequences in $ X $ have a convergent subsequence
+\end{definitionbox}
+
+\begin{definitionbox}{3.5.3}{}
+A subset $ A $ of a metric space $ \left( X, d \right)  $ is bounded if there is a number $ M \in \mathbb{R} $ such that $ d \left( a, b \right) \leq M \; \forall  a,b \in A $
+\end{definitionbox}
+
+\begin{propositionbox}{3.5.4}{}
+Every compact set $ K $ in a metric space $ \left( X, d \right)  $ is closed and bounded
+
+\begin{proofbox}{3.5.4}{}
+  We have that 
+  \begin{itemize}
+    \item A: "K compact"
+    \item B: "K closed"
+    \item X: "K bounded"
+  \end{itemize}
+  The proposition tells 
+  \[
+      A \Rightarrow \left( B \wedge C \right) 
+  \]
+  which translates to 
+  \[
+      A \Rightarrow B \; \wedge \; A \Rightarrow C
+  \]
+  K is compact if $ \forall \left( x_n \right) \in  K \; \exists \left( x_{n_k} \right) \in K $ such that $ d \left( x_{n_k}, x \right) \rightarrow 0  $ for $ x \in K $. To prove that a set is compact, we thus have to show that all sequences have subsequences converging to a point in the set. Its easier to show that there exists a single sequence that doesnt have a subsequence converging to the point $ x $ . So we prove
+  \[
+      \neg B \Rightarrow \neg A \; \neg C \Rightarrow \neg A
+  \]
+
+  Start with $ \neg B \Rightarrow \neg A $. Assume that K is not closed. That means that $ \exists \left( x_n \right) \in  K $ such that $ \lim_{n \to \infty} x_n = x \notin K $. In english, this means that there is a boundary point $ x \notin K $. Take any $ \left( x_n \right) \in K  $ converging to $ x $. Then $ \lim_{n \to \infty} x_n = x $. And since $ x_n $ converges to a point $ x $, then so does all its subsequences. So 
+  \[
+      \lim_{n   \to \infty} x_{n_k} = x 
+  \]
+  But since K is not closed, there exists limit points that are not in K. So $ x \notin K $, and thus, there exists sequences in K such that there are no subsequences converging to a point in K. Hence, K cannot be compact if K is not closed
+
+
+  $ \neg C \Rightarrow  \neg A $ 
+  Assume now that K is not bounded, that is
+  \[
+      \forall M \in \mathbb{R} \; \exists a, b \in K \text{ such that } d \left( a, b \right) > M
+  \]
+  
+  Pick $ x_0 \in K $. Since $ \forall n \in \mathbb{N} \; \exists x_n \in  K $ such that $ d \left( x_n, x_0 \right) > n $, then
+
+  \[
+      \lim_{n \to \infty}  d \left( x_n, x_0 \right) = \infty
+  \]
+
+  We want to show that $ x_n $ has no convergent subsequence. This happens if for $ x \in K $, we have that 
+
+  \[
+      \lim_{k \to \infty} d \left( x_{n_k}, x \right) = 0 
+  \]
+
+  And from the triangle ineq.
+  \[
+      d \left( x_{n_k}, x_0 \right) \leq d \left( x_{n_k}, x \right) + d \left( x, x_0 \right) 
+  \]
+  
+  Since $ d \left( x_{n_k}, x \right) \to 0 $ as $ k \to \infty $, we have that $ d \left( x_{n_k}, x_0 \right) \leq d \left( x, x_0 \right) =: C $. But from above, we have that 
+  \[
+      d \left( x_{n_k}, x_0 \right) > n_k
+  \]
+  and as $ k \to \infty $ we get that $ d \left( x_{n_k}, x_0 \right) \to \infty $. And hence its a contradiction, since
+
+  \[
+      \infty \leq C 
+  \]
+  is not true.
+  
+  
+  
+  
+  
+  
+\end{proofbox}
+\end{propositionbox}
+
+\begin{corollarybox}{3.5.5}{}
+A subset of $ \mathbb{R}^n $ is compact $ \iff  $ it is closed and bounded
+
+\begin{proofbox}{3.5.5}{}
+  We have already proved that $ A \Rightarrow B \& C $, must now prove that a closed and bounded subset of $ \mathbb{R}^n $  is compact. 
+
+  Assume A is closed and bounded. From Bolsano Weierstrass theorem, any bounded sequence in $ \mathbb{R}^n $ has a convergent subsequence. This means if we take $ \left( x_n \right) \in A $ , then
+
+  \[
+      \lim_{k \to \infty} x_{n_k} = x
+  \]
+  This can be viewed as yet another sequence. Define $ \left( y_k \right) = \left( x_{n_k} \right)  $. Then since A is closed, $ x \in K $, and we have found that if we pick an arbitrary sequence in $ A \subseteq \mathbb{R}^n $, then we get that $ \exists \left( x_{n_k} \right)  $ such that $ d \left( y_k, x \right) \to 0 $ as $ k \to \infty $ 
+  
+\end{proofbox}
+\end{corollarybox}
+
+\begin{lemmabox}{3.5.6}{}
+Assume that $ \left\{ x_n \right\}  $ is a caucht sequence in a metric space. If there is a subsequence $ \left\{ x_{n_k} \right\}  $ converging to a point $ a $, then the original sequence $ \left\{ x_n \right\}  $ also converges to $ a $.
+
+\begin{proofbox}{3.5.6}{}
+  Assume $ \left( x_n \right) \in \left( X, d \right)   $ is cauchy, and that $ \left( x_n \right)  $ has a subsequence $ \left( x_{n_k} \right)  $ such that $ d \left( x_{n_k}, a \right) \to 0 $  as $ k \to \infty $. Since $ \left( x_n \right)  $  is cauchy, we have that $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that $ d \left( x_n, x_m \right) < \epsilon  \; \forall n, m \geq N $. Since $ \left( x_{n_k} \right)  $   converges to $ a $, there is a $ K \in \mathbb{N} $ such that $ n_K \geq N $ and $ d \left( x_{n_k}, a \right) < \epsilon  $. Then
+  \[
+      d \left( x_n, a \right) \leq d \left( x_n, x_{n_K} \right) + d \left( x_{n_K}, a \right) < \epsilon + \epsilon = 2 \epsilon 
+  \]
+  
+\end{proofbox}
+\end{lemmabox}
+
+\begin{propositionbox}{3.5.7}{}
+Every comapct metric space is complete
+
+\begin{proofbox}{3.5.7}{}
+  Assume that K is compact. Then $ \forall \left( x_n \right) \; \exists \left( x_{n_k} \right)  $ such that $ \left( x_{n_k} \right)  $ converges to $ x \in K $. K is complete is all cauchy sequences converge.
+
+  Assume now that $ \left( x_n \right)  $ is a cauchy sequence in compact metric space $ \left( X, d \right)  $. Since X is compact, $ \left( x_n \right)  $ has convergent subsequences. And from the lemma above, if a cauchy sequence has convergent subsequences, then $ \left( x_n \right)  $ also converges to $ x \in X $. Hence all cauchy sequences converge, and X is complete as well
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{propositionbox}{3.5.8}{}
+A closed subset $ F $ of a compact set $ K $ is compact
+
+\begin{proofbox}{3.5.8}{}
+  Assume F is closed. Then all convergent subsequences in F converges to $ a \in F $. Assume $ \left( x_n \right)  $ is a sequence in F. Since K is compact, every sequence $ \left( x_n \right)  $ has convergent subsequences $ \left( x_{n_k} \right)  $ to $ a \in L $. 
+
+  But since F is closed, any sequence must stay within the closed set. which means that any subsequence must also stay within F. Then $ a \in F $, and thus, $ \left( x_{n_k} \right)  $  converges to $ a \in F $, which means that an arbitrary sequence $ \left( x_n \right) \in F  $ has a convergent subsequence $ \left( x_{n_k} \right)  $ converging to $ a \in F $, which means that F is also compact. 
+\end{proofbox}
+\end{propositionbox}
+
+\begin{propositionbox}{3.5.9}{}
+Assume that $ f : X \to Y $ is a continuous function between two metric spaces. If $ K \subseteq X $ is compact, then $ f \left( K \right)  $ is a compact subset of $ Y $ 
+
+\begin{proofbox}{3.5.9}{}
+  Let $ \left( y_n \right)  $ be a sequence in $ f \left( K \right)$. We have that $ K \subseteq X $  is compact. Since $ f(x) \in f \left( K \right)  $, we have for each $ n \in \mathbb{N} \; f \left( x_n \right) = y_n$. Since K is compact, $ \left( x_n \right)  $ has a converging subsequence $ \left( x_{n_k} \right)  $  to $ x \in K $. But since f is a continuous function, then taking the function of a convergent sequence will preserve convergence in the new metric space. Thus, $ f \left( x_{n_k} \right)  $ converges to $ f \left( x \right)  $
+
+  \[
+      \left( y_{n_k} \right) = \left( f \left( x_{n_k} \right)  \right) 
+  \]
+
+  and thus, there is a subsequence of $ \left( y_n \right)  $ converging to $ y = f(x) $, and Y is compact as a result
+  
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{theorembox}{3.5.10 Extreme value theorem}{}
+Assume $ K $ is nonempty compact subset of $ \left( X, d \right)  $ and that $ f : K \to \mathbb{R} $ is a continuous function. Then f has a maximum and minimum points in $ K $, i.e. $ \exists  c, d \in K $ such that
+\[
+    f \left( d \right) \leq f \left( x \right) \leq f \left( c \right) \; \forall x \in K
+\]
+
+
+\begin{proofbox}{3.5.10}{}
+  Since K is compact, its closed and bounded. Define now
+  \[
+      \alpha_{  }^{} := \inf \left\{ x \in K : f(x) \right\} \; \beta_{}^{} := \sup \left\{ x \in X : f(x) \right\} 
+  \]
+  then 
+  \[
+      \alpha_{}^{} \leq f(x) \leq \beta_{}^{} \; \forall x \in  K
+  \]
+  
+\end{proofbox}
+\end{theorembox}
+
+\begin{definitionbox}{3.5.11}{}
+A subset $ A $ of $ X $ is called totally bounded if for each $ \epsilon > 0 $ there is finite $ B \left( a_1, \epsilon  \right), V \left( a_2, \epsilon  \right), ..., B \left( a_n, \epsilon  \right)    $ of balls with centers in $ A $ and radius $ \epsilon  $ that cover $ A $
+\[
+    A \subseteq B \left( a_1, \epsilon  \right) \cup V \left( a_2, \epsilon  \right) \cup ... \cup B \left( a_n, \epsilon  \right)
+\]
+\end{definitionbox}
+
+
+\begin{propositionbox}{3.5.12}{}
+Let $ K $ be a compact subset of $ X $. Then $ K $ is totally bounded
+
+\begin{proofbox}{3.5.12}{}
+  Assume that K is not totally bounded. This means that $ \exists \epsilon > 0 $ such that no finite collection of $ \epsilon  $- balls cover K. We shall make a sequence $ \left( x_n \right)  $ that has no convergent subsequence.
+
+  Pick $ x_1 \in K $, then $ B \left( x_1, \epsilon  \right)  $ does not cover K. Choose $ x_2 \in  K \setminus B \left( x_1, \epsilon  \right)  $, then $ B \left( x_1, \epsilon  \right) \cup B \left( x_2, \epsilon  \right)   $ does not cover K. So we pick $ x_3 \in K \setminus \left( B \left( x_1, \epsilon \right), B \left( x_2, \epsilon  \right)   \right)  $, and get that $ B \left( x_1, \epsilon  \right) \cup B \left( x_2, \epsilon  \right) \cup B \left( x_3, \epsilon  \right)    $ also does not cover K.
+
+
+  Go down and get that $ x_n \in K \setminus \left( B \left( x_1, \epsilon   \right) \cup ... \cup B \left( x_{n-1}, \epsilon  \right)   \right)  $. Now we have a sequence $ \left( x_n \right)  $ such that $ d \left( x_n, x_m \right) \geq \epsilon \; \forall n, m \in \mathbb{N} $ and $ n \neq m $. Hence $ \left( x_n \right)  $ has no convergent subsequence, and A is not compact. 
+\end{proofbox}
+\end{propositionbox}
+
+\begin{theorembox}{3.5.13}{}
+A subset $ A $ of complete metric space $ X $ is compact $ \iff $ $ A  $ is closed and totally bounded
+
+\begin{proofbox}{3.5.12}{}
+  To be continued
+\end{proofbox}
+\end{theorembox}
+
+
+\begin{oppgavebox}{3.5.5 }{}
+Let $ \left( X, d \right)  $ be a metric space. For a subset $ A \subset X $, let $ \partial A $ denote the boundary of A. $ \bar{A} = A \cup \partial A $ 
+
+\begin{itemize}
+  \item a) A subset A of X is called precompact $ \bar{A} $ is compact. Show that A is precompact if and only if all sequences in A have convergent subsequences
+  
+  \begin{proofbox}{3.5.5 a)}{}
+
+    \begin{itemize}
+      \item 1: A is precompact
+      \item 2: all sequences in A have convergent subsequences.
+    \end{itemize}
+
+    We start with $ 1 \Rightarrow 2 $ 
+    Assume that A is precompact. That is $ \bar{A} $ is compact. Want to show that all sequences in A have convergent subsequences. 
+
+    Take an arbitrary sequence in A, $ \left( x_n \right)  $. Then $ \left( x_n \right) \subset \bar{A} $, which is compact. This means that $ \left( x_n \right)  $ has a convergent subsequence $ \left( x_{n_k} \right)  $ to $ x \in  \bar{A} $. Hence all sequences in A has a convergent subsequence
+
+
+    Now we show the other way $ 2 \Rightarrow 1 $
+
+    Assume that all sequences in A have convergent subsequences. Let $ \left( x_n \right) \subset A $. Then $ \left( x_{n_k} \right)  $ converges to $ x \in  X $. But since $ A \subseteq \bar{A} $, then $ x \in \bar{A} $, and hence, since $ \bar{A} $ is closed by definition (the set $\bar{A}$ contains its boundary points) $\left( x_{n_k} \right)  $ must converge to $ x \in \bar{A} $. Thus, $ \bar{A} $ is compact $\Rightarrow$ A is precompact 
+  \end{proofbox}
+  \item b) Show that a subset of $ \mathbb{R}^n $ is precompact if and only if its bounded
+  
+  \begin{proofbox}{3.5.5 b)}{}
+    We have that 
+    \begin{itemize}
+      \item A: $ A \subseteq \mathbb{R}^n $ is precompact
+      \item B: $ A \subseteq \mathbb{R}^n $ is bounded
+    \end{itemize}
+
+
+    $ A \Rightarrow B $ 
+
+    Assume that $ A \subseteq \mathbb{R}^n$ is precompact.  Since $ \bar{A} \subseteq \mathbb{R}^n $ is compact, then this implies that $ \bar{A} $ is closed and bounded. We already know that $ \bar{A} $ is closed, but now its bounded as well. So $ \exists M \in \mathbb{R} $ such that $ d \left( a, b \right) \leq M \; \forall a, b \in  \bar{A} $. Furthermore, since $ A \subseteq \bar{A} $, then M also encloses $ A $, and we get that $ A $ is also bounded. 
+
+
+
+    $ B \Rightarrow A $
+    
+    Assume that $ A \subseteq \mathbb{R}^n $ is bounded. Then we know that $ \bar{A} = A \cup \partial A $ is closed and bounded. In $ \mathbb{R}^n $, this implies that $ \bar{A} $ is also compact.  So $ \bar{A} $ is compact $ \iff $ A is precompact
+    
+    And the proof is finished
+
+  \end{proofbox}
+\end{itemize}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{3.5.6}{}
+Assume $ \left( X, d \right)  $ is a metric space and $ f : X \rightarrow \left[ 0, \infty \right)  $ is a continuous function. Assume $ \forall  \epsilon > 0 \; \exists  K_{ \epsilon } \subseteq K $ such that $ f(x) < \epsilon  $ when $ x \notin K_{ \epsilon } $. Show that f has a maximum.
+
+\begin{proofbox}{3.5.6}{}
+  We have that $ X = K_{ \epsilon } \cup \left( K_{ \epsilon } \right)^c  $. We assume that $ \forall  \epsilon > 0 \; \exists K_{ \epsilon } \subseteq X $ such that $ f(x) < \epsilon  $ when $ x \in \left( K_{ \epsilon }  \right)^c$  .
+
+
+  When $ x \in K_{ \epsilon } $, then, since $ K_{ \epsilon } $ is compact and f is continuous, we get that there exists a $ d \in K_{ \epsilon } $ such that $ f(x) \leq f(d) \; \forall x \in K_{ \epsilon } $. But we are asked to find the maximum of f in the whole metric space x. So when $ x \notin K_{ \epsilon } $, then $ f(x) < \epsilon  $ and $ \epsilon   $ becomes the upper bound for f. Thus, we can define 
+
+  \[
+      \sup_{ x \in X} f(x) = max \left( f(d), \epsilon \right) 
+  \]
+  What is bigger between $ f(d)  $  and $ \epsilon  $?
+
+  Pick $ \epsilon _1 $ and define
+  \[
+      \epsilon _n = e^{-n} \epsilon _1
+  \]
+  Then 
+  \[
+      \lim_{n \to \infty} \epsilon _n = 0
+  \]
+  
+  Thus, $ \exists N \in \mathbb{N} $ such that $  d \left( \epsilon _n, 0 \right) < d f(d) \; \forall n \geq N $. So we have found that
+
+  \[
+      \sup_{x \in X} = f(d) \; \forall n \geq N
+  \]
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.5.7}{}
+Let $ \left( X, d \right)  $ be a compact metric space, and assume that $ f: X \rightarrow \mathbb{R} $ is continuous when we give $ \mathbb{R} $ the usual metric $ d \left( x, y \right) = \left| x - y \right|  $. Show that if $ f(x) > 0 \; \forall  x \in X $, then $ \exists a \in \mathbb{R} \; f(x) > a \; \forall x \in X $.
+
+\begin{proofbox}{3.5.7}{}
+  Since $ X $ is compact and f is continuous, then there exists a $ c \in X $ such that $ f(c) \geq f(x) \; \forall x \in X $. Since $ f(x) > 0 \; \forall  x \in X $  then also $ f(c) > 0 $. Hence there exists $ a \in \mathbb{R} $ such that
+  \[
+      f(c) = a \leq f(x) \; \forall x \in X
+  \]
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.5.8}{}
+Assume that $ f : X \rightarrow Y $ is continuous between metric spaces, and let $ K $ be a compact subset of Y. Show that $ f^{-1} (K) $ is closed. Find an examole which shows that $ f^{-1}(K) $ need not be compact
+
+\begin{proofbox}{3.5.8}{}
+  Since $ K \subseteq Y $ is compact, K is closed and bounded. So all sequences $ \left( y_n \right) \in K $ have convergent subsequences meaning that $ \left( y_{n_k} \right)  $ converges to $ y \in K $. Since f is continuous, we have that $ \forall n \in \mathbb{N} $, we have $ f^{-1}(y_n) = x_n $. This means that 
+  \[
+      f^{-1} \left( y_{n_k} \right) = x_{n_k}
+  \]
+  Now taking the limits, we get that $ \lim_{k \to \infty} f^{-1} \left( y_{n_k} \right) = f^{-1} \left( \lim_{k \to \infty} y_{n_k} \right) = f^{-1} (y) = x \in f^{-1} \left( K \right) $. Since this counts for all $ \left( y_n \right)  $  in $ K $, then $ f^{-1} (K) $ is closed.   
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.5.9}{}
+Show that a totally bounded subset of a metric space is always bounded. Find and example of a bounded set in a metric space that is not totally bounded.
+
+\begin{proofbox}{3.5.9}{}
+  Assume $ A \subseteq X $ is totally bounded, then if $ \exists \epsilon > 0 $ such that for a finite collection of balls,  $ A \subseteq B \left( a_1, \epsilon  \right) \cup ... \cup B \left( a_n, \epsilon  \right)   $. 
+
+  Choose $ \epsilon > 0 $. We have that $ A \subseteq \cup_{i=1}^n B \left( a_i, \epsilon  \right)  $. Pick an arbitrary $ x_0 \in X $, then define $ R := max_{i \in \left[ 1, n \right] } d(a_i, x_0 ) + 1$, thus $ d \left( a_i, x_0 \right) < R \; \forall i \in \left[ 1, n \right]  $ . Pick $ x \in A $ such that $ x \in B \left( a_i, \epsilon  \right)  $ , then $ d(a_i, x) < \epsilon  $. we get
+  
+  \[
+      d \left( x, x_0 \right) \leq d \left( x, a_i \right) + d \left( a_i, x_0 \right) < \epsilon + R
+  \]
+
+  hence $ x \in B \left( x_0, R \right)  $ 
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{3.5.10}{}
+Let $ d \left( x, y \right) = \left| x - y \right|  $ be the usual metric on $ \mathbb{Q} $. Let $ A = \left\{ q \in \mathbb{Q} : 0 \leq q \leq 2 \right\}  $. Show that A is closed and totally bounded subset of $ \mathbb{Q} $, but not compact.
+
+\begin{proofbox}{3.5.10}{}
+  A is not compact, since the sequence converging to $ \sqrt{ 2 } $ does not lie in $ \mathbb{Q} $, and hence not in $ A $. But its closed, because $ A^c = \left\{ q \in \mathbb{Q} : \left( - \infty, 0 \right) \cup \left( 2, \infty \right)   \right\}  $ is open. Its totally bounded since 
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.5.11}{}
+A metric space $ \left( X, d \right)  $ is locally compact if for each $ a \in X $ is an $ r > 0 $ such that the closed ball $ \bar{B} \left( a, r \right) = \left\{ x \in X : d \left( a, x \right) \leq r \right\}   $ is compact.
+\begin{itemize}
+  \item a) Show that $ \mathbb{R}^n $ is locally compact.
+  \begin{proofbox}{3.5.11 a)}{}
+    Take any $ x \in \mathbb{R}^n $, then the closed ball around x with radius r is $ \bar{B} \left( x, r \right)  $. Show that $ \bar{B} \left( x, r \right)  $ is compact. 
+
+    Since $ \bar{B} \left( x, r \right) \subseteq \mathbb{R}^n $, we have to show that $ \bar{B} \left( x, r \right)  $ is compact. This happens if its closed and bounded. Its already closed by definition, so we only have to show its bounded.
+    
+
+    BOUNDEDNESS:
+    $ \exists M \in \mathbb{R} $ such that $ d \left( a, b \right) \leq M \; \forall a, b \in \bar{B} \left( x, r \right)  $. Since $ d \left( x, y \right) \leq r \; \forall y \in \bar{B} \left( x, r \right)  $, we have a bounded set. 
+  \end{proofbox}
+
+  \item b) Show that if $ X = \mathbb{R} \setminus \left\{ 0 \right\}  $ and $ d : X \rightarrow \mathbb{R} $ is defined as $ d \left( x, y \right) := \left| x-y \right|  $, then $ \left( X, d \right)  $ is locally compact, but not complete.
+  
+  \begin{proofbox}{3.5.11 b)}{}
+    We know that its not complete since the sequence $ x_n = \frac{ 1 }{ n } $ converges to $ 0 \notin \mathbb{R} \setminus \left\{ 0 \right\}  $. Its locally compact if $ \forall x \in \mathbb{R} \setminus \left\{ 0 \right\}  \; \exists \epsilon  > 0 $ such that $ \bar{B} \left( x, \epsilon  \right)  $ is compact. This happens if its closed and bounded. Its already closed from definition, it contains its boudnary points.... Its bounded if $ \exists M \in \mathbb{R} $ such that $ d \left( x,y \right) \leq M \; \forall y, x \in \bar{B} \left( x, eps \right) $  . So we have that $ \forall y \in \bar{B} \left( x, \epsilon  \right) \Rightarrow d \left( x, y \right) = \left| x-y \right| \leq \epsilon =: M$. Hence we have that its closes
+  \end{proofbox}
+\end{itemize}
+\end{oppgavebox}
+
+\begin{oppgavebox}{3.5.15}{}
+Assume C and K are disjoint compact subset of a metric space $ \left( X, d \right)  $ and define
+\[
+    a = \inf \left\{ d \left( x, y \right) : x \in C, y \in K \right\} 
+\]
+
+Show that $ a > 0 $ and that $ \exists x_0 \in C, y_0 \in K $  such that $ d \left( x_0, y_0 \right) =a $
+
+\begin{proofbox}{3.5.15}{}
+  Since $ C \subseteq X $ and $ K \subseteq X $, then C and K inherits the metric, and $ \left( C, d_C \right)  $ and $ \left( K, d_K \right)  $ are two new metric spaces in $ \left( X, d \right)  $ 
+  Construct a new metric space $ c \times K $ with the metric $ d_{\times} \left( \left( x, y \right) , \left( x', y' \right)  \right) = d_C \left( x, x' \right) + d \left( y, y' \right)   $. Since the distance function $ d_C : C \rightarrow \mathbb{R} $ and $ d_K : K \rightarrow \mathbb{R} $  are continuous, then $ f : C \times K \rightarrow \mathbb{R} $ defined by $ f(x,y) = d_{C \times K}(x,y) $, then f is a continuous function. To show that $ a > 0 $, assume that $ a = 0 $. This means that $ d(x,y) = 0 \Rightarrow x,y \in C \cap K = \emptyset $. So the statement that $ d \left( x, y \right) = 0 $ is false. Therefore, $ a > 0 $ (because $ d \left( x, y \right) \geq 0 $)    
+  
+  
+  
+  The product of two metric spaces are also compact, and hence, f attains a minimum
+  \[
+      \exists x_0, y_0 \in C \times K \text{ such that } f \left( x_0, y_0 \right) = min_{x, y \in C \times K} f(x, y)
+  \]
+   
+  We now just let $ a = f \left( x_0, y_0 \right)  $ and get that $ d \left( x_0, y_0 \right) = a $ 
+
+\end{proofbox}
+
+
+\begin{proofbox}{Proof that the product of two compact metric spaces are also compact}{}
+  Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be two compact metric spaces. We have that  
+  \[
+      d_X : X \rightarrow \mathbb{R}
+  \]
+  \[
+      d_Y : Y \rightarrow \mathbb{R}
+  \]
+  The product of the two metric spaces make up $ \left( X \times Y, d_{X \times Y} \right)  $. Is this new metric space compact?
+
+  We have that since $ \left( X,d_X \right)  $ and $ \left( Y, d_Y \right)  $ are compact, then
+  \[
+      \left( x_n, y_n \right) 
+  \]
+  have convergent subsequences
+  \[
+      \left( x_{n_k}, y_n \right) \to \left( x, y_n \right) 
+  \]
+  and
+  \[
+      \left( x_n, y_{n_k} \right) \to \left( x_n, y \right) 
+  \]
+
+  hence
+  \[
+      d_{X \times Y} \left( \left( x_{n_k}, y_{n_k} \right), \left( x, y \right)  \right)  \to d_X \left( x_{n_k}, x \right) + d_Y \left( y_{n_k}, y \right) = 0
+  \]
+  So $\left( x_{n_k}, y_{n_k} \right) \to \left( x, y \right) $ as $ k \to \infty $ 
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A metric space}{}
+Define a metric space as rigorously as possible
+\begin{proofbox}{}{}
+  A metric space $ \left( X, d_X \right)  $ is a non-empty set that satisfies
+  \begin{itemize}
+    \item $ d \left( x, y \right) \geq 0  $ and $ d \left( x, y \right) = 0 \iff x =y \; \forall x, y \in X $
+    \item $ d \left( x,y \right) = d \left( y, x \right) \; \forall x, y \in X $
+    \item $ d \left( x, y \right) \leq d \left( x, z \right) + d \left( z, y \right) \; \forall x, y, z \in X  $   
+  \end{itemize}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A subset of metric space is bounded}{}
+\begin{proofbox}{}{}
+  $ A \subseteq \left( X, d \right)  $ is boudned if $ \exists M \in \mathbb{R} $ s.t. $ d \left( a, b \right) \leq M \; \forall a, b \in A $  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{An open subset of a metric space}{}
+\begin{proofbox}{}{}
+  An open subset $ A \subseteq X $ of a metric space $ \left( X, d \right)  $ is open if and only if $ \forall x \in A \; \exists \epsilon > 0 $ such that $ B \left( x, \epsilon \right) = \left\{ y \in A : d \left( x, y \right) < \epsilon  \right\} \subseteq A  $ 
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A closed subset of a metric space}{}
+Write as rigorously as possible the definition
+
+\begin{proofbox}{}{}
+  A closed subset $ A \subseteq X $ of metric space $ \left( X, d \right)  $ is defined as 
+  
+  $ \forall \left( x_n \right) \in A $ such that $ \left( x_n \right) \to x \in X \Rightarrow x \in A $
+\end{proofbox}
+
+\begin{proofbox}{Alternative proof}{}
+  A contains all the limit points of any convergent sequence. That is, if $ x \in X $ satisfies
+  \[
+      \forall \epsilon > 0 \; B \left( x, \epsilon \right) \cap \left( A \setminus \left\{ x \right\}  \right)  = \emptyset
+  \]
+  then $ x \in A $ 
+  
+\end{proofbox}
+
+\begin{proofbox}{Alternative}{}
+  $ A \subseteq X $ is closed $ \iff \; A^c = X \setminus A $ is open. That is, $ \forall x \in X \setminus A \; \exists  \epsilon > 0 $ such that $ B \left( x, \epsilon \right) \subseteq X \setminus A  $  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{Convergence of a sequence in a metric space}{}
+\begin{proofbox}{}{}
+  $ \left( x_n \right) \in X $ converges to x if $ \forall \epsilon > 0 \; \exists  N \in \mathbb{N} $  such that $ d \left( x_n, x \right) < \epsilon \; \forall n \geq N $ 
+\end{proofbox}
+
+\begin{proofbox}{}{}
+  $ \left( x_n \right) \to x $ as $ n \to \infty $ 
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A function f from one metric space to another is continuous at a point x}{}
+\begin{proofbox}{}{}
+  Let $ \left( X, d_X \right)  $ and $ \left( Y, d_Y \right)  $ be two metric spaces. f is continuous at $ x \in X $ if $ \forall \epsilon > 0 \; \exists \delta > 0  $ such that $ \forall y \in X \; d \left( x, y \right) < \delta \Rightarrow d \left( f(x), f(y) \right) < \epsilon $ 
+\end{proofbox}
+
+\begin{proofbox}{}{}
+  $ \forall \left( x_n \right) \to x \in X \; f \left( x_n \right) \to f(x) $
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A sequence in a metric space is cauchy}{}
+\begin{proofbox}{}{}
+  Let $ \left( X, d \right)  $ be a metric space, $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that $ d \left( x_n, x_m \right) < \epsilon \; \forall n, m  \geq N $ 
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{A complete metric space}{}
+\begin{proofbox}{}{}
+  A metric space $ \left( X,d \right)  $ is complete if all cauchy sequences converge. That is, let $ \left( x_n \right)  $ be a cauchy sequence in $ \left( X, d \right)  $, then   $ \forall \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ d \left( x_n, x_m \right) < \epsilon \; \forall n, m \geq N $ 
+\end{proofbox}
+\end{oppgavebox}
+
+\end{document}

@@ -1,0 +1,628 @@
+% !TeX spellcheck = nb_NO
+% Kommentaren ovenfor gir instruks til editoren din om at den skal bruke norsk stavekontroll. Dette fungerer bl.a. i TeXstudio.
+
+\documentclass[a4paper,norsk]{article}
+% Norsk orddeling
+\usepackage[norsk]{babel}
+% AMS-pakkene er nyttige
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+% For å definere lister, som f.eks. deloppgaver
+\usepackage{enumitem}
+% Inneholder mye nyttig, slik som \coloneqq
+\usepackage{mathtools}
+% Penere kalligrafiske fonter
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{mathabx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{ifthen}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+\tcbset{before upper=\par, after upper=\par} % allows itemize and enumerate inside boxes
+
+\usepackage{hyperref}
+
+
+
+\tcbset{
+  % Better page breaking for all tcolorbox environments
+  enhanced,
+  breakable,
+  before skip=5pt plus 2pt minus 1pt,
+  after skip=5pt plus 2pt minus 1pt,
+  parbox=false,
+}
+\newtcbtheorem[]{definitionbox}{Definisjon}{
+  colback=blue!3,
+  colframe=blue!70!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{def}
+
+\newtcbtheorem[]{theorembox}{Teorem}{
+  colback=green!3,
+  colframe=green!50!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  arc=2mm,
+  enhanced,
+  breakable
+}{thm}
+
+\newtcbtheorem[]{oppgavebox}{Oppgave}{
+  colback=gray!5,
+  colframe=black!60,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  parbox=false
+}{oppg}
+
+\newtcolorbox{sectionbox}[1][]{
+  colback=white,
+  colframe=black!70,
+  boxrule=0.7pt,
+  arc=3mm,
+  top=2mm, bottom=2mm, left=2mm, right=2mm,
+  title=#1,
+  enhanced,
+  breakable
+}
+
+\newtcbtheorem[]{corollarybox}{Korollar}{
+  colback=purple!5,
+  colframe=purple!60!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip
+}{cor}
+
+\newtcbtheorem[]{lemmabox}{Lemma}{
+  colback=orange!5,
+  colframe=orange!70!black,
+  fonttitle=\bfseries,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{lem}
+
+\newtcbtheorem[]{propositionbox}{Proposisjon}{
+  colback=cyan!5,
+  colframe=cyan!60!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{prop}
+
+\newtcbtheorem[]{proofbox}{Bevis}{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=black,
+  title style={opacity=0.9},
+  boxrule=0.6pt,
+  arc=2mm,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  parbox=false, % Viktig for sidebryting
+  segmentation style={black,solid,opacity=0.2,line width=0.5pt}
+}{proof}
+
+\newlist{suboppgave}{enumerate}{1}
+\setlist[suboppgave,1]{
+  label=\textbf{(\alph*)},
+  ref=\theenumi\alph*,
+  leftmargin=1.5em,
+  itemsep=0.4em,
+  topsep=0.3em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+
+
+\setcounter{secnumdepth}{2}  % Sections and subsections numbered
+
+% Python style  
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    numbers=left,
+    frame=single
+}
+
+% Bruk bedre symboler for ≥, ≤, epsilon og phi
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\newcommand{\eps} {\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+% Definer de vanligste mengdene og funksjonene
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+% \L er definert som noe annet fra før av, så vi må redefinere \L
+\renewcommand{\L}{\mathcal{L}}
+% Rommet av polynomer
+\newcommand{\Pol}{{\mathcal{P}}}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Image}{im}
+\DeclareMathOperator{\Kernel}{ker}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\Diag}{diag}
+\DeclareMathOperator{\Proj}{proj}
+\newcommand{\basis}{{\mathcal{B}}}
+\newcommand{\basiss}{{\mathcal{C}}}
+\newcommand{\basisss}{{\mathcal{D}}}
+
+\newtcolorbox{algoritme}[1]{
+  title=Algoritme~#1,
+  colback=white,
+  colframe=black,
+  boxrule=0.5pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=1mm,
+  bottom=1mm
+}
+
+% Definer oppgavemiljøet
+\newenvironment{oppgave}[1]%
+	{\trivlist{}\item\relax\textbf{Løsning på #1.}\medspace}%
+	{\endtrivlist}
+% Deloppgavelister
+\newlist{deloppgave}{enumerate}{1}
+\setlist[deloppgave,1]{label=(\textbf{\alph*}),align=left}
+
+\title{Real Analysis \\ MAT2400 University of Oslo, Spring 2026}
+\author{Oliver Ekeberg}
+
+\begin{document}
+\tableofcontents
+
+
+\section*{1.1 Proofs}
+\addcontentsline{toc}{section}{Proofs}
+
+Chapters with the word “preliminaries” in the title are never much fun, but they are useful, they provide readers with the background information they need to enjoy the rest of the text. This chapter is no exception, but I have tried to keep it short and to the point; everything you find here will be needed at some stage, and most of the material will show up throughout the book.
+Real analysis is a continuation of calculus, but it is more abstract and therefore in need of a larger vocabulary and more precisely defined concepts. You have undoubtedly dealt with proofs, sets, and functions in your previous mathematics courses, but probably in a rather casual fashion. Now they become the centerpiece of the theory, and there is no way to understand what is going on if you dont have a good grasp of them: The subject matter is so abstract that you can no longer rely on drawings and intuition; you simply have to be able to understand the concepts and to read, make, and write proofs. Fortunately, this is not as difficult as it may sound if you have never tried to take proofs and formal definitions seriously before.
+
+Many mathematical statements are of the form "If A then B", for example, "If $ n \in \mathbb{N}$ and divisible by 14, then n is. divisible by 7  ". This is not true, so if 
+
+\begin{itemize}
+    \item A = "Divisible by 14"
+    \item B = "Divisible by 7"
+\end{itemize}
+
+\begin{oppgavebox}{1.1}{}
+  \begin{enumerate}
+    \item Assume that the product of two integers x and y are. even. Prove that at least one of the integers are even
+  \begin{proofbox}{1.1}{}
+
+  Want to prove that $ xy $  is odd, i.e. $ xy = 2k+1 $ for $ k \in \mathbb{Z} $. We have the two events. 
+  \begin{itemize}
+    \item A =. $ xy $ is even
+    \item B = at least one of x and y is even
+  \end{itemize}
+  And the negations of these two events.
+  \begin{itemize}
+    \item $ \neg A = xy $ is odd
+    \item $ \neg B = $ None of x and y are even
+  \end{itemize}
+
+  First, assume $ \neg B $. This means that both x and y are odd. Then $ x = 2k+1, y = 2h+1 $  for $ k \in \mathbb{Z}, h \in \mathbb{Z} $. Then
+  \[
+      xy = \left( 2k+1 \right) \left( 2h+1 \right) = 4kh + 2k +2h+1 = 2 \left( 2kh + k + h \right) + 1
+  \]
+  Set now $ c = 2kh + k + h \in \mathbb{Z} $ and. get that. the product of two odd numbers are always odd. Or
+  \[
+      xy = 2c+1,\quad c \in \mathbb{Z}
+  \]
+  This means that if at least one of x and y are even, then $ x\cdot y $ can never be odd, since we have assumed that $ \neg B \rightarrow \neg A $ 
+    
+  \end{proofbox}
+  \item Assume that the sum of two integers x and y are even. Show that x and y are either. both. even or both odd.
+  \begin{proofbox}{1.2}{}
+    We have 
+    \begin{itemize}
+      \item A = sum of two integers are even
+      \item B = x and y are either both even or both odd
+    \end{itemize}
+
+    And the negated events are 
+    \begin{itemize}
+      \item $ \neg A =  $ sum of two integers are odd
+      \item $ \neg B =  $ x and y are neither both even and. both. odd.
+    \end{itemize}
+
+    The negated statement of B is tricky. We first have that if x and y are both odd, then there is an outcome. in the statement B,  where this is true. So this cant be an outcome in $ \neg B $. This also applies if both x and y are even. So either x is even, and y is odd. Or x is odd, and y is even. 
+
+    If we first want to prove that $ \neg B \rightarrow \neg A $, proceed like this. If x is. odd, and y is even, then 
+    \[
+        x =2k+1, k \in \mathbb{Z}, y = 2h, h \in \mathbb{Z}
+    \]
+    .Then 
+    \begin{align*}
+      x + y &= 2k+1 + 2h \\
+      &= 2 \left( k +h \right) + 1
+    \end{align*}
+    If we. set $ c = h+k $, then $ x+y = 2c + 1 $. The same applies. if y is odd and x is even. Therefore, we have proven that 
+    \[
+        \neg B \rightarrow \neg A
+    \]
+    which is logically equivalent with 
+    \[
+        A \rightarrow B
+    \].
+
+
+    And the proof is finished. I now want to expand. Assume that the sum of x and y is even. Then $ x+y=2k $ for $ k \in \mathbb{Z} $. If x is odd, and y is odd,  then $ x=2c+1 $   and $ y=2h+1 $ for $ c, h \in \mathbb{Z} $ . Then 
+    \[
+        x+y = \left( 2c+1 \right) + \left( 2h+1 \right) = 2 \left( c+h \right) + 2 = 2 \left( c+h+1 \right) 
+    \]
+    If we now set $ k = c+h+1 $, then we get that the sum of x and y is even,  when both x and y is odd. The result is pretty obvious for x. and y being even. 
+  \end{proofbox}
+
+  \item Show that if n is a natural number,  such that $ n^2 $ is divisible by 3, then n is divisible by 3. Use this to show that $ \sqrt{ 3 } $ is irrational
+  \begin{proofbox}{1.3}{}
+    \begin{itemize}
+      \item A = n is a natural number, such that $ n^2 $ is divisible by 3 
+      \item B = n is divisible by 3
+    \end{itemize}
+
+    \begin{itemize}
+      \item $ \neg A = $ n is not divisible by 3
+      \item $ \neg B = n^2 $ is not divisible by 3
+    \end{itemize}
+
+    I use this to show that the square root of 3 is irrational. If n is not divisible by. 3, then
+    \[
+        n =3k+1, n=3k+2
+    \]
+    This means that 
+    \[
+        n^2 = 9k^2+6k+1, n^2 =9k^2 + 12k + 4
+    \]
+    In both cases, $ n^2 $ is not divisible by 3, so $ \neg A $ holds. I want to use this to prove that $ \sqrt{ 3 } $ is irrational.
+
+    Assume for contradiction that $ \sqrt{ 3 } = \frac{ a }{ b } $. Then $ 3 = \frac{ a^2 }{ b^2 } $. So $ b^2 3 = a^2 $. In other words, $ a^2 $ is divisible by 3. Substitute $ a = 3k $. Then
+    \[
+        3b^2 = 9k^2 \rightarrow b^2 = 3k^2 
+    \]
+    So $ b^2 $ is also divisible by 3, and since we showed that if n is divisible by 3, then $ n^2 $ is also divisible by 3, we draw that b is divisible by 3. But this is a contradition to the fact that $ \sqrt{ 3 } = \frac{ a }{ b } $  with a and b having no common factors. So $ \sqrt{ 3 } $ is an irrational number
+  \end{proofbox}
+
+  \end{enumerate}
+\end{oppgavebox}
+
+
+
+\section*{1.2 Sets}
+\addcontentsline{toc}{section}{Sets}
+
+If we have sets $ A_1,\cdots A_n $, then their union and intersection is given by  
+\[
+    A_1 \cup \cdots \cup A_n = \left\{ a : a \text{a belongs to at least one of } A_1, \cdots A_n  \right\} 
+\]
+\[
+    A_1 \cap \cdots \cap A_n = \left\{ a : a \text{a belongs to all of } A_1, \cdots A_n  \right\} 
+\]
+
+We also have that
+
+\[
+    \left[ a, b \right] = \left\{ x in \mathbb{R} : a \leq x \leq b  \right\}  
+\]
+
+
+
+
+
+In set theory, we have some algebraic rules to help us
+
+\begin{propositionbox}{1.2.1: Distributive laws}{}
+\begin{itemize}
+  \item $ B \cup \left( A_1 \cap \cdots \cap A_n \right) = \left( B \cup A_1 \right) \cap \cdots \cap \left( B \cup A_n \right)   $ 
+  \item $ B \cap \left( A_1 \cup \cdots \cup A_n \right) = \left( B \cap A_1 \right) \cup \cdots \cup \left( B \cap A_n \right)   $ 
+\end{itemize}
+\end{propositionbox}
+
+We also have the \textbf{set theoretic difference}, written as 
+\[
+     A \setminus B = \left\{ a : a \in A, a \notin B  \right\} 
+\]
+
+We are often interested in the subsets of a given universe, denoted.  $ U $. A subset of this U is A. If an element $ a $  is in the universe U, but not in A, we denote $ a \in A^c $ where 
+\[
+    A^c  = U \setminus A = \left\{ a \in U : a \notin A \right\} 
+\]
+
+
+\begin{propositionbox}{1.2.2 Demorgans law}{}
+  \begin{itemize}
+    \item $ \left( A_1 \cup \cdots \cup A_n \right) ^ c = A_1^c \cap \cdots \cap A_n^c $
+    \item $ \left( A_1 \cap \cdots \cap A_n \right) ^ c = A_1^c \cup \cdots \cup A_n^c $  
+  \end{itemize}
+\end{propositionbox}
+
+\begin{oppgavebox}{1.2.1}{}
+  Show that $ \left[ 0, 2 \right] \cup \left[ 1, 3 \right] = \left[ 0, 3 \right]    $ 
+
+  \begin{proofbox}{1.2.1}{}
+    We start to show that $ \left[ 0, 2 \right]  \cup \left[ 1, 3 \right]  \subseteq \left[ 0, 3 \right]  $. If $ x \in \left[ 0, 2 \right] \cup \left[ 1, 3 \right]   $, then x satisfies at least one of following conditions
+    \[
+        0 \leq x \leq 2 \quad  1 \leq x \leq 3
+    \]
+    In both cases, we have that 
+    \[
+        0 \leq x \leq 3
+    \]
+    and thus,  we have that $ x \in \left[ 0, 3 \right]  $. To show that 
+    \[
+        \left[ 0, 3 \right] \subseteq \left[ 0, 2 \right] \cup \left[ 1, 3 \right]  
+    \]
+    , observe that if we can split the left side. $ \left[ 0, 3 \right] = \left[ 0, 1 \right] \cup \left[ 1, 2 \right] \cup \left[ 2, 3 \right]     $. So we just rearrange, and get that 
+    \[
+        \left[ 0, 3 \right] = \left[ 0, 2 \right] \cup \left[ 1, 3 \right]  
+    \]    
+  \end{proofbox}
+
+  \begin{proofbox}{1.2.1}{}
+    Now I want to prove that 
+    \[
+        \left[ 0 2 \right] \cap \left[ 1, 3 \right] = \left[ 1, 2 \right] 
+    \]
+    
+    If $ x \in \left[ 0, 2 \right] \cap \left[ 1, 3 \right]   $, then x needs to satisfy both of the following conditions:
+    \begin{enumerate}
+      \item $ 0 \leq x \leq 2 $ 
+      \item $ 1 \leq x \leq 3 $ 
+    \end{enumerate} 
+    in other words, $ 1 \leq x \leq 2 \rightarrow x \in \left[ 1, 2 \right]  $. For the other side implication, we have that if $ x \in \left[ 1, 2 \right]  $, then $ x \in \left[ 0,  3 \right] \cap \left[ 1, 2 \right] $. We can rearrange this to be 
+    
+    \[
+        x \in \left[ 0, 2 \right] \cap \left[ 1, 3 \right]  
+    \]
+    
+  \end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{1.2.2}{}
+Let $ U = \mathbb{R} $ be the universe. Explain that $ \left( - \infty, 0 \right)^C = \left[ 0, \infty \right)   $ 
+  \begin{proofbox}{1.2.2}{}
+    Since $ \mathbb{R} $ can be described as all numbers between $ \left( - \infty, \infty \right)  $,  then its self explanatory
+  \end{proofbox}
+\end{oppgavebox}
+
+
+\section*{1.4 Functions}
+\addcontentsline{toc}{section}{Functions}
+
+
+\begin{oppgavebox}{1.4.1}{}
+Let $ f: \mathbb{R} \rightarrow \mathbb{R} $ be the function $ f(x) = x^2 $ .FInd $ f \left( \left[ -1,2 \right] brc1 \right)  $ and $ f^{-1} \left( \left[ -1, 2 \right]  \right)  $ 
+
+\begin{proofbox}{1.4.1}{}
+  We have $ A = \left[ -1, 2 \right]  $, and $ f \left( A \right)  $ being the domain in $ \mathbf{R} $  that. f can take. This is defined as $ \left[ min \left( f(A) \right), max \left( f(A) \right)   \right]  $. This is $ \left[ 0, 4 \right]  $. And for $ f ˆ{-1} \left( \left[ -1, 2 \right]  \right)  $, we have that 
+
+  \[
+      fˆ{-1}(x) = \left\{ x in \mathbb{R} : f(x) \in \left[ -1,2 \right]  \right\} 
+  \]
+  \begin{align*}
+    y&=x^2  \\
+    x &=\pm \sqrt{ 2 }
+  \end{align*}
+  And since we have that x can take values between $ 0, 4 $, then $ f^{-1} (A) = \left[ - \sqrt{ 2 }, \sqrt{ 2 } \right]  $ 
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{1.4.2}{}
+Let $ g: \mathbb{R}^2: \mathbb{R} $ be the function $ g \left( x, y \right)  = x^2+y^2 $. FInd $ g \left( \left[ -1, 1 \right] \times \left[ -1, 1 \right]   \right)  $ and $ g^{-1} \left( \left[ 0, 4 \right]  \right)  $ 
+
+\begin{proofbox}{1.4.2}{}
+  To find $ g \left( \left[ -1, 1 \right] \times \left[ -1,  1 \right]   \right)  $ we need to find the max and min of g. Obviously, the min is $ g(0, 0) = 0 $. The max is 
+  \[
+      g(\pm 1, \pm 1) = \left( \pm 1 \right)^2 + \left( \pm 1 \right)  ^2 = 2
+  \]
+   So $ g \left( \left[ -1, 1 \right] \times \left[ -1 ,1 \right]   \right) = \left[ 0, 2 \right]  $ 
+
+  To find $ g ^{-1} \left( \left[ 0, 4 \right]  \right)  $,  we need to find the preimage
+  \[
+      g^{-1} \left( \left[ 0, 4 \right]  \right) = \left\{ \left( x, y \right) \in \mathbb{R}^2 : x^2 + y^2 \in \left[ 0, 4 \right]   \right\} 
+  \]
+  Since this is a disk in $ R^2 $, this is equivalent to $ x^2+y^2 \geq 0 $ and $ x^2+y^2 \leq 4 $. Thus
+  \[
+      g^{-1} \left( \left[ 0,  4 \right]  \right) = \left\{ \left( x, y \right) \in \mathbb{R}^2 : 0 \leq x^2+y^2 \leq 4  \right\} 
+  \]
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{1.4.3}{}
+Show that the function $ f: \mathbb{R} \rightarrow \mathbb{R} $ defined by $ f(x) = x^2 $  is neither injective nor surjective. What if we change the definition to $ f(x) = x^3 $?
+
+\begin{proofbox}{1.4.3}{}
+  For a function $ f: \mathbb{R} \rightarrow \mathbb{R} $ to be injective, then 
+  $$ f(b) = f(a) \iff a = b $$
+  Its easy to see that for $ x = \pm n $ for an $ n \in \mathbb{R} $, we get that $ f(-n) = f(n) $, which breaks the definition foran injective function.
+  
+  Furthermore, a. function $ f: \mathbb{R} \rightarrow \mathbb{R} $ is surjective,  if $ \forall x in \mathbb{R} \exists  $ an $ y \in \mathbb{R} $  such that $ f(x) = y $. We also see very quickly that f is not surjective, because for $ y = -1 $, we have no $ x \in \mathbb{R} $  such that $ f(x) = y $.
+
+
+  And now for the case of $ f(x) = x^3 $, f is injective, since for any $ a, b \in \mathbb{R} $, we have that $ f(a) \neq f(b) \forall b \neq a $, and we can reach all negative numbers with the function $ f(x) = x^3 $ 
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{1.4.4}{}
+Show that a strictly increasing function $ f: \mathbb{R} \rightarrow \mathbb{R} $ is injective. Doesit have to be surjective?
+
+\begin{proofbox}{1.4.4}{}
+
+  We are asked to prove $ A \Rightarrow B $ where 
+  \begin{itemize}
+    \item A = f is strictly increasing
+    \item B = f is injective
+  \end{itemize}
+  Assume that f is strictly increasing. Any strictly increasing. function has the property that its increasing on the whole domain of f. This means that for all $ x_i < x_j $, we have that $ f(x_i) < f(x_j) $. Since f is injective when $ f(x_i) = f(x_j) \Rightarrow x_i = x_j$, we get that any strictly increasing function f is injective.\\
+  
+  It does not necessarily have to be surjective. We can gather that a function can asymptotically. reach a slope of $ 0 $ on the edge of the domain $ R $,  and still be strictly increasing. Take for example the function $ f(x) = e^x $. This is not surjective, but is strictly increasing,and therefore injective.
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{1.4.6}{}
+Find a function $ f: X\rightarrow Y $ and a set $ A \subseteq X $ such that neither $ f \left( A^c \right) \subseteq f \left( A \right) ^c  $ nor $ f \left( A \right) ^c \subseteq f \left( A^c \right)  $ 
+
+\begin{proofbox}{1.4.6}{}
+  Lets define the problem $ f : X \rightarrow Y $ where $ X = \left\{ 3, 4 \right\}  $ and $ Y = \left\{ a, b, c \right\}  $. Define the mappings
+  \[
+      f(3) = a, f(4) =a
+  \]
+  So. $ f(3) =f(4) $ maps to the same object. Define now $ A = \left\{ 3 \right\}  $. Then $ A^ c= \left\{ 4 \right\}  $ and 
+  $ f(A)^c = \left\{ b, c \right\}  $.  Then we have the case that 
+  \[
+      f(A^c) \nsubseteq f(A)^ c \quad f(A)^c. \nsubseteq f(A^c)
+  \]
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{1.4.7}{}
+Let X and Y be non empty sets and consider $ f: X \rightarrow Y $ 
+\begin{itemize}
+  \item a) Show that if $ B \subseteq Y $ then $ f \left( f^{-1} \left( B \right)  \right) = B $ 
+  \item b) Show that if $ A \subseteq X $, then $ A \subseteq f^{-1} \left( f \left( A \right)  \right)  $ 
+\end{itemize}
+
+\begin{proofbox}{1.4.7}{}
+  To be filledin
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{1.4.8}{}
+f and g arefunctions $ f: X \rightarrow Y $ and $ g: Y \rightarrow Z $
+\begin{itemize}
+  \item Show that if f and g are injective, so is $ g \circ f $ 
+  \item Show that if f and g are surjective, is $ g \circ f $ 
+  \item Explain that if f and g are bijective,so is $ g \circ f $,and show that $ \left( g\circ f \right)^{-1} = \left( f \right)^{-1} \circ \left( g \right) ^{-1}  $  
+\end{itemize}
+
+\begin{proofbox}{1.4.8}{}
+  \begin{itemize}
+    \item a) f is injective if $ f(a) = f(b) \iff a = b $, and g is injective if $ g(a) = g(b) \iff a = b $. Then $ g \circ f : X \rightarrow Z $ is injective if $ g(f(a)) = g(f(b)) \iff f(a) = f(b) \iff a = b $. Since we are already given that f and g is injective, we can conclude that $ g \circ f : X \rightarrow Z $ is also injective
+    \item b) Since f and g are surjective, then $ \forall c in Z \quad \exists b \in Y $ and $ \forall b in Y \exists a in X \quad s.t. f(a) = b \quad $   and $ g(b) = c $. Then there exists a function $ g \circ f : X \rightarrow Z $ defined by $ g(f(a)) = c $. As a result, $ g \circ f $ is surjective
+    \item c) If f and g are bijective, then they are both surjective and injective. This means that $ g \circ f $ also is bijective, as a result of proofs from a) and b). \\
+    
+    Furthermore, we have that if $ f: X \rightarrow Y $ and $ g: Y \rightarrow Z $, then $ f^{-1} : Y \rightarrow X $ and $ g^{-1} : Z \rightarrow Y$. This means for $ z \in Z $   and $ x \in X $, we have that
+    \[
+        f^{-1} \left( g^{-1} \left( z \right)  \right) = x
+    \]
+    This is equivalent with defining $ f^{-1} \circ g^{-1} : Z \rightarrow X $ 
+    \[
+        \left( g \circ f \right) ^{-1} = f^{-1} \circ g^{-1}
+    \]
+    
+    
+  \end{itemize}
+\end{proofbox}
+\end{oppgavebox}
+
+
+\section*{1.6 Countability}
+\addcontentsline{toc}{section}{Coutnability}
+
+We have that a A set is countable if it can be listed as $ a_1, a_2, ...., a_n, ... $. Meaning that there exists an injective mapping $ f : A \rightarrow \mathbb{N} $. This means that for any countable set, there is a one-to-one correspondence with the natural numbers.
+
+\begin{oppgavebox}{1.6.1}{}
+Show that a subset of a countable set is also countable. 
+
+\begin{proofbox}{1.6.1}{}
+  Assume that $ B \subseteq A $, and A is countable. This means that $ \exists$ an injective mapping $ f: A \rightarrow \mathbb{N} $. Now let the inclusion mapping be $ i: B \rightarrow A $. The inclusion mapping can be thougt of as the identity mapping $ i(x) = x $ from linear algebra. This mapping is also inejctive. And since composites of injective mappings are also injective, we can establish that 
+  
+  \[
+      f \circ i : B \rightarrow \mathbb{N}
+  \]
+  is also injective. Hence There exists a mapping that has a one to one correspondence with the natural numbers, and thus B is countable
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{1.6.2}{}
+SHow that if $ A_1, A_2, ..., A_n $ are countable, then so is $ A_1 \times A_2 \times ... \times A_n $.
+
+\begin{proofbox}{1.6.2}{}
+  paaasss
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{1.6.3}{}
+Show that the set of all finite sets $ \left( q_1, ..., q_k \right), \quad k \in \mathbb{N}  $ of rational numbers is countable.
+
+\begin{proofbox}{1.6.3}{}
+  We are asked to find out if $ \mathbf{Q}^k $ is countable. We have a fact that Q is countable (proofs online), then there exists an injectice mapping
+  \[
+      f: \mathbb{Q} \rightarrow \mathbb{N}
+  \]
+  . Now take an arbitrary sequence in $ \mathbf{Q}^k $. Namely $ \left( q_1, ..., q_k \right) k \in \mathbb{N} $. Then we can apply $ f $ to all elements in the sequence. So
+
+  \[
+      \left( f(q_1), ..., f(q_k) \right) \in \mathbb{N}^k
+  \]
+  And since $ \mathbb{N} $ is countable, then so is $ \mathbb{N}^k $, because of the fact that 
+  \[
+      \mathbb{N}^k = \mathbb{N} \times ... \times \mathbb{N}
+  \]
+  . And since $ \mathbb{N}^k $ is countable, we have am injective mapping 
+  \[
+      \psi : \mathbb{N}^k \rightarrow \mathbb{N}
+  \]
+
+  and therefore the mapping 
+  \[
+      \psi \circ f : \mathbb{Q}^k \rightarrow \mathbb{N}
+  \]
+  is injective, and hence, $ \mathbb{Q}^k $ is countable
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{1.6.4}{}
+Show that if A is an infinite, countable set, then there is a list $a_1,a_2,a_3,...$ which only contains elements in A and where each element in A appears only once. Show that if A and B are two infinite, countable sets, there is a bijection (i.e., an injective and surjective function) $f : A \rightarrow B$
+
+\begin{proofbox}{1.6.4}{}
+  Do this later
+\end{proofbox}
+\end{oppgavebox}
+\end{document}

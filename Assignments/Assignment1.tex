@@ -1,0 +1,405 @@
+% !TeX spellcheck = nb_NO
+% Kommentaren ovenfor gir instruks til editoren din om at den skal bruke norsk stavekontroll. Dette fungerer bl.a. i TeXstudio.
+
+\documentclass[a4paper,norsk]{article}
+% Norsk orddeling
+\usepackage[norsk]{babel}
+% AMS-pakkene er nyttige
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+% For å definere lister, som f.eks. deloppgaver
+\usepackage{enumitem}
+% Inneholder mye nyttig, slik som \coloneqq
+\usepackage{mathtools}
+% Penere kalligrafiske fonter
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{mathabx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{ifthen}
+\usepackage{parskip}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+\tcbset{before upper=\par, after upper=\par} % allows itemize and enumerate inside boxes
+
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+
+\tcbset{
+  % Better page breaking for all tcolorbox environments
+  enhanced,
+  breakable,
+  before skip=5pt plus 2pt minus 1pt,
+  after skip=5pt plus 2pt minus 1pt,
+  parbox=false,
+}
+\newtcbtheorem[]{definitionbox}{Definisjon}{
+  colback=blue!3,
+  colframe=blue!70!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{def}
+
+\newtcbtheorem[]{theorembox}{Teorem}{
+  colback=green!3,
+  colframe=green!50!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  arc=2mm,
+  enhanced,
+  breakable
+}{thm}
+
+\newtcbtheorem[]{oppgavebox}{Oppgave}{
+  colback=gray!5,
+  colframe=black!60,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  parbox=false
+}{oppg}
+
+\newtcolorbox{sectionbox}[1][]{
+  colback=white,
+  colframe=black!70,
+  boxrule=0.7pt,
+  arc=3mm,
+  top=2mm, bottom=2mm, left=2mm, right=2mm,
+  title=#1,
+  enhanced,
+  breakable
+}
+
+\newtcbtheorem[]{corollarybox}{Korollar}{
+  colback=purple!5,
+  colframe=purple!60!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip
+}{cor}
+
+\newtcbtheorem[]{lemmabox}{Lemma}{
+  colback=orange!5,
+  colframe=orange!70!black,
+  fonttitle=\bfseries,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{lem}
+
+\newtcbtheorem[]{propositionbox}{Proposisjon}{
+  colback=cyan!5,
+  colframe=cyan!60!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{prop}
+
+\newtcbtheorem[]{proofbox}{Bevis}{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=black,
+  title style={opacity=0.9},
+  boxrule=0.6pt,
+  arc=2mm,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  parbox=false, % Viktig for sidebryting
+  segmentation style={black,solid,opacity=0.2,line width=0.5pt}
+}{proof}
+
+\newlist{suboppgave}{enumerate}{1}
+\setlist[suboppgave,1]{
+  label=\textbf{(\alph*)},
+  ref=\theenumi\alph*,
+  leftmargin=1.5em,
+  itemsep=0.4em,
+  topsep=0.3em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+
+
+\setcounter{secnumdepth}{2}  % Sections and subsections numbered
+
+% Python style  
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    numbers=left,
+    frame=single
+}
+
+% Bruk bedre symboler for ≥, ≤, epsilon og phi
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\newcommand{\eps} {\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+% Definer de vanligste mengdene og funksjonene
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+% \L er definert som noe annet fra før av, så vi må redefinere \L
+\renewcommand{\L}{\mathcal{L}}
+% Rommet av polynomer
+\newcommand{\Pol}{{\mathcal{P}}}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Image}{im}
+\DeclareMathOperator{\Kernel}{ker}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\Diag}{diag}
+\DeclareMathOperator{\Proj}{proj}
+\newcommand{\basis}{{\mathcal{B}}}
+\newcommand{\basiss}{{\mathcal{C}}}
+\newcommand{\basisss}{{\mathcal{D}}}
+
+\newtcolorbox{algoritme}[1]{
+  title=Algoritme~#1,
+  colback=white,
+  colframe=black,
+  boxrule=0.5pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=1mm,
+  bottom=1mm
+}
+
+% Definer oppgavemiljøet
+\newenvironment{oppgave}[1]%
+	{\trivlist{}\item\relax\textbf{Løsning på #1.}\medspace}%
+	{\endtrivlist}
+% Deloppgavelister
+\newlist{deloppgave}{enumerate}{1}
+\setlist[deloppgave,1]{label=(\textbf{\alph*}),align=left}
+
+\title{Real Analysis, Assignment 1 \\ MAT2400 University of Oslo, Spring 2026}
+\author{Oliver Ekeberg}
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+
+\section*{Exc 1}
+\addcontentsline{toc}{section}{Exc 1}
+
+\subsection*{1 a)}
+\addcontentsline{toc}{subsection}{1 a)}
+
+
+Let $ m := \inf \left\{ f(x) : x \in K \right\}  $. Argue that there exists a minimizing sequence $ \left( x_n \right)  $ in K such that $ f(x_n) \to m $ as $ n \to \infty $. 
+
+\begin{proofbox}{1 a)}{}
+    Let m exists, i.e. $ m > - \infty $. So there exists a $ x \in K $ such that $ f(x) < m + \epsilon  $. Let $ \epsilon_n := \frac{ 1 }{ n } $. This means that for an arbitrary sequence $ \left( x_n \right)  $ in K, we have that
+    \[
+        f(x_n)  < m + \epsilon_n = m + \frac{ 1 }{ n }.
+    \]
+    
+
+    If we now let $ n \to \infty $, we get that $ f(x_n) \to m $ as $ n \to \infty $. 
+    
+\end{proofbox}
+
+\subsection*{1 b)}
+\addcontentsline{toc}{subsection}{1 b)}
+Show that there is a subsequence $ \left( x_{n_k} \right)  $ in K, and some $ \bar{x} \in  X $ such that $ x_{n_k} \to \bar{x} $ as $ k \to \infty $.  
+\begin{proofbox}{1 b)}{}
+    For our arbitrary sequence $ \left( x_n \right)  $ in K, since K is compact, we now have that $ \left( x_n \right)  $ has a convergent subsequence $ \left( x_{n_k} \right)  $ converging to a point $ x \in K $. We can now just set $ x = \bar{x} $ and get that 
+    \[
+        x_{n_k} \to \bar{x}
+    \]
+    as $ k \to \infty $.
+\end{proofbox}
+
+
+\subsection*{1 c)}
+\addcontentsline{toc}{subsection}{1 c)}
+
+Show that $ m \leq f( \bar{x}) \leq m + \epsilon  $ for any $ \epsilon > 0 $, and conclude that $ \bar{x} $ is a minimum of f.
+
+\begin{proofbox}{1 c)}{}
+    We have that for a sequence $ \left( x_n \right)  $ in K, we have constructed a sequence $ f(x_n) $ that converges to $ m $ as $ n \to \infty $. In addition, we have that a subsequence $ \left( x_{n_k} \right)  $  converges to $ \bar{x} $ as $ k \to \infty $. 
+    
+    
+
+    To prove that $ m \leq  f( \bar{x} ) \leq  m + \epsilon  $, we first show that $ m \leq f( \bar{x}) $. Since $ m := \inf \left\{ f(x) :  x \in K \right\}  $, and $ \bar(x) \in K $, then obviously, $ m \leq  f( \bar{x}) $
+
+
+    To prove that $ f( \bar{x}) \leq  m+ \epsilon  $, we use lower semicontinuity. Since $ x_{n_k} \to \bar{x} $ as $ k \to \infty $, we can for every $ \delta > 0 $  pick a $ k \geq  N \in \mathbb{N} $ such that $ d \left( \bar{x}, x_{n_k} \right) < \delta \Rightarrow f( \bar{x}) < f(x_{n_k}) + \epsilon   $. Since we allow $ \left( x_{n_k} \right)  $ to be a minimizing sequence, we get that 
+    \[
+        f(\bar{x}) < \lim_{k \to \infty} f( x_{n_k}) + \epsilon _k =  \lim_{k \to \infty} f( x_{n_k}) + \frac{ 1 }{ k }.
+    \]
+
+    This means that $ f (\bar{x}) \leq  m $. Hence, $ m \leq  f (\bar{x}) \leq m $  and we conclude that $ \bar{x} $ is a minimizer of f.
+    
+\end{proofbox}
+
+
+\begin{proofbox}{1 c)}{}
+  Show that $ m \leq  f(\bar{x} \leq  m + \epsilon  $. Since $ \bar{x} \in K $, we have that obviously, the infimum of a set, is smaller than or equal to any possible value in that set. Hence,
+  \[
+    m \leq f(\bar{x}.
+  \]
+  
+
+  To show that $ f \left( \bar{x} \right) \leq  m + \epsilon   $, we let $ \left( x_n \right)  $ be a minimizing sequence of f. Since $ \left( x_n \right)  $ is a sequence in a compact metric space, we have that it has a convergent subsequence $ \left( x_{n_k} \right)  $ converging to $ \bar{x} \in K $. Since the initial sequence $ \left( x_n \right)  $ is a minimizing sequence, then $ \left( x_{n_k} \right)  $ is also a minimizing sequence, which means that
+  \[
+      f(\bar{x}) \leq \liminf_{n \to \infty} f \left( x_{n_k} \right).
+  \]
+  
+
+  But since any subsequence converges to what its oversequence converges to, and $ \left( x_n \right)  $ converges to m, then 
+  \[
+      f(\bar{x_n}) \leq \liminf_{n \to \infty} f \left( x_{n_k} \right) \to m.
+  \]
+  Hence we have also proved that $ f(\bar{x} \leq  m $. This means that $ m \leq  f(\bar{x}) \leq  m $, and we can conclude that m is the minimum of f, and this is attained at $ \bar{x} $ 
+\end{proofbox}
+
+\section*{Exc 2}
+\addcontentsline{toc}{section}{Exc 2}
+Let $ \left( X, d \right)  $ be a metric space and $ E \subseteq X $ any subset. Let $ f : E \to \mathbb{R} $ be any bounded function (i.e., there is some $ M \in \mathbb{R} $ such that $ \left| f(x) \right| \leq M \; \forall x \in E$  ). Define $ g : \bar{E} \to \mathbb{R} $ by
+\[
+    g(x) := \lim_{y \to x, y \in E} \inf f(y) \; \forall x \in \bar{E}
+\]
+
+that is
+$ g(x) := \lim_{n \to \infty} f_n(x)  $, where $ f_n(x) := \inf \left\{ f(y) : y \in  E \cap B \left( x; \frac{ 1 }{ n } \right)  \right\}  $
+
+Here $ \bar{E} = E \cup \partial E $ is the closure of E. g is called the lower semi continuous envelope of f.
+
+\subsection*{2 a)}
+\addcontentsline{toc}{subsection}{2 a)}
+
+Show that g is well defined, i.e. the above limit exists, and that $ g(x) \leq f(x) $ for all $ x \in E $.
+
+
+\begin{proofbox}{2 a)}{}
+    g is well defined if
+    \begin{enumerate}
+        \item for all $ x \in \bar{E} $, the value $ g(x) $ actually makes sense
+        \item The value $ g(x) $ is an element in $ \mathbb{R} $ 
+        \item $ g(x) $ is unique in $ \mathbb{R} $.
+    \end{enumerate}
+
+
+    Lets first establish what we are dealing with. We have a function $ g : \bar{E} \to \mathbb{R} $ defined by 
+    \[
+        g(x) := \lim_{n \to \infty} f_n(x)  
+    \]
+
+    where $ f_n(x) := \inf \left\{ f(y) : y \in E \cap B \left( x ; \frac{ 1 }{ n } \right)  \right\}  $. Assume that $ \left( x_m \right)  $ is a sequence that converges to a point $ x \in \bar{E} $. Then around every single $ x_m $, we can define a ball $ B \left( x_m ; \frac{ 1 }{ n } \right)  $. Then $ E \cap B \left( x_m ; \frac{ 1 }{ n } \right) \neq \emptyset  $, which means that if $ y \in E \cap B \left( x_m ; \frac{ 1 }{ n } \right) $, then $ f_n(x_m) < \infty $, because infimum of the empty set is $ \infty $. If we define
+    \[
+        E_n(x_m) = E \cap B \left( x_m; \frac{ 1 }{ n } \right) 
+    \]
+    as a sequence of sets, then the \textit{size} of the sets are decreasing. If we now define 
+
+    \[
+        f_n(x_m) =  \inf(E_n(x_m))
+    \]
+    then the for each n, we can define $ m := \inf(E_n(x_m)) $, where m are real numbers. This means that $ g(x) = \lim_{n \to \infty}  f_n(x) $ is a sequence of real numbers. This is well defined.
+    
+    
+
+    To now show that $ g(x) \leq f(x) \; \forall x \in E $, observe that we are taking infimum over smaller and smaller sets. This means that $ f_n(x)  $ is an increasing sequence of infimum of sets. To illustrate, consider $ n \in \mathbb{N} $ and $ n > 0 $. Then $ A_n \left[ \frac{ -1 }{ n }, \frac{ 1 }{ n } \right]  $ is a sequence of sets. We can take the infimum of this set, and get that 
+    \[
+        \inf A_n = \frac{ -1 }{ n }.
+    \]
+    So the smaller larger n is, the smaller the infimum gets, i.e. $ A_{n+1} \subseteq A_n$ for all $ n \in \mathbb{N} $. 
+
+    
+    Going back to our exercise, we now see that 
+    \[
+        f_{n}(x) \leq  f_{n-1}(x) \leq ... \leq f(x) \; \forall n \in \mathbb{N}.
+    \]
+    Hence, since $ g(x) := \lim_{n \to \infty} f_n(x) \leq \lim_{n \to \infty} f(x) = f(x)   $. So $ g(x) \leq  f(x) $. We get that the limit is well defined, because the sequence $ f_n(x) $ is a monotone increasing sequence that is bounded. Hence, it is convergent.
+\end{proofbox}
+
+
+\subsection*{2 b)}
+\addcontentsline{toc}{subsection}{2 b)}
+
+Show that g is lower semicontinuous
+
+\begin{proofbox}{2 b)}{}
+  We can start by observing that $ f_n(x) \leq g(y)  $ for all $ y \in  E \cap B \left( x; \frac{ 1 }{ n } \right)  $. If we let $ y \in E \cap B \left( x; \frac{ 1 }{ n } \right)  $, then we have that for large enough k
+
+\[
+    E \cap B \left( y ; \frac{ 1 }{ k } \right) \subseteq E \cap B \left( x; \frac{ 1 }{ n } \right)
+\]
+
+So $ f_n(x) \leq f_k(y) $. If we now let $ k \to \infty $, we get that 
+\[
+    f_n(x) \leq g(y) := \lim_{k \to \infty}  f_k(y) \; \forall  y \in E \cap B \left( x; \frac{ 1 }{ n } \right) 
+\]
+
+
+Now observe since $ g(x) := \lim_{n \to \infty} f_n(x)  $, we have that for all $ n \geq N \in \mathbb{N} $ and $ \epsilon > 0 $ that $ \left| g(x) - f_n(x) \right| < \epsilon  $. This means that for a general $ x \in \bar{E} $ and all $ n \geq N \in \mathbb{N} $ , we have that
+\[
+    \left| g(x) - f_n(x) + f_n(x) \right| \leq \left| g(x) - f_n(x)  \right| + \left| f_n(x) \right| < \epsilon + f_n(x) \leq g(y) + \epsilon.
+\]
+Hence, g is lower semi continuous.
+\end{proofbox}
+
+\subsection*{2 c)}
+\addcontentsline{toc}{subsection}{2 c)}
+
+Show that if f is lower semicontinuous on E, then $ g(x) = f(x)  $ for all $ x \in E $.
+
+\begin{proofbox}{2 c)}{}
+  Let $ x \in E $. Since f is lower semi continuous, then $ \forall \epsilon > 0 $ and $ \delta > 0 $, $ d \left( x, y \right) < \delta  $ implies that $ f(x) < f(y) + \epsilon  $. In other words, we have that 
+  \[
+      f(x) \leq  liminf_{y \to x} f(y)
+  \]
+
+  Now fix $ \epsilon > 0 $, by lower semi continuity, pick $ \delta > 0 $ such that $ y \in E \cap B \left( x; \delta  \right)  $. This implies that $ f(x) < f(y) + \epsilon  $. let $ \frac{ 1 }{ N } < \delta  $, then for all $ n \geq N $, we have for every $ y \in E \cap B \left( x; \frac{ 1 }{ n } \right)  $ satisfying $ f(x) < f(y) + \epsilon  $. Since $ f_n(x) $ is an increasing sequence, we have that $ f(x) - \epsilon  \leq f_n(x) $. Taking $ n \to \infty $, we get that 
+  \[
+      f(x) - \epsilon  \leq g(x).
+  \]
+  And since $ \epsilon >0 $ is arbitrarily chosen, we get that 
+  \[
+      f(x) \geq  g(x).
+  \]
+  
+  Hence, $ g(x) \geq f(x)  $ and $ f(x) \geq g(x) $, then $ g(x) = f(x) $ is the only possibility
+\end{proofbox}
+
+\end{document}
