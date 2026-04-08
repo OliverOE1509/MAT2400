@@ -214,6 +214,7 @@
 \author{Oliver Ekeberg}
 
 \begin{document}
+\maketitle
 \tableofcontents
 
 
@@ -1039,12 +1040,179 @@ Assume that $ f : \mathbb{R} \to \mathbb{R} $ is a bounded continuous function. 
 \section*{4.8 Compact sets of continuous functions}
 \addcontentsline{toc}{section}{4.8 Compact sets of continuous functions}
 
+
+We have already encountered compact spaces, and learnt that if a metric space is closed AND bounded, then its also compact. Also, all subsequences of cauchy sequences in compact metric spaces converge, so all compact metric spaces are complete.
+
+
+We have also encountered spaces of functions. A sequence of functions converge to a function f, if it converges uniformly to f. We will characterize a space of functions as compact, if its closed, bounded and \textit{\textbf{equicontinuous}}. This is know as the \textbf{Arzela-Ascoli theorem}.
+
+
+
+\begin{definitionbox}{4.8.1}{}
+Let X be a metric space and assume A a subset of X. A is dense in X if for each $ x \in X $, there is a sequence from A converging to a point $ x \in X $
+
+
+Alternatively, $ \overline{A} = X $. 
+
+
+Alternatively, subset A of X is dense $ \iff \; \forall x \in X, \; \forall \delta > 0 \; \exists y \in A$  such that $ d \left( x, y \right) < \delta  $
+
+Alternatively, Let A be subset of X, then A is dense in X if $ \forall x \in X $ and $ r > 0 $, then
+\[
+    B \left( x, r \right) \cap A \neq \emptyset
+\]
+
+\end{definitionbox}
+
+\begin{definitionbox}{4.8.2}{}
+X is called separable if it has a countable and dense subset A. Recall a set is countable if there exists an injective mapping
+\[
+    f : A \to \mathbb{N}.
+\]
+\end{definitionbox}
+
+
+
+\begin{propositionbox}{4.8.3}{}
+All compact metric spaces are separable. We can choose countable dense set A in such a way that for any $ \delta > 0 $ there is a finite subset $ A_{ \delta } $ of A such that all elements of X are within distance less than $ \delta  $ of $ A_{ \delta } $. i.e. $ \forall x \in X \; \exists a \in A_{ \delta } $ such that $ d \left( x, a \right) < \delta  $.
+
+\begin{proofbox}{4.8.3}{}
+  I dont understand it yet
+\end{proofbox}
+\end{propositionbox}
+
+\begin{definitionbox}{4.8.4}{}
+Let X and Y be metric spaces and $ \mathcal{F} $ be a collection of functions $ f: X \to Y $. We say that $ \mathcal{F} $ is equicontinuous if $ \forall  \epsilon > 0 \; \exists \delta > 0 $ such that $ \forall f \in \mathcal{F} $ and $ \forall x, y \in X $, then
+\[
+    d_X \left( x, y \right) \Rightarrow d_Y \left( f(x), f(y) \right) 
+\]
+\end{definitionbox}
+
+
+Note: A collection of functions being equicontinuous, just means that all functions in the collection are uniformly continuous.
+
+
+\begin{lemmabox}{4.8.5}{}
+Assume X is compact and Y a complete metric space. Let $ \left( g_k \right)  $ be an equicontinuous sequence in $ C \left( X, Y \right)  $. Assume $ A \subseteq X $ is dense and that $ \left( g_k(a) \right)  $ converges for all $ a \in A $. Then $ \left( g_k \right)  $ converges in $ C \left( X, Y \right)  $.
+
+\begin{proofbox}{4.8.5}{}
+  Finish later. p. 108
+\end{proofbox}
+\end{lemmabox}
+
+
+\begin{propositionbox}{4.8.6}{}
+Assume X is compact, and let $ \left( f_n \right)  $ be a boudned and equicontinuous sequene in $ C \left( X, \mathbb{R}^m \right) $. Then $ \left( f_n \right)  $  has a subsequence converging in $ C \left( X, \mathbb{R}^m \right)  $ 
+
+\begin{proofbox}{4.8.6}{}
+  Extremely long proof
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{corollarybox}{4.8.7}{}
+If $ \left( X, d \right)  $ is compact, all boudned, closed and equicontinuous sets $ \mathcal{K} $ in $ C \left( X, \mathbb{R}^m \right)  $ are compact.
+
+\begin{proofbox}{4.8.7  }{}
+  According to the last proposition, any sequence in $ \mathcal{K} $ has a convergent subsequence. Since $ \mathcal{K} $ is closed, its limit must be in $ \mathcal{K} $, and hence, $ \mathcal{K} $ is compact.
+\end{proofbox}
+\end{corollarybox}
+
+
+\begin{lemmabox}{4.8.8}{}
+Assume X and Y are metric spaces and $ \left( f_n \right)  $ is a sequence of continuous functions from X to Y which converges uniformly to f. If $ \left( x_n \right)  $ is a sequence in X converging to a, then $ \left( f_n(x_n) \right)  $ converges to $ f(a) $ 
+
+\begin{proofbox}{4.8.8}{}
+  Given $ \epsilon > 0 $ we must show how to find an $ N \in \mathbb{N} $ such that $ d_Y \left( f_n(x_n), f(a) \right) < \epsilon   $  for all $ n \geq N $. Since we know from 4.2.4, that f is continuous, there is a $ \delta > 0 $ such that $ d_X \left( x, a \right) < \delta  \Rightarrow  d_Y \left( f(x), f(a) \right) < \epsilon /2  $. Since $ \left( x_n \right)   $ converges to x, there is an $ N_1 \in \mathbb{N} $ such that $ d_X \left( x_n, a \right) < \delta \; \forall n \geq N_1 $. Also, since $ \left( f_n \right)  $ converges uniformly to f, there is an $ N_2 \in \mathbb{N} $ such that when $ n \geq N_2 $  $ d_Y \left( f_n(x), f(x) \right) < \epsilon /2 \; \forall x \in X $. If we choose $ N = max \left\{ N_1, N_2 \right\}  $, we see that if $ n \geq N $, then
+  \[
+      d_Y \left( f_n(x_n), f(a) \right) \leq d_Y \left( f_n(x_n), f(x_n) \right) + d_Y \left( f(x_n), f(a) \right)  < \epsilon /2 + \epsilon /2 = \epsilon 
+  \]
+  
+  and the lemma is proved.
+\end{proofbox}
+\end{lemmabox}
+
+
+\begin{theorembox}{4.8.9 Arzela Ascoli theorem}{}
+Let $ \left( X, d_X \right)  $ be compact. A subset $ \mathcal{K} $ of $ C \left( X, \mathbb{R}^m \right)  $  is compact if and only if its closed, bounded and equicontinuous.
+
+
+\begin{proofbox}{4.8.9}{}
+  Make this proof later.
+\end{proofbox}
+\end{theorembox}
+
+
+
 \begin{oppgavebox}{4.8.3}{}
 Assume $ \left( X, d \right)  $ is a complete metric space, and that A is a dense subset of X. 
 
 \begin{itemize}
   \item a) Assume that $ f : A \to \mathbb{R} $ is uniformly cont. Explain that if $ \left( a_n \right)  $ is a sequence from A converging to a point $ x \in X $, then $ \left( f(a_n) \right)  $ converges. Show that the limit is the same for all such sequences $ \left( a_n \right)  $ converging to the same point x.
+  
+  \begin{proofbox}{4.8.3 a)}{}
+
+    We have that $ \left( a_n \right)  $ converges to x. This implies that $ a_n $ is a cauchy sequence, because all convergent sequences are cauchy. Now we have the function $ f : A \to \mathbb{R} $ which is uniformly continuous. This means that given $ \epsilon > 0 $, we can find a $ \delta > 0 $ that gives when $ d_A \left( a_n, a_m \right) < \delta  \Rightarrow \left| f(a_n) - f(a_m) \right| < \epsilon   $ for all $ a_n, a_m \in A$. 
+
+
+
+    So we let $ N \in \mathbb{N} $  be such that $ \forall n, m \geq N $, we get that $ d_A \left( a_n, a_m \right)  < \delta  $. From uniform continuity, we get that $ \left| f(a_n) - f(a_m) \right| < \epsilon   $ for those same m and n. This implies that $ f \left( a_n \right)  $ is also a cauchy sequence. Since $ f : A \to \mathbb{R} $, then $ f(a_n) \in \mathbb{R} $ which is complete. Since a metric space is complete if and only if all cauchy sequences converge, then $ f(a_n) $ must converge.
+
+    
+
+    Now to show that the limit is the same for all such sequences. 
+
+
+    Let $ \left( a_n \right)  $ and $ \left( b_n \right)  $ be two sequences converging to the same element $ x \in X $. Then $ \forall \delta > 0 $ there exists an $ N \in \mathbb{N} $ such that when $ n \geq N $, we get that $ d_A \left( a_n, x \right) < \delta / 2  $ and $ d_A \left( b_n, x \right) < \delta  / 2  $. Then 
+
+    \[
+        d_A \left( a_n, b_n \right) \leq  d_A \left( a_n, x \right) + d_A \left( b_n, x \right) < \delta /2 + \delta /2 = \delta.
+    \]
+
+    So $ d_A \left( a_n, b_n \right) < \delta \Rightarrow \left| f(a_n) - f(b_n) \right| < \epsilon   $. In other words, as $ N $ grows larger and larger, $ d_A \left( a_n, b_n \right) \to 0  $, which implies that $ \left| f(a_n) - f(b_n) \right| \to 0  $ as $ N \to \infty $. Hence, the limit is the same for both $ a_n $ and $ b_n $ evalueated at f.
+    
+    
+
+  \end{proofbox}
   \item b ) Define $ \bar{f} : X \to \mathbb{R} $ by putting $ \bar{f}(x) = \lim_{n \to \infty} f(a_n)  $ where $ \left( a_n \right)  $ is a sequence from a converging to x. We call f the continuous extension of f to X. Show that $ \bar{f} $ is uniformly continuous.
+  \begin{proofbox}{4.8.3 b)}{}
+    Show that $ \overline{f} $ is uniformly continuous. This happens if $ \forall \epsilon > 0 $ there exists $ \delta > 0 $ such that $ d_A \left( x, y \right) < \delta \Rightarrow \left| f(x) - f(y) \right| < \epsilon    $  for all $ x, y \in X $.
+
+
+    Since $ \overline{f} $ is the continuous extension for f. Then 
+    \[
+        \overline{f}(x) = \lim_{n \to \infty}  f(a_n).
+    \]
+
+    Let x, y in X be such that $ a_n \to x $ and $ b_n \to y $ as $ n \to \infty $. This implies from definition that 
+    \[
+        \overline{f}(x) = \lim_{n \to \infty} f(a_n), \overline{f}(y) = \lim_{n \to \infty} f(b_n).
+    \]
+     
+    So
+    \[
+        \left| \overline{f}(x) - \overline{f}(y) \right| = \lim_{n \to \infty} \left| f(a_n) - f(b_n) \right|.
+    \]
+
+    Since $ \overline{f}(x) = \lim_{n \to \infty} f(a_n)  $ and $ \overline{f}(y) = \lim_{n \to \infty} f(b_n)  $, we can pick $ \delta /3 > 0$ such that when $ n \geq N \in \mathbb{N} $, then $ d \left( a_n, x \right) < \delta /3  $, and $ d \left( b_n, y \right) < \delta /3 $. 
+
+    Let $ \epsilon > 0 $. Since f is uniformly continuous, there exists a $ \delta > 0 $ such that when $ d_A \left( a_n, b_n \right) < \delta \Rightarrow \left| f(a_n) - f(b_n) \right| < \epsilon $. ChooseFrom triangle inequality, then 
+    \[
+        d_A \left( a_n, b_n \right) \leq d \left( a_n, x \right) + d \left( x, y \right)  + d \left( y, b_n \right) < \delta/3 + \delta /3 + \delta /3 = \delta 
+    \]
+
+    This implies that $ \left| f(a_n) - f(b_n)  \right| < \epsilon/3  $. Since $ \overline{f}(x) = \lim_{n \to \infty}f(a_n)  $ and $ \overline{f}(y)  = \lim_{n \to \infty} f(b_n)  $ then
+    \[
+        \left| \overline{f}(x) - \overline{f}(y) \right| \leq \left| \overline{f}(x) - f(a_n) \right| + \left| f(a_n) - f(b_n)  \right| + \left| f(b_n) - \overline{f}(y) \right| < \epsilon /3 + \epsilon/3 + \epsilon /3 = \epsilon 
+    \]
+
+    Hence, $ \overline{f} $ is uniformly continuous.
+    
+    
+    
+
+    
+  \end{proofbox}
   \item c) Let $ f : \mathbb{Q} \to \mathbb{R} $ be defined by 
   \[
       f(x) = \begin{cases}
@@ -1254,5 +1422,12 @@ Let $ \sum_{ k=1 }^{ n } f_k(x)  $ be a series of functions
   \item $ \mathbf{EquicontinuitySequence} $ Let $ \left( X, d \right)  $  and $ \left( Y, \rho \right)  $ be metric spaces. The sequence $ \left( f_n \right)  $ is equicontinuous if $ \forall x_0 \in  X $ and $ \forall \epsilon > 0 \; \exists  \delta > 0 $  such that $ d \left( x, x_0 \right) < \delta  \Rightarrow \rho \left( f_n(x), f_n(x_0 \right) < \epsilon \; \forall n \in \mathbb{N} $. The key point is that when n is large enough, we can find a $ \delta > 0  $ that is independent of the point x.
 \end{itemize}
 \end{oppgavebox}
+
+
+\section*{4.10 Polynomials are dense in the continuous functions}
+\addcontentsline{toc}{section}{4.10 Polynomials are dense in the continuous functions}
+
+
+
 
 \end{document}

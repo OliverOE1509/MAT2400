@@ -1,0 +1,2168 @@
+% !TeX spellcheck = nb_NO
+% Kommentaren ovenfor gir instruks til editoren din om at den skal bruke norsk stavekontroll. Dette fungerer bl.a. i TeXstudio.
+
+\documentclass[a4paper,norsk]{article}
+% Norsk orddeling
+\usepackage[norsk]{babel}
+% AMS-pakkene er nyttige
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+% For å definere lister, som f.eks. deloppgaver
+\usepackage{enumitem}
+% Inneholder mye nyttig, slik som \coloneqq
+\usepackage{mathtools}
+% Penere kalligrafiske fonter
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{mathabx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{ifthen}
+\usepackage{parskip}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+\tcbset{before upper=\par, after upper=\par} % allows itemize and enumerate inside boxes
+
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+
+\tcbset{
+  % Better page breaking for all tcolorbox environments
+  enhanced,
+  breakable,
+  before skip=5pt plus 2pt minus 1pt,
+  after skip=5pt plus 2pt minus 1pt,
+  parbox=false,
+}
+\newtcbtheorem[]{definitionbox}{Definisjon}{
+  colback=blue!3,
+  colframe=blue!70!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{def}
+
+\newtcbtheorem[]{theorembox}{Teorem}{
+  colback=green!3,
+  colframe=green!50!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  arc=2mm,
+  enhanced,
+  breakable
+}{thm}
+
+\newtcbtheorem[]{oppgavebox}{Oppgave}{
+  colback=gray!5,
+  colframe=black!60,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  parbox=false
+}{oppg}
+
+\newtcolorbox{sectionbox}[1][]{
+  colback=white,
+  colframe=black!70,
+  boxrule=0.7pt,
+  arc=3mm,
+  top=2mm, bottom=2mm, left=2mm, right=2mm,
+  title=#1,
+  enhanced,
+  breakable
+}
+
+\newtcbtheorem[]{corollarybox}{Korollar}{
+  colback=purple!5,
+  colframe=purple!60!black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip
+}{cor}
+
+\newtcbtheorem[]{lemmabox}{Lemma}{
+  colback=orange!5,
+  colframe=orange!70!black,
+  fonttitle=\bfseries,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{lem}
+
+\newtcbtheorem[]{propositionbox}{Proposisjon}{
+  colback=cyan!5,
+  colframe=cyan!60!black,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxrule=0.6pt,
+  arc=2mm,
+  enhanced,
+  breakable
+}{prop}
+
+\newtcbtheorem[]{proofbox}{Bevis}{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=black,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=black,
+  title style={opacity=0.9},
+  boxrule=0.6pt,
+  arc=2mm,
+  before upper=\par\ignorespaces,
+  after upper=\par\unskip,
+  parbox=false, % Viktig for sidebryting
+  segmentation style={black,solid,opacity=0.2,line width=0.5pt}
+}{proof}
+
+\newlist{suboppgave}{enumerate}{1}
+\setlist[suboppgave,1]{
+  label=\textbf{(\alph*)},
+  ref=\theenumi\alph*,
+  leftmargin=1.5em,
+  itemsep=0.4em,
+  topsep=0.3em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+
+
+\setcounter{secnumdepth}{2}  % Sections and subsections numbered
+
+% Python style  
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    numbers=left,
+    frame=single
+}
+
+% Bruk bedre symboler for ≥, ≤, epsilon og phi
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\newcommand{\eps} {\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+% Definer de vanligste mengdene og funksjonene
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+% \L er definert som noe annet fra før av, så vi må redefinere \L
+\renewcommand{\L}{\mathcal{L}}
+% Rommet av polynomer
+\newcommand{\Pol}{{\mathcal{P}}}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Image}{im}
+\DeclareMathOperator{\Kernel}{ker}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Rank}{rank}
+\DeclareMathOperator{\Diag}{diag}
+\DeclareMathOperator{\Proj}{proj}
+\newcommand{\basis}{{\mathcal{B}}}
+\newcommand{\basiss}{{\mathcal{C}}}
+\newcommand{\basisss}{{\mathcal{D}}}
+
+\newtcolorbox{algoritme}[1]{
+  title=Algoritme~#1,
+  colback=white,
+  colframe=black,
+  boxrule=0.5pt,
+  arc=2mm,
+  left=3mm,
+  right=3mm,
+  top=1mm,
+  bottom=1mm
+}
+
+% Definer oppgavemiljøet
+\newenvironment{oppgave}[1]%
+	{\trivlist{}\item\relax\textbf{Løsning på #1.}\medspace}%
+	{\endtrivlist}
+% Deloppgavelister
+\newlist{deloppgave}{enumerate}{1}
+\setlist[deloppgave,1]{label=(\textbf{\alph*}),align=left}
+
+\title{Real Analysis, Normed spaces and linear operators \\ MAT2400 University of Oslo, Spring 2026}
+\author{Oliver Ekeberg}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+
+
+\section*{5.1 Normed spaces}
+\addcontentsline{toc}{section}{5.1 Normed spaces}
+
+
+
+
+We are familiar with normed vector spaces from MAT1125. Its basically a vector space which we equip with a notion of distance. But in MAT1125, we were very comfortable with finite dimensional vector spaces, which as a consequence, has a basis. We are now interested in infinite dimensional vector spaces, which equivalently, does not have a basis. In the next chapter, we will see how we can extend the theory of differentiation and linearization to normed spaces.
+
+
+\begin{definitionbox}{5.1.1}{}
+Let $ \mathbb{K} $ be a body and let V be a non-empty set equipped with two opearations
+\begin{itemize}
+    \item Addition: which to any two elements $ u, v \in V $  assigns a value $ u + v \in V  $ 
+    \item Scalar multiplication: which to any element $ u \in V $ and $ \alpha_{}^{}  \in \mathbb{K} $ assigns an element $ \alpha_{}^{} u \in V $.
+\end{itemize}
+
+
+We call V a vector space over $ \mathbb{K}  $  if
+\begin{enumerate}
+    \item $ u+v = v+u \; \forall u, v \in V $ 
+    \item $ \left( u+v \right) +w = u + \left( v+w \right)  \; \forall u,v,w \in V$ 
+    \item $ \exists 0_V \in V $ such that $ u + 0_V = u \; \forall  u \in V $
+    \item For each $ u \in V $, there is an element $ -u \in V $ such that $ u + \left( -u \right) = 0 $ 
+    \item $ \alpha_{}^{} \left( u + v \right) = \alpha_{}^{} u + \alpha_{}^{} v \; \forall  u, v \in V  $ and $ \forall \alpha_{}^{} \in \mathbb{K}  $ 
+    \item $ \left( \alpha_{}^{} + \beta \right) u = \alpha_{}^{} u + \beta u \; \forall u \in V  $ and $ \forall \alpha_{}^{} , \beta \in \mathbb{K}  $ 
+    \item $ \alpha_{}^{} \left( \beta u \right) = \left( \alpha_{}^{} \beta \right) u \; \forall  u \in  V $ and $ \forall \alpha_{}^{} , \beta \in \mathbb{K}  $.
+    \item $ 1u = u \; \forall  u \in V $ 
+\end{enumerate}
+\end{definitionbox}
+
+
+
+\begin{definitionbox}{5.1.2}{}
+If U is a vector space over $ \mathbb{K}  $, a norm on U is a function $ \left\lVert \cdot \right\rVert : V \to \mathbb{R} $ such that
+\begin{enumerate}
+    \item $ \left\lVert u \right\rVert \geq 0  $ and $ \left\lVert u \right\rVert = 0 \iff u = 0 $  
+    \item $ \left\lVert \alpha_{}^{} u \right\rVert = \left| \alpha_{}^{}  \right| \left\lVert u \right\rVert   \; \forall  \alpha_{}^{} \in \mathbb{K} , u \in U $ 
+    \item $ \left\lVert u + v \right\rVert \leq \left\lVert u \right\rVert + \left\lVert v \right\rVert \; \forall u, v \in U $ 
+\end{enumerate}
+\end{definitionbox}
+
+
+We have for the space $ U = C \left( X, \mathbb{R} \right)  $ the set of all continuous real valued functions on X, then U is a vector space over $ \mathbb{K}  = \mathbb{R} $ and
+\[
+    \left\lVert f \right\rVert = \sup \left\{ \left| f(x) \right| : x \in X  \right\} 
+\]
+
+which is a norm on U.
+
+
+\begin{propositionbox}{5.1.3}{}
+Let $ \left( V, \left\lVert \cdot \right\rVert  \right)  $ be a normed space. Then
+\[
+    d \left( u, v \right) = \left\lVert u -v  \right\rVert 
+\]
+is a metric on V.
+
+\begin{proofbox}{5.1.3}{}
+    \begin{itemize}
+        \item Positivity: We see that since $ d \left( u, v \right) = \left\lVert u - v \right\rVert  $, then $ d \left( u, v \right) \geq  0 $ and $ d \left( u, v \right) = 0 \iff u - v = 0 \Rightarrow u = v $ which is the requirement for a metric to be zero.
+        \item Symmetry: SInce $ \left\lVert u - v \right\rVert = \left\lVert \left( -1 \right) \left( v - u \right)  \right\rVert = \left| -1 \right| \left\lVert v - u \right\rVert = \left\lVert v - u \right\rVert  $, then $ d \left( u, v \right) = d \left( v, u \right)  $   
+        \item Triangle inequality. We have that $ d \left( u, v \right) = \left\lVert u - v \right\rVert = \left\lVert \left( u - w \right) + \left( w - v \right)  \right\rVert \leq  \left\lVert u -  w\right\rVert + \left\lVert w - v \right\rVert = d \left( u, w \right) + d \left( w, v \right)  \; \forall u, v , w \in  U$ 
+    \end{itemize}
+\end{proofbox}
+\end{propositionbox}
+
+
+Remark that the inverse triangle inequality $ \left| d \left( u, v \right)  - d \left( u, w \right)  \right| \leq d \left( w, v \right)  $ also has its own version in normed spaces.
+\[
+    \left| \left\lVert u \right\rVert - \left\lVert v \right\rVert  \right| \leq \left\lVert u - v \right\rVert.
+\]
+
+
+Remark the $ L^p $ 
+
+
+\begin{propositionbox}{5.1.4}{}
+Assume $ \left( U, \left\lVert \cdot \right\rVert  \right)  $ is a normed space.
+\begin{itemize}
+    \item If $ \left( x_n \right)  $ is a sequence from U converging to x, then $ \left( \left\lVert x_n \right\rVert  \right)  $ converges to $ \left\lVert x \right\rVert  $ 
+    \item If $ \left( x_n \right)  $ and $ \left( y_n \right)  $ converge to x and y respectively, then $ \left( x_n + y_n \right)  $ converge to $ x+y $  
+    \item If $ \left( x_n \right)  $ is a sequence from U converging to x and $ \left( \alpha_{n}^{}  \right)  $ is a sequence from $ \mathbb{K}  $ converging to $ \alpha_{}^{}  $, then $ \left( \alpha_{n}^{} x_n  \right)  $ converges to $ \alpha_{}^{} x $.
+\end{itemize}
+
+
+\begin{proofbox}{5.1.4}{}
+    \begin{itemize}
+        \item Let $ \left( x_n \right)  $ be a sequence in U convergint to x. This means $ \forall \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ \forall n \geq N $, then $ \left\lVert x_n - x \right\rVert < \epsilon  $. Since 
+        \[
+          \left| \left\lVert x_n \right\rVert - \left\lVert   x \right\rVert  \right| \leq \left\lVert x_n - x \right\rVert,    
+        \]
+         
+        then $ \left| \left\lVert x_n \right\rVert - \left\lVert x \right\rVert  \right| < \epsilon  \; \forall n \geq N $. This implies that we can choose N large enough so that for all other preceding elements in the sequence, the distance between $ x_n $  and $ x $ will be $ < \epsilon  $ away from eachother. This implies that 
+        \[
+            \left\lVert x_n \right\rVert \to \left\lVert x \right\rVert 
+        \]
+        as $ n \to \infty $.
+        \item Let $ \left( x_n \right)  $  converge to x and $ \left( y_n \right)  $ converge to y. Then $ \forall \epsilon _1 > 0 \; \exists N_1 \in \mathbb{N}$ such that $ \forall n \geq N_1, \left\lVert x_n - x \right\rVert < \epsilon _1 $. And $ \forall \epsilon _2 \; \exists N_2 \in \mathbb{N} $ such that $ \forall n \geq N_2 , \left\lVert y_n - y \right\rVert < \epsilon _2 $.
+        
+
+        We are supposed to show that $ \left( x_n + y_n \right)  $ converges to $ x+y $. Let $ \epsilon > 0 $, find $ N \in \mathbb{N} $ such that $ \forall n \geq N $, we then get that $ \left\lVert \left( x_n+y_n \right) - \left( x+y \right)  \right\rVert < \epsilon  $. 
+
+        Observe that
+        \[
+            \left\lVert \left( x_n + y_n \right) - \left( x+y \right)  \right\rVert = \left\lVert \left( x_n - x \right) + \left( y_n - y \right)  \right\rVert  \leq \left\lVert x_n - x \right\rVert + \left\lVert y_n - y \right\rVert 
+        \]
+
+        Since for n greater than $ N_1 $, we get that $ \left\lVert x_n - x \right\rVert < \epsilon _1 $  and for n greater than $ N_2 $, we get that $ \left\lVert y_n - y \right\rVert < \epsilon _2 $, then we can pick $ N = max(N_1, N_2) $ and define $ \epsilon := \epsilon _1 + \epsilon _2 $ and get as a result that $ \forall n \geq N $, then
+
+        \[
+            \left\lVert \left( x_n + y_n \right) - \left( x+y \right)  \right\rVert \leq \left\lVert x_n - x \right\rVert + \left\lVert y_n - y \right\rVert < \epsilon _1 + \epsilon _2 = \epsilon.
+        \]
+        
+        Hence, I have found an N such that for all n larger than n, then the distance between $ \left( x_n + y_n \right)  $ and $ x+y $ is less than $ \epsilon  $ away. Hence, 
+
+        \[
+            \left( x_n + y_n \right) \to x+y
+        \]
+        as $ n \to \infty $. 
+        \item Let $ \left( x_n \right)  $ converge to x in U and $ \left( \alpha_{n}^{}  \right)  $ converge to $ \alpha_{}^{}  $ in $ \mathbb{K}  $. Then $ \forall \epsilon > 0 \; \exists  N \in \mathbb{N} $ such that $ \left\lVert x_n - x \right\rVert < \epsilon  \; \forall n \geq N$ and $ \forall \sigma _{ } > 0 \; \exists N_1 \in \mathbb{N}$ such that $ \left| \alpha_{n}^{} - \alpha_{}^{}  \right| < \sigma _{} \; \forall  n \geq N_1  $. Im supposed to show that $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $  such that $ \left\lVert \alpha_{n}^{} x_n - \alpha_{}^{} x  \right\rVert < \epsilon  \; \forall n \geq N $ 
+        
+
+        Let $ \epsilon > 0 $, and N great enough such that both $ \left\lVert x_n-x \right\rVert < \epsilon   $ and $ \left| \alpha_{n}^{} - \alpha_{}^{}  \right| < \delta  $ 
+        \[
+            \left\lVert \alpha_{n}^{} x_n - \alpha_{}^{} x \right\rVert = \left\lVert \left( \alpha_{n}^{} x_n + \alpha_{}^{} x_n \right) - \left( \alpha_{}^{} x_n + \alpha_{}^{} x \right)   \right\rVert  \leq  \left\lVert \alpha_{n}^{} x_n - \alpha_{}^{} x_n \right\rVert + \left\lVert \alpha_{}^{} x_n - \alpha_{}^{} x  \right\rVert < \delta \left\lVert x_n \right\rVert + \left| \alpha_{}^{}  \right| \epsilon 
+        \]
+
+        Since $ \delta  $ and $ \epsilon  $ can be arbitrarily small, then $ \left\lVert \alpha_{n}^{} x_n - \alpha_{}^{} x  \right\rVert \to 0 $ as $ n \to \infty $ 
+        
+        
+        
+    \end{itemize}
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{definitionbox}{5.1.5}{}
+Two norms $ \left\lVert \cdot \right\rVert _1, \left\lVert \cdot \right\rVert _2 $ are equivalent if there are positive constanct $ C_1, C_2 $ such that $ \forall x \in U $ 
+\[
+    \left\lVert x \right\rVert_1 \leq C_1 \left\lVert x \right\rVert _2
+\]
+and 
+\[
+    \left\lVert x \right\rVert _2 \leq C_2 \left\lVert x \right\rVert _1.
+\]
+\end{definitionbox}
+
+\begin{propositionbox}{5.1.6}{}
+Assume $ \left\lVert \cdot \right\rVert _1 $ and $ \left\lVert \cdot \right\rVert _2 $ are equivalent. Then
+\begin{enumerate}
+  \item If a sequence $ \left( x_n \right)  $ converges to x w.r.t one of the norms, its also convergent w.r.t the other norm
+  \item If a set is open, closed, compact w.r.t one norm, its also open, closed, compact w.r.t the other norm.
+  \item If X is a metric space, and a map $ f: U \to X $ is continuous w.r.t one norm, its also continuous w.r.t the other norm. Likewise with $ g : X \to U $ is continuous.
+\end{enumerate}
+\end{propositionbox}
+
+
+\begin{theorembox}{5.1.7}{}
+All norms on $ \mathbb{R}^n $ are equivalent.
+
+\begin{proofbox}{5.1.7}{}
+  Suffices to show that all norms are equivalent w.r.t euclidean norm $ \left\lVert \cdot \right\rVert  $. We have that 
+  \[
+      \left\lVert x \right\rVert = \sqrt{ \sum_{ j= }^{ n } x_i ^{2}  } \leq \sqrt{ \sum_{ j=1 }^{ n } \left\lVert x \right\rVert _{\infty} ^{2}  } = n \left\lVert x \right\rVert _{\infty}.
+  \]
+  
+  And
+  \[
+      \left\lVert x \right\rVert _{\infty} = \sup _k \left| x_k \right| \leq \sqrt{ \sum_{ k=1 }^{ n } x_k ^{2}  } 
+  \]
+  
+  so the supremum norm and euclidean norm are equivalent.
+
+
+
+
+  Let $ \left| \cdot \right|  $ be another norm. We must show there are constants $ c_1 $ and $ c_2 $ such that 
+  \[
+      \left| x \right| \leq c_1 \left\lVert x \right\rVert 
+  \]
+  and
+  \[
+      \left\lVert x \right\rVert \leq c_2 \left| x \right| 
+  \]
+
+
+
+  To prove the first inequality, let $ \left( e_1, ..., e_n \right)  $ be a basis for $ \mathbb{R}^n $, and put
+  \[
+      B = max \left\{ \left| e_1 \right| , ..., \left| e_n \right|  \right\} 
+  \]
+  
+  So for $ x \in  \mathbb{R} ^{n}  $ we have that 
+  \[
+      x = \sum_{ j=1 }^{ n } x_j e_j.
+  \]
+
+  Thus
+  \[
+      \left| x \right| = \left| \sum_{ j=1 }^{ n } x_j e_j \right| \leq \sum_{ j=1 }^{ n } \left| x_k \right| \left| e_k \right| \leq \sum_{ j=1 }^{ n } \left| x_j \right| B = B \left( \left| x_1  \right| + ..., + \left| x_n \right|   \right) \leq n B max_j \left\{ x_k \right\}   
+  \]
+
+
+  And since $ max_j \left\{ x_j \right\} = \sqrt{ max_j \left| x_j \right|^2 } \leq \sqrt{ \sum_{ j=1 }^{ n } x_j^2 } = \left\lVert x \right\rVert  $ 
+  
+\end{proofbox}
+\end{theorembox}
+
+\begin{propositionbox}{5.1.8}{}
+If the spaces $ \left( V_1, \left\lVert \cdot \right\rVert _1 \right), ..., \left( V_m, \left\lVert \cdot \right\rVert _n \right)   $ are complete, so is their product $ \left( V, \left\lVert \cdot \right\rVert  \right)  $ 
+
+\begin{proofbox}{5.1.8}{}
+  We have that a normed space is complete if the metric space $ \left( U, d \right)  $ where $ d \left( x, y \right) := \left\lVert x - y \right\rVert  $ is complete. We have that $ V = V_1 \times ... \times V_n $ where $ \left( V_1, \left\lVert \cdot \right\rVert _1 \right) , ..., \left( V_n, \left\lVert \cdot \right\rVert _n \right)   $ are complete. 
+  
+  
+  This means that if $ \left( x_n \right)_i  $ is a cauchy sequence in $ V_i $, then   $ \forall \epsilon _i > 0  \; \exists N_i \in \mathbb{N}$ such that $ \forall k, j \geq N_i $, then $ \left\lVert \left( x_j - x_k  \right) _i\right\rVert_i < \epsilon _i  $. 
+
+
+  Im supposed to show that $ V = V_1 \times ... \times V_n $ is complete. Let $ \epsilon > 0 $, and $ \left( x_n \right)  \in V $ be a cauchy seuqnence in V. 
+
+
+  \[
+      \left( x_n \right) = \left( \left( x_n \right) _1, ..., \left( x_n \right) _n \right) 
+  \]
+
+  Since $ \left( x_n \right) _i $ are all cacuhy seuquences in a complete metric space, they all converge. So let $ N = \sup_j \left\{ N_j \right\}  $ and $ \epsilon = \sup_j \left\{ \epsilon _j \right\}  $ . We then get that $ \forall k, j \geq N $, then 
+  
+  \[
+      \left\lVert x_n - x_m \right\rVert = \left\lVert x_j - x_k \right\rVert_1 + ... + \left\lVert x_j - x_k \right\rVert_n < \epsilon_1 + ... + \epsilon _n \leq \sum_{ i=1 }^{ n } \epsilon  = n \epsilon.
+  \]
+  
+
+  So we can just pick $  \epsilon' = \epsilon / n  $, and just use $ \epsilon ' $ as our new threshold, because this is still larger than 0. Hence, V is complete.
+  
+\end{proofbox}
+\end{propositionbox}
+
+
+
+
+
+
+\begin{oppgavebox}{5.1.5}{}
+Prove the inverese triangle inequality
+\[
+    \left| \left\lVert u \right\rVert - \left\lVert v \right\rVert  \right| \leq \left\lVert u - v \right\rVert \; \forall  u, v \in U.
+\]
+
+\begin{proofbox}{5.1.5}{}
+  Let $ \left( U, \left\lVert \cdot \right\rVert  \right)  $ be a normed vector space. Then for any $ u, v \in U $, then
+  \[
+      \left\lVert u + v \right\rVert \leq \left\lVert u \right\rVert + \left\lVert v \right\rVert 
+  \]
+
+
+  Let $ u, v \in U $. Then we can rewrite
+  \[
+      \left\lVert u \right\rVert = \left\lVert \left( u - v \right) + v \right\rVert \leq \left\lVert u-v \right\rVert + \left\lVert v \right\rVert.
+  \]
+
+  Then just subtract $ \left\lVert v \right\rVert  $ on both sides and get
+  \[
+      \left\lVert u \right\rVert - \left\lVert v \right\rVert \leq \left\lVert u-v \right\rVert  \Rightarrow \left| \left\lVert u \right\rVert - \left\lVert v \right\rVert  \right| \leq \left\lVert u-v \right\rVert.
+  \]
+  And the inverse triangle inequality is proved.
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{5.1.10}{}
+Check that the product $ \left( V, \left\lVert \cdot \right\rVert  \right)  $ of normed spaces $ \left( V_1, \left\lVert \cdot \right\rVert _1 \right), ..., \left( V_n, \left\lVert \cdot \right\rVert _n \right)   $ really is normed space. Check that V is a linear space, and that $ \left\lVert \cdot \right\rVert  $ is a norm.
+
+\begin{proofbox}{5.1.10}{}
+  Let $ V = V_1 \times V_2 \times ... \times V_n $. This is the set of all n-tuples. Let $ x \in  V $, then 
+  \[
+      x = \left( x_1, ..., x_n \right) 
+  \]
+  where $ x_i \in V_i $ for $ i = 1, ..., n $ . To show that this is a linear space, prove that $ V $ satisfies all the axioms.
+  \begin{enumerate}
+    \item If $ x, y \in V $, then $ x = \left( x_1, ..., x_n \right)  $ and $ y = \left( y_1, ..., y_n \right)  $. Then
+    \[
+      x + y = \left( x_1 + y_1, ..., x_n + y_n \right) = \left( y_1 + x_1, ..., y_n + x_n \right) = y+x
+    \]
+    \item If $ \alpha_{}^{} \in \mathbb{K}  $  and $ x \in V $, then 
+    \[
+      \alpha_{}^{} x = \left( \alpha_{}^{} x_1, ..., \alpha_{}^{} x_n \right) = \alpha_{}^{} \left( x_1, ..., x_n \right) 
+    \]
+    the rest are obvious.
+  \end{enumerate}
+
+  And now to check that $ \left\lVert \cdot \right\rVert  $ is actually a norm. Let $ x, y \in V $ and $ \alpha_{}^{} \in \mathbb{K}  $ 
+
+  \begin{enumerate}
+    \item $ \left\lVert x \right\rVert = \left( \left\lVert x_1 \right\rVert , ..., \left\lVert x_n \right\rVert  \right)  $, and this is equal to $ 0 $  if and only if $ \left\lVert x_i \right\rVert _{i=1} ^{n} = 0 \iff x_i = 0 \; \forall  i=1, ..., n $. 
+    \item $ \left\lVert \alpha_{}^{} x \right\rVert = \left( \left\lVert \alpha_{}^{} x_1 \right\rVert, ..., \left\lVert \alpha_{}^{} x_n \right\rVert   \right) = \left( \left| \alpha_{}^{}  \right| \left\lVert x_1 \right\rVert , ..., \left| \alpha_{}^{}  \right| \left\lVert x_n \right\rVert    \right) = \left| \alpha_{}^{}  \right| \left( \left\lVert x_1 \right\rVert, ..., \left\lVert x_n \right\rVert   \right)  = \left| \alpha_{}^{}  \right| \left\lVert x \right\rVert    $ 
+    \item $ \left\lVert x + y \right\rVert = \left( \left\lVert  x_1 + y_1\right\rVert, ..., \left\lVert x_n + y_n \right\rVert   \right) \leq  \left( \left\lVert x_1 \right\rVert + \left\lVert y_1 \right\rVert, ..., \left\lVert x_n \right\rVert + \left\lVert y_n \right\rVert   \right) = \left( \left\lVert x_1 \right\rVert , ..., \left\lVert x_n \right\rVert  \right) + \left( \left\lVert y_1 \right\rVert , ..., \left\lVert y_n \right\rVert  \right) = \left\lVert x \right\rVert + \left\lVert y \right\rVert      $ 
+  \end{enumerate}
+
+  Hence $ \left( V, \left\lVert \cdot \right\rVert  \right)  $ is a normed space. 
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{5.1.11}{}
+Prove proposition 5.1.8
+\end{oppgavebox}
+
+
+\section*{5.1 $ \ell^p $-spaces }
+\addcontentsline{toc}{section}{5.1 $ \ell^p $-spaces}
+
+If we let $ \left( a_n \right)  $ be a sequence in $ \mathbb{R} $, then $ a = \left( a_1, a_2, ... \right)  $ which can be viewed as an infinite dimensional vector in. We instead let $ a \in \ell^p $  
+
+
+\section*{5.1 Holders inequality}
+\addcontentsline{toc}{section}{5.1 Holders inequality}
+
+
+\begin{theorembox}{Holders inequality}{}
+For $ x, y \in \mathbb{F} ^{n}  $, we have that
+\[
+    \left\lVert xy \right\rVert _1 \leq \left\lVert x \right\rVert _p \left\lVert y \right\rVert _q
+\]
+where $ \frac{ 1 }{ p } + \frac{ 1 }{ q }= 1 $ for $ p, q \in \left[1, \infty \right] $   and
+\[
+    \left\lVert x \right\rVert _p = \left( \sum_{ j= 1}^{ n } \left| x_j \right| ^{p}   \right) ^{ \frac{ 1 }{ p }} 
+\]
+
+
+We write
+\[
+    xy = \left( x_1 y_1, ..., x_n y_n \right) 
+\]
+
+
+
+\end{theorembox}
+
+\begin{oppgavebox}{1}{}
+Show that $ \left\lVert \cdot \right\rVert _1 $ and $ \left\lVert \cdot   \right\rVert_{\infty}  $ are norms on $ \mathbb{R} ^{n}  $
+
+\begin{proofbox}{For $ \left\lVert \cdot \right\rVert _1 $ }{}
+  Let $ u, v \in \mathbb{R} ^{n}  $ and $ \alpha_{}^{} \in \mathbb{K} $ . Then
+  \begin{enumerate}
+    \item $ \left\lVert u \right\rVert _1 = \sum_{ j= 1}^{ n } \left| u_j \right| \geq 0 $ and is equal to 0 if $ u=0 $ 
+    \item $ \left\lVert \alpha_{}^{} u   \right\rVert_1 = \sum_{ j=1 }^{ n } \left| \alpha_{}^{} u_j \right| = \sum_{ j=1 }^{ n } \left| \alpha_{}^{}  \right| \left| u_j \right|  = \left| \alpha_{}^{}  \right| \sum_{ j=1 }^{ n } \left| u_j \right| = \left| \alpha_{}^{}  \right| \left\lVert u \right\rVert _1      $ 
+    \item $ \left\lVert u + v \right\rVert _1 = \sum_{ j=1 }^{ n } \left| u_j + v_j \right| \leq \sum_{ j=1 }^{ n } \left| u_j \right| + \left| v_j \right| = \sum_{ j=1 }^{ n } \left| u_j \right| + \sum_{ j=1 }^{ n } \left| v_j \right| = \left\lVert u \right\rVert _1 + \left\lVert v \right\rVert _1      $ 
+  \end{enumerate}
+\end{proofbox}
+
+\begin{proofbox}{For $ \left\lVert \cdot \right\rVert _{\infty} $ }{}
+  
+  Let $ u, v \in \mathbb{R} ^{n}  $ and $ \alpha_{}^{} \in \mathbb{K} $ . Then
+  \begin{enumerate}
+    \item $ \left\lVert u \right\rVert _{\infty} = max_{k=1, ..., n} \left| u_k \right| \geq 0  $ and is equal to 0 if the largest absolute value of each component of u is 0. This implies that $ u= 0 $ 
+    \item $ \left\lVert \alpha_{}^{} u   \right\rVert_{\infty} = max_{k=1, ..., n} \left| \alpha_{}^{} u_k \right| = max_{k=1, ..., n} \left| \alpha_{}^{}  \right| \left| u_k \right|  = \left| \alpha_{}^{}  \right| max_{k=1, ..., n} \left| u_k \right| = \left| \alpha_{}^{}  \right| \left\lVert u \right\rVert _{\infty}       $ 
+    \item $ \left\lVert u + v \right\rVert _{\infty} = max_{k=1, ..., n} \left| u_k + v_k \right| \leq max_{k= 1, ..., n} \left| u_k \right| + \left| v_k \right| \leq max_{k} \left| u_k \right| + max_k \left| v_k \right| = \left\lVert u \right\rVert _{\infty} + \left\lVert v \right\rVert _{\infty}    $ 
+  \end{enumerate}
+\end{proofbox}
+\end{oppgavebox}
+
+For remaining exercises, assume $ p \in \left( 1, \infty \right)  $ 
+
+\begin{oppgavebox}{2}{}
+Show that $ \left\lVert \cdot \right\rVert _p $ satisfies the positivity and homogeneity conditions
+
+\begin{proofbox}{2}{}
+  \begin{enumerate}
+    \item We have for a $ u \in \mathbb{R} ^{n}$, then $ \left\lVert u \right\rVert _p = \left( \sum_{ j=1 }^{ n } \left| u_j \right| ^{p}  \right) ^{ \frac{ 1 }{ p }}   $. If $ u = 0 $, then
+  \[
+      \left\lVert u \right\rVert _p = \left( \sum_{ j=1 }^{ n } \left| u_j \right|^p   \right) ^{ \frac{ 1 }{ p }} = \left( \sum_{ j=1 }^{ n }  0^p  \right)  ^{ \frac{ 1 }{ p }} = 0.
+  \]
+
+  Hence, $ \left\lVert u \right\rVert _p \geq 0 $ and $ \left\lVert u \right\rVert _p = 0 \iff u = 0 $ 
+  \item Next, 
+   \[
+      \left\lVert \alpha_{}^{} u \right\rVert_p = \left( \sum_{ j=1 }^{ n } \left| \alpha_{}^{} u_j \right| ^{p}   \right) ^{ \frac{ 1 }{ p }}  = \left( \sum_{ j=1 }^{ n } \left| \alpha_{}^{}  \right| ^{p} \left| u_j \right|^p    \right) ^{ \frac{ 1 }{ p }} = \left( \left| \alpha_{}^{}  \right| ^{p}  \right) ^{ \frac{ 1 }{ p }} \left( \sum_{ j=1 }^{ n } \left| u_k \right| ^{p}  \right) ^{ \frac{ 1 }{ p }} = \left| \alpha_{}^{}  \right| \left\lVert u \right\rVert _p 
+  \]
+  
+  \end{enumerate}
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{definitionbox}{3}{}
+We say that $ p, q \in  \left( 1, \infty \right)  $ are conjugate exponents if 
+\[
+    \frac{ 1 }{ p }+ \frac{ 1 }{ q } = 1.
+\]
+The conjugate exponent of 1 is $ \infty $ .
+\end{definitionbox}
+
+\begin{oppgavebox}{3}{}
+Let $ p, q $ be conjugate exponents.
+\begin{enumerate}
+  \item Show that. if $ p = q$, then $ p, q = 2 $ 
+  \item Show that if $ p < 2 $, then $ q > 2 $ and vice versa
+  \item Show that $ q = \frac{ p }{ p-1 } $ 
+\end{enumerate}
+
+\begin{proofbox}{3 a)}{}
+  If $ p = q $, then 
+  \[
+      \frac{ 1 }{ q } + \frac{ 1 }{ p } = \frac{ 1 }{ q } + \frac{ 1 }{ q }= \frac{ 2 }{ q }= 1 \Rightarrow q = 2 = p 
+  \]
+\end{proofbox}
+
+\begin{proofbox}{3 b)}{}
+  Assume $ p < 2 $, then $ \frac{ 1 }{ p } > \frac{ 1 }{ 2 } $. Let $ k = \frac{ 1 }{ p } $. Then
+  \begin{align*}
+    k + \frac{ 1 }{ q } &= 1 \\
+    \frac{ 1 }{ q } &= 1 - k < \frac{ 1 }{ 2 }. \\ 
+  \end{align*}
+  So $ \frac{ 1 }{ q } < \frac{ 1 }{ 2 } $ which implies that $ q > 2 $. Hence, if $ p < 2 $, then $ q > 2 $. And if $ p > 2 $, then $ q < 2 $.
+\end{proofbox}
+
+\begin{proofbox}{3 c)}{}
+  We have that 
+  \begin{align*}
+    \frac{ 1 }{ p } + \frac{ 1 }{ q } &= 1 \\
+    p + q &= pq\\
+    p &= q \left( p - 1 \right) \\
+    q &= \frac{ p }{ p-1 }
+  \end{align*}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{4}{}
+Prove Youngs inequality. If $ p, q \in \left( 1, \infty \right)  $ are conjuage exponents, then 
+\[
+    xy \leq \frac{ \left| x \right| ^{p}  }{ p } + \frac{ \left| y \right| ^{q}  }{ q } \; \forall x, y \in \mathbb{R}
+\]
+
+\begin{itemize}
+  \item a) For a continuous function $ f : \mathbb{R} \to \mathbb{R} $ , the Legendre transform of f is the function $ f^* : \mathbb{R} \to \mathbb{R}     $ defined as  
+  \[
+    f ^{*} (y) := \sup _{z \in \mathbb{R}}  \left( zy - f(z) \right) 
+  \]
+  Prove that  $ xy \leq f(x) + f^* (y) \; \forall x, y \in \mathbb{R} $ 
+  \item b) Let $p, q \in  \left( 1, \infty \right)$  be conjugate exponents. Show that the Legendre transform of $f(x) := \frac{ \left| x \right| ^{p} }{ p } $ is $ f^* (y) = \frac{ \left| y \right| ^{q}  }{ q } $ 
+  Hint: Think of $ f^* (y) $  as the maximum of a function. How do you find maxima of functions on $ \mathbb{R} $ ?
+  \item Prove Young’s inequality (1)
+\end{itemize}
+
+
+\begin{proofbox}{4 a)}{}
+  Since $ xy - f(x) \leq f ^{*}(y)  $ for all $ x \in \mathbb{R} $, then 
+  \[
+      xy \leq f(x) + f ^{*}(y) \; \forall x, y \in \mathbb{R} 
+  \]
+  
+\end{proofbox}
+
+\begin{proofbox}{4 b)}{}
+  We start by observing that $ p = \frac{ q }{ q-1 } $ and $ q = \frac{ p }{ p-1 } $. Define the function $ g(x) = xy - f(x) $.  Start by optimizing $ g(x) $, and get $ \frac{ d }{ dx } \left( xy - \frac{ \left| x \right| ^{p}  }{ p } \right) = y - \left| x \right| ^{p-1}  = 0 \Rightarrow y = \left| x \right| ^{p-1} $, 
+  
+  
+  
+  which implies that $ x = y ^{ \frac{ 1 }{ p-1 }} = y ^{1-q}   $, becuase $ \frac{ 1 }{ p } + \frac{ 1 }{ q } = 1 $. 
+  \begin{align*}
+    q + p = pq \Rightarrow q \left( 1+p \right) = -p \Rightarrow q = \frac{ p }{ p-1 }\\
+    q - 1 = \frac{ p }{ p-1 } - 1 \Rightarrow q-1 = \frac{ 1 }{ p-1 }
+  \end{align*}
+
+  Also,
+  \begin{align*}
+    \frac{ 1 }{ q } = \frac{ 1 }{ \frac{ p }{ p-1 } } = \frac{ p-1 }{ p }
+  \end{align*}
+  
+    
+  
+  
+  
+  Substituting this back into our original equation, we get that
+  \[
+      g(x) = y ^{q-1} y - \frac{ y ^{q}  }{ p }  = y ^{q} \left( 1 - \frac{ 1 }{ p } \right)    = y ^{q} \frac{ 1 }{ q }  
+  \]
+  Hence, $ f ^{*}(y) = \frac{ \left| y \right| ^{q}  }{ q }  $ 
+    
+\end{proofbox}
+
+\begin{proofbox}{4 c)}{}
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5}{}
+\textbf{Problem 6.} 
+
+\textbf{Problem 6.} 
+
+\textbf{Problem 6.} Next, we prove Hölder’s inequality: If $u, v \in \mathbb{R}^n$, and $p, q \in [1,\infty]$ are conjugate exponents, then
+\[
+\|uv\|_1 \le \|u\|_p \|v\|_q. \tag{2}
+\]
+(Here, $uv$ is the vector $uv = (u_1 v_1, \dots, u_n v_n)$.)
+
+\begin{enumerate}
+\item[(a)] Prove the special case $p = 1$, $q = \infty$.
+\begin{proofbox}{6 a)}{}
+  If $ p= 1 $ and $ q =\infty $, then
+  \[
+      \left\lVert uv \right\rVert _1 = \sum_{ k=1 }^{ n } \left| u_k v_k \right| = \sum_{ k=1 }^{ n } \left| u_k \right| \left| v_k \right| \leq \sum_{ k=1 }^{ n } \left| u_k \right| \left\lVert v \right\rVert _{\infty} = \left\lVert u \right\rVert _1 \left\lVert v \right\rVert _{\infty}
+  \]
+
+  hence, $ \left\lVert uv \right\rVert _1 \leq \left\lVert u \right\rVert _1  \left\lVert v \right\rVert _{\infty} $ 
+  
+\end{proofbox}
+
+\item[(b)] We now assume $p, q \in (1,\infty)$. Prove Hölder’s inequality in the case where either $u = 0$ or $v = 0$.
+\begin{proofbox}{6 b)}{}
+  Let $ u = 0 $, then $ u = \left( 0, 0, ..., 0 \right)  $ 
+  \[
+      \left\lVert uv \right\rVert _1 = \sum_{ k=1 }^{ n } \left| u_k v_k\right|  = \sum_{ k=1 }^{ n } \left| u_k \right| \left| v_k \right| = \sum_{ k=1 }^{ n } 0 \left| v_k \right| = 0
+  \]
+    
+\end{proofbox}
+
+\item[(c)] Assume now that $u, v \neq 0$. Explain each step in the following computation:
+\[
+\frac{\left|uv\right|_1}{\left|u\right|_p \left|v\right|_q}
+= \frac{1}{\left|u\right|_p \left|v\right|_q} \sum_{i=1}^n |u_i v_i|
+= \sum_{i=1}^n \frac{|u_i|}{\left|u\right|_p} \frac{|v_i|}{\left|v\right|_q}
+\le \sum_{i=1}^n \frac{|u_i|^p}{p \left|u\right|_p^p}
++ \frac{|v_i|^q}{q \left|v\right|_q^q}
+\]
+\[
+= \frac{\left|u\right|_p^p}{p \left|u\right|_p^p}
++ \frac{\left|v\right|_q^q}{q \left|v\right|_q^q}
+= 1.
+\]
+
+\begin{proofbox}{6 c)}{}
+  The only thing we need to note here, is that in the third step, we set
+  \[
+      x = \left| u_k \right| / \left\lVert u \right\rVert _p, y = \left| v_k \right| / \left\lVert v \right\rVert _q
+  \]
+  and get that $ xy = \frac{ \left| u_k \right|  }{ \left\lVert u \right\rVert _p }  \cdot \frac{ \left| v_k \right| }{ \left\lVert v \right\rVert _q }  \leq \frac{ 1 }{ p } \left( \frac{ \left| u_k \right|  }{ \left\lVert u \right\rVert _p } \right) ^{ \frac{ 1 }{ p }}  \frac{ 1 }{ q } \left(  \frac{ \left| v_k \right| }{ \left\lVert v \right\rVert _q } \right) ^{ \frac{ 1 }{ q }}   $ 
+  
+  At the end, we get that $ \frac{ 1 }{ p } + \frac{ 1 }{ q }= 1 $ because
+  \[
+      \sum_{ k=1 }^{ n }  \left| u_k \right| ^{p} = \left( \sum_{ k=1 }^{ n } \left| u_k \right| ^{p}  \right) ^{ \frac{ 1 }{ p } \cdot p} = \left\lVert u \right\rVert _p ^{p} 
+  \]
+  
+\end{proofbox}
+
+\item[(d)] Use the computation in the previous step to conclude Hölder’s inequality.
+\end{enumerate}
+
+
+
+\end{oppgavebox}
+
+
+\section*{5.2 Infinite sums and bases}
+\addcontentsline{toc}{section}{5.2 Infinite sums and bases}
+
+
+A finite set of elements in V, is called a basis if all elements in V can be written as a \textit{linear combination} of them. That is, given $ \left\{ u_1, ..., u_n \right\}  $ a basis for V, then if $ x \in V $
+\[
+    x = \alpha_{1}^{} u_1 + ... + \alpha_{n}^{} u_n
+\]
+for \textit{unique} $ \alpha_{1}^{}, ..., \alpha_{n}^{}   $.
+
+
+
+
+Since we are now dealing with vector spaces that are not finite, we run into a problem. We need to make sense of infinite sums in normed spaces.
+
+\begin{definitionbox}{5.2.1}{}
+If $ \left( u_k \right) _{k=1} ^{\infty}  $ is a sequence of elements in a normed space, we define the infinite sum $ \sum_{ k=1 }^{ \infty } u_k  $ as the limit of the partial sums 
+\[
+    S_n = \sum_{ k=1 }^{ n } u_k
+\]
+provided this element exists. i.e.
+\[
+    \sum_{ k=1 }^{ \infty } u_k = \lim_{n \to \infty}  \sum_{ k=1 }^{ n } u_k.
+\]
+When the limit exists, the series converges, otherwise, it diverges.
+\end{definitionbox}
+
+
+We can now extend the notion of a basis
+\begin{definitionbox}{5.2.2}{}
+Let $ \left( e_k \right) _{k=1} ^{\infty}  $ be a sequence of elements in a normed vector space V. We say that $ \left( e_k \right)  $ is a basis for V if for each $ x \in V $ there is a unique sequence $ \left( \alpha_{k}^{} \right)   $ from $ \mathbb{K}  $ such that
+\[
+    x = \sum_{ k=1 }^{ \infty} \alpha_{k}^{} e_k  
+\]
+\end{definitionbox}
+
+
+This doesnt mean all normed spaces have a basis. Some are uncountably infinite, which means not all elements can be reached from a countable set.
+
+
+
+
+\begin{oppgavebox}{5.2.1}{}
+Prove that the set $ \left( e_k \right)  $ in example 1 really is a basis for $ c_0 $ 
+
+\begin{proofbox}{5.2.1}{}
+  We have that $ c_0 $ is the set of all sequences $ x = \left( x_k \right)  $ of real numbers such that $ \lim_{k \to \infty} x_k = 0  $. We have that $ e_k = \left( 0, 0, ..., 0, 1, 0, ..., 0, ...\right)  $ be the sequence that is 1 at element number k and 0 elsewhere. 
+
+  Let $ \left( x_k \right)  \in c_0 $, then $ \lim_{k \to \infty} x_k = 0  $.  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.2.2}{}
+Show that if a normed vector space V has a basis, then its also separable
+
+\begin{proofbox}{5.2.2}{}
+  A vector space is separable if it has a dense and countable subset. If a normed vector space has a basis $ \left( e_k \right)  $, then for all $ x \in V $, then there exists a unique sequence $ \left( \alpha_{k}^{}  \right)  $ such that 
+  \[
+      x = \sum_{ k= }^{ \infty } \alpha_{k}^{} e_k
+  \]
+  
+
+
+  Let $ x \in  V $, and let $ \left( e_k \right)  $ be a basis for V, with the unique sequence being $ \left( \alpha_{k}^{}  \right)  $. Then
+  $ x = \sum_{ k=1 }^{ \infty } \alpha_{k}^{} e_k $. Or
+  \[
+      \left\lVert x - \sum_{k=1}^{\infty} \alpha_{k}^{} e_k   \right\rVert = \lim_{n \to \infty}  \left\lVert x - \sum_{k=1}^{n} \alpha_{k}^{} e_k   \right\rVert 
+  \]
+
+  Let our subset be $ D := \left\{ y \in V : y = \sum_{k=1}^{n} q_k e_k, q_k \in \mathbb{Q} \; \forall k \in \mathbb{N}  \right\}  $. This is a countable subset of V, because its the sum of finite elements in a countable set. Note that $ \mathbb{Q} $ is countable. 
+
+
+  I need now to show that D is dense. This happens if for all $ x \in V, \epsilon > 0$, then there exists an element $ y \in D $  such that 
+  \[
+      \left\lVert x-y \right\rVert < \epsilon 
+  \]
+
+
+  As we have $ x \in V $, then $ x = \sum_{k=1}^{\infty} \alpha_{k}^{} e_k    $. So we can find an $ N \in \mathbb{N} $ such that $ \left\lVert x - \sum_{k=1}^{N} \alpha_{k}^{} e_l  \right\rVert < \frac{ \epsilon   }{ 2 }  $. For $ \left( q_n \right) \in \mathbb{Q} $, we can find $ \left| \alpha_{k}^{} - q_k \right| < \frac{ \epsilon    }{ 2 N \left\lVert e_k \right\rVert  }  $. We then get that
+  \[
+      \left\lVert \sum_{k=1}^{N} \alpha_{k}^{} e_k - \sum_{k=1}^{N} q_k e_k    \right\rVert \leq  \sum_{k=1}^{N} \left\lVert \left( \alpha_{k}^{} - q_k \right) e_k  \right\rVert  = \sum_{k=1}^{N} \left| \alpha_{k}^{} - q_k \right| \left\lVert e_k \right\rVert   < \sum_{k=1}^{N} \left\lVert e_k \right\rVert  \frac{ \epsilon   }{ 2 N \left\lVert e_k \right\rVert  } = \frac{ \epsilon  }{ 2  } \sum_{k=1}^{N} \frac{ 1 }{ N } = \frac{ \epsilon  }{ 2 }
+  \]
+
+
+  Now, since we are supposed to prove that $ \forall x \in V, \epsilon > 0 \; \exists y \in D $ such that $ \left\lVert x-y \right\rVert < \epsilon  $, we see that
+  \[
+      \left\lVert x-y \right\rVert = \left\lVert x - \sum_{k=1}^{N} \alpha_{k}^{} e_k + \sum_{k=1}^{N} \alpha_{k}^{}  e_k    \right\rVert = \left\lVert \left( x - \sum_{k=1}^{N} \alpha_{k}^{} e_k  \right) + \left( \sum_{k=1}^{N} \alpha_{k}^{}  e_k   \right)   \right\rVert \leq
+  \]
+  \[
+      \left\lVert x - \sum_{k=1}^{N} \alpha_{k}^{} e_k  \right\rVert + \left\lVert \sum_{k=1}^{N} \alpha_{k}^{} e_k - y  \right\rVert < \epsilon /2 + \epsilon /2 = \epsilon 
+  \]
+  
+
+  Hence, D is both countable, dense, and a subset of V, which implies that V is separable, when it has a basis.
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+Does the same apply for when V is finite dimensional? Since V itself is finite, its definetly countable, and one can also prove it has a dense subset I imagine.
+
+
+\begin{oppgavebox}{5.2.3}{}
+$ \ell_1 $ is the set of all sequences $ x = \left( x_k \right)  $ of real numbers such that $ \sum_{k=1}^{\infty} \left| x_k \right|    $ converges. 
+\begin{itemize}
+  \item[a)] show that $ \left\lVert x \right\rVert = \sum_{k=1}^{\infty} \left| x_k \right|    $ is a norm on $ \ell_1 $ 
+  \begin{proofbox}{5.2.3 a)}{}
+    \begin{itemize}
+      \item[i)] obvious
+      \item[ii)] obvious
+      \item[iii)] Let $ x, y \in \ell_1 $, then $ \left\lVert x \right\rVert   = \sum_{k=1}^{\infty} \left| x_k \right|   $ and $ \left\lVert y \right\rVert = \sum_{k=1}^{\infty} \left| y_k \right|   $. THen 
+      \[
+          \left\lVert x+y \right\rVert = \sum_{k=1}^{\infty} \left| x_k + y_k \right| = \lim_{n \to \infty} \sum_{k=1}^{n} \left| x_k + y_k \right| \leq \lim_{n \to \infty}   \sum_{k=1}^{n} \left| x_k \right| + \left| y_k \right|   = \lim_{n \to \infty} \left( \sum_{k=1}^{n} \left| x_k \right| + \sum_{k=1}^{n} \left| y_k \right|    \right)
+      \]
+      \[
+          = \lim_{n \to \infty} \sum_{k=1}^{n} \left| x_k \right|   + \lim_{n \to \infty} \sum_{k=1}^{n} \left| y_k \right|  = \left\lVert x \right\rVert + \left\lVert y \right\rVert 
+      \]
+    \end{itemize}
+  \end{proofbox}
+  \item[b)] Show that the set $ \left( e_k \right)  $ as used in exc 5.2.1 is a basis for $ \ell_1 $  
+  
+  \begin{proofbox}{5.2.3 b)}{}
+    We have that a sequence $ \left( e_k \right)  $ is a basis if for all $ x \in  \ell_1 $ there exists a unique sequence $ \left( \alpha_{k}^{}  \right)  $ such that $ x = \sum_{k=1}^{\infty} \alpha_{k}^{} e_k   $. 
+
+    Let $ \alpha_{k}^{} = x_k $. Then
+    \[
+        x - \sum_{k=1}^{N} x_k e_k = \left( 0, ..., 0, x_{N+1}, ... \right).
+    \]
+
+    This means that 
+    \[
+        \left\lVert x - \sum_{k=1}^{N} x_k e_k  \right\rVert = \sum_{k=N+1}^{\infty} \left| x_k \right|.
+    \]
+    Since $ x \in \ell_1 $, then $ \sum_{k=1}^{\infty} \left| x_k \right|    $ converges. This means that for large enough N, then 
+    \[
+        \sum_{k=1}^{\infty} \left| x_k \right|   - \sum_{k=1}^{N} \left| x_k \right|   < \epsilon.
+    \]
+    Which implies that $ \sum_{k=N+1}^{\infty} \left| x_k \right| < \epsilon    $. So $ \left( x_k \right)  $ is that unique sequence that we are looking for, with our basis $ \left( e_k \right)  $ from exercise 5.2.1.
+
+
+
+    Now I have to prove that this sequence $ \left( x_k \right)  $ is unique. To do this, I let $ \left( a_k \right)  $ be another sequence, and find that $ \left\lVert \sum_{k=1}^{\infty} x_k e_k - \sum_{k=1}^{\infty} a_k e_k     \right\rVert = \lim_{n \to \infty} \left\lVert \sum_{k=1}^{n} x_k e_k - \sum_{k=1}^{n} a_k e_k    \right\rVert   $  does not converge.
+
+
+    Let $ \left( a_k \right)  $ be another sequence. Then for at least one i, then $ \left| x_i - a_i \right| > \epsilon $. So $ \left\lVert x - \sum_{k=1}^{n} a_k e_k  =  \right\rVert = \left\lVert \left( x-1 - a-1, ..., x_n - a_n, x_{n+1}, ... \right)  \right\rVert  = \sum_{k=1}^{n} \left| x_k - a_k \right| + \sum_{k=n+1}^{\infty} \left| x_k \right|      $. Since $ \sum_{k=1}^{n} \left| x_k - a_k \right| \geq \epsilon  $ and $ \sum_{k=n+1}^{\infty} \left| x_k \right| < \epsilon     $, then $ \left\lVert x - \sum_{k=1}^{n} a_k e_k   \right\rVert > \epsilon   $. So $ x \neq \sum_{k=1}^{n} a_k e_k  $, which implies that $ \left( e_k \right)  $ is not a basis for $ \ell_1 $. And $ \left( x_k \right)  $ is a unique sequence such that
+    \[
+        x = \sum_{k=1}^{\infty} x_k e_k.
+    \]  
+  \end{proofbox}
+  \item[c)] Show that $ \ell_1 $ is complete
+  \begin{proofbox}{5.2.3 c)}{}
+    Let $ x \in \ell_1 $, then $ \left\lVert x \right\rVert = \sum_{k=1}^{\infty} \left| x_k \right| < \infty   $. We have that $ x = \left( x_n \right)  $ is actually a seuquence. A sequence in $ \ell_1 $ is $ \left( x_n^r \right)  $, which can be viewed as an array
+    \[
+    \begin{aligned}
+        x_n^1 &= \left( x_1^1, x_2^1, \dots \right) \\
+        x_n^2 &= \left( x_1^2, x_2^2, \dots \right) \\
+        &\;\;\vdots
+    \end{aligned}
+    \]
+
+    Let $ \left( x_n^r \right)  $ be a cauchy sequence, then $ \forall \epsilon > 0 \; \exists N \in \mathbb{N} $ such that $ \forall i, j \geq N $, then $ \left\lVert x_n^i - x_n^j \right\rVert = \sum_{k=1}^{\infty} \left| x_k^i - x_k^j \right|   < \epsilon  $. 
+
+    We have to prove that $ \left( x_n^r \right)  $ converges to $ x \in \ell_1 $. Fix $ N \in \mathbb{N} $. We now look at the sequences, and see that 
+    \[
+        \left| x_n^i - x_n^j \right| \leq \sum_{k=1}^{\infty} \left| x_k^i - x_k^j \right| < \epsilon.
+    \]
+
+    So for every fixed value of n, then $ \left( x_n^r \right)  $ is a cauchy sequence i.e. it converges to something. Say $ \left( x_n^r \right)  $ converges to $ S_n $. So 
+    \[
+        \lim_{r \to \infty} x_n^r = S_n
+    \]
+
+    We want to show that $ \sum_{k=1}^{\infty} \left| x_k^r - S_n \right| < \epsilon    $. 
+
+    Since $ \sum_{k=1}^{\infty} \left| x_k^i - x_k^j \right| < \epsilon    $, then $ \sum_{k=1}^{M} \left| x_k^i - x_k^j \right| < \frac{ \epsilon }{ 2 }    $. Let $ j \to \infty $ and get
+    \[
+        \sum_{k=1}^{M} \left| x_k^i - S_n \right| \leq  \frac{ \epsilon  }{ 2 }.
+    \]
+    Now let $ M \to \infty $ and get
+    \[
+        \sum_{k=1}^{\infty}  \left| x_k^i - S_n \right| \leq \frac{ \epsilon  }{ 2 } < \epsilon. 
+    \]
+
+    Now we want to prove that $ \left( S_n \right)  $ is in $ \ell_1 $. We have that $ \left( S_n \right)  $ is cauchy, which implies that its bounded, since an element in $ \ell_1 $ can only take real values. So $ \exists R \in \mathbb{R} $ such that $ \left\lVert x_n^r  \right\rVert \leq R $, which implies that $ \sum_{k=1}^{M} \left| x_k^r \right| \leq R  $. Let $ r \to \infty $ and get $ \sum_{k=1}^{M} \left| S_k \right| \leq R  $. Let $ M \to \infty $ and get
+    \[
+        \sum_{k=1}^{\infty} \left| S_k \right|  \leq R.
+    \]
+     
+    Hence, $ \left( S_n \right) \in \ell_1 $ and $ \ell_1 $ is complete
+     
+    
+    
+    
+  \end{proofbox}
+\end{itemize}
+\end{oppgavebox}
+
+\begin{oppgavebox}{Recap from MAT1125}{}
+Use the theory from MAT1125 to show that the functions $ e_k = e ^{ikt}, k \in \mathbb{Z}  $ constitute a basis for the space $ C \left( \mathbb{T}, \mathbb{C} \right)  $   of complex-valued, continuous function on the torus, equipped with the L2  norm 
+\[
+    \left\lVert f \right\rVert = \frac{ 1 }{ 2 \pi  } \int_{0}^{2 \pi } \left| f(t) \right| ^{2 } dt   
+\]
+
+\begin{proofbox}{}{}
+  We have that the space of continuous functions from the torus to complex values, $ C \left( \mathbb{T}, \mathbb{C} \right)  $ is an infinite dimensional space. This space, as we have shown in this chapter, is that this can have a basis. A basis means an orthonormal basis in the Hilbert space sense: a set is both orthonormal and complete, meaning every f can be written as
+  \[
+      f = \sum_{k \in \mathbb{Z}}^{} \hat{f}_k e_k  
+  \]
+  with convergence in the L2 norm. We have that a sequence $ \left( e_k \right)  $ is a basis for a normed vector space if for all $ x \in V $  there exists a unique sequence $ \left( \alpha_{n}^{}  \right)  $ such that
+  \[
+      x = \sum_{k=1}^{\inf} \alpha_{k}^{} e_k 
+  \]
+  Or $ x = \lim_{n \to \infty} \sum_{k=1}^{n} \alpha_{k}^{} e_k  $, which means that given $ \epsilon > 0 $, then $ \forall n \geq N $,
+  \[
+      \left\lVert x - \sum_{k=1}^{n} \alpha_{k}^{} e_k  \right\rVert < \epsilon  
+  \]
+
+  So when we are given our L2 norm, we need to prove convergence in this norm. From MAT1125, we proved that for every $ f \in C \left( \mathbb{T}, \mathbb{C} \right)  $, then the fourier series of f is given by
+  \[
+      f_k = \sum_{k=-n}^{n} \hat{f}_k e_k 
+  \]
+  and this converges uniformly to f, see lemma 4.3.3.
+  
+  
+  According to theorem 6.4.3, then uniform convergence implies convergence in the L2 norm as well. This means that 
+  \[
+      \lim_{k \to \infty} \left\lVert f - \sum_{k=-n}^{n} \hat{f}_k e_k  \right\rVert_{L^2}  = 0
+  \]
+
+  Hence, there exists a unique sequence $ \left( \hat{f}_k \right)  $ in $ C \left( \mathbb{T}. \mathbb{C} \right)  $ such that for all x in $ C \left( \mathbb{T}. \mathbb{C} \right) $ then $ x = \sum_{k \in \mathbb{Z}  }^{} \hat{f}_k e_k   $. 
+\end{proofbox}
+\end{oppgavebox}
+
+
+\section*{5.3 Inner product spaces}
+\addcontentsline{toc}{section}{5.3 Inner product spaces}
+
+
+\begin{definitionbox}{5.3.1}{}
+An inner product $ \langle \cdot, \cdot \rangle_{  }  $ on V over $ \mathbb{K}  $  is a function $ \langle \cdot, \cdot \rangle_{  } : V \times V \to \mathbb{K}   $  such that $ \forall u, v, w, c \in V, \alpha_{}^{} \in \mathbb{K}  $ 
+\begin{itemize}
+  \item[i)] $ \langle u, v \rangle_{  } = \overline{ \langle v, u \rangle_{  } }  $ 
+  \item[ii)] $ \langle u+v, w \rangle_{  } = \langle u, w \rangle_{  } + \langle v, w \rangle_{  }  $ 
+  \item[iii)] $ \langle \alpha_{}^{} u, v \rangle_{  }  = \alpha_{}^{} \langle u, v \rangle_{  }  $  
+  \item[iv)] $ \langle u, u \rangle_{  } \geq 0 $  and $ \langle u, u \rangle_{  } = 0 \iff u = 0 $ 
+\end{itemize}
+
+
+Some other useful identities are
+
+\begin{itemize}
+  \item[i)] $ \langle u, \alpha_{}^{} v \rangle_{  }  = \overline{ \alpha_{}^{} } \langle u, v \rangle_{  }  $ 
+  \item[ii)] $ \langle \alpha_{}^{} u, \alpha_{}^{} v  \rangle_{  }  = \left| \alpha_{}^{}  \right| ^{2} \langle u, v \rangle_{  }    $  
+  \item[iii)] $ \langle u+v, w+c \rangle_{  } = \langle u, w \rangle_{  } + \langle u, c \rangle_{  } + \langle v, w \rangle_{  } + \langle v, c \rangle_{  }  $  
+\end{itemize}
+
+\end{definitionbox}
+
+
+\begin{propositionbox}{5.3.2 Pyhtagoran theorem}{}
+For all $ u_1, ..., u_n $ orthogonal in V,
+\[
+    \left\lVert u_1 + ... + u_n \right\rVert ^{2}  = \left\lVert u_1 \right\rVert ^{2} + ... + \left\lVert u_n \right\rVert ^{2}  
+\]
+
+\begin{proofbox}{5.3.2}{}
+  We have that $ \left\lVert u_1  + ... + u_n    \right\rVert ^{2}  = \langle u_1 + ... + u_n, u_1 + ... + u_n  \rangle_{  } = \sum_{k,j=1}^{n}  \langle u_k, u_j \rangle_{  } = \sum_{k=1}^{n} \langle u_k, u_k \rangle_{  } = \sum_{k=1}^{n} \left\lVert u_k \right\rVert ^{2} = \left\lVert u_1 \right\rVert ^{2} + ... + \left\lVert u_n \right\rVert ^{2}  $ where we have used orthogonality. 
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{propositionbox}{5.3.3}{}
+Assume u and v are nonzero elements of V. THen the \textit{projection} p of u on v is given by
+\[
+    p = \frac{ \langle u, v \rangle_{  }  }{ \left\lVert v \right\rVert ^{2}  } v
+\]
+
+\begin{proofbox}{5.3.3}{}
+  Since p is parallell to v, it must be on the form $ p = \alpha_{}^{} v $. To determine $ \alpha_{}^{}  $, we note that in order for $ u-p $ to be orthogonal to v, we must have $ \langle u-p, v  \rangle_{  } = 0  $ 
+  \[
+      \langle u-p, v \rangle_{  } = \langle u, v \rangle_{  } - \langle p, v \rangle_{  } = \langle u, v \rangle_{  } - \langle \alpha_{}^{}  v, v  \rangle_{  } = \langle u, v \rangle_{  } - \alpha_{}^{}  \left\lVert v \right\rVert ^{2}  
+  \]
+  which implies that $ \alpha_{}^{}  = = \frac{ \langle u, v \rangle_{  } }{ \left\lVert v \right\rVert ^{2}  }  $ and hence, 
+  \[
+      p = \alpha_{}^{} v = \frac{ \langle u, v \rangle_{  }  }{ \left\lVert v \right\rVert ^{2}  } v
+  \]
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{propositionbox}{5.3.4 Cauchy Schwarz inequality}{}
+for all $ u, v \in V $ 
+\[
+    \left| \langle u, v \rangle_{  }  \right| \leq \left\lVert u \right\rVert   \left\lVert v \right\rVert 
+\]
+
+\begin{proofbox}{5.3.4}{}
+  \[
+      \left\lVert u \right\rVert ^{2 } = \left\lVert u -p + p\right\rVert ^{2}  = \left\lVert u-p \right\rVert ^{2} + \left\lVert p \right\rVert ^{2} \geq \left\lVert p \right\rVert ^{2}.   
+  \]
+
+  We have from 5.3.3 that $ \left\lVert p \right\rVert ^{2} = \langle \alpha_{}^{} v, \alpha_{}^{}  v \rangle_{  } = \left| \alpha_{}^{}  \right|^2 \langle v, v \rangle_{  }   = \frac{ \left| \langle u, v \rangle_{  }  \right|^2  }{ \left\lVert v \right\rVert ^{4}  }  \left\lVert v \right\rVert ^{2} $. So $ \left\lVert p \right\rVert = \frac{ \left| \langle u, v \rangle_{  }  \right|  }{ \left\lVert v \right\rVert ^{2}  } $. Hence, we get that 
+  \[
+      \left\lVert u \right\rVert ^{2} \geq \frac{ \left| \langle u, v \rangle_{  }  \right|^2  }{ \left\lVert v \right\rVert^2 } \Rightarrow \left| \langle u, v \rangle_{  }  \right| \leq  \left\lVert u \right\rVert \left\lVert v \right\rVert.
+  \]
+  We can take roots, because the norms are nonzero.
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{propositionbox}{5.3.5 Triangle inequality}{}
+for all $ u, v \in V $ 
+\[
+    \left\lVert u+v \right\rVert \leq \left\lVert u \right\rVert + \left\lVert v \right\rVert 
+\]
+\begin{proofbox}{5.3.5}{}
+  $ \left\lVert u+v \right\rVert ^{2} = \langle u+v, u+v \rangle_{  } = \langle u, u \rangle_{  } + \langle u, v \rangle_{  } + \langle v, u \rangle_{  } + \langle v, v \rangle_{  }    = \langle u, u \rangle_{  } + \langle u, v \rangle_{  } + \overline{ \langle u, v \rangle_{  } } + \langle v, v \rangle_{  }  = \left\lVert u \right\rVert ^{2} + 2 Re \left( \langle u, v \rangle_{  }  \right) + \left\lVert v \right\rVert ^{2} \leq \left\lVert u \right\rVert ^{2} + 2 \left\lVert u \right\rVert \left\lVert v \right\rVert + \left\lVert v \right\rVert ^{2} = \left( \left\lVert u \right\rVert + \left\lVert v \right\rVert  \right) ^{2}     $ where we have used cauchy inequality on
+  \[
+      Re \left( \langle u, v \rangle_{  }  \right) \leq \left| \langle u, v \rangle_{  }  \right| \leq \left\lVert u \right\rVert \left\lVert v \right\rVert   
+  \]
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{propositionbox}{5.3.6}{}
+If $ \langle \cdot, \cdot \rangle_{  }  $ is an inner product on V, then 
+\[
+    \left\lVert u \right\rVert = \sqrt{ \langle u, u \rangle_{  }  } 
+\]
+defines a norm in V.
+\end{propositionbox}
+
+
+\begin{propositionbox}{5.3.7}{}
+Let V be an inner product space
+\begin{itemize}
+  \item[i)] If $ \left( u_n \right)  $ is a sequence in V converging to u,, then the sequence $ \left( \left\lVert u_n \right\rVert  \right)  $ converges to $ \left\lVert u \right\rVert  $ 
+  \item[ii)] If the series $ \sum_{k=0}^{\infty} w_k   $ converges in V, then
+  \[
+      \left\lVert \sum_{k=0}^{\infty} w_k  \right\rVert = \lim_{n \to \infty} \left\lVert \sum_{k=0}^{n} w_k  \right\rVert  
+  \]
+  \item[iii)] If $ \left( u_n \right)  $ converges to u, then the sequence $ \langle u_n, v \rangle_{  }  $ converges to $ \langle u, v \rangle_{  }  $ for all $ v \in V $ 
+  \[
+      \lim_{n \to \infty} \langle u_n, v \rangle_{  }     = \langle u, v \rangle_{  } 
+  \]
+  \item[iv)] If $ \sum_{k=0}^{\infty} w_k   $ converges in V, then
+  \[
+      \left( \sum_{k=0}^{\infty} \langle w_k, v \rangle_{  }    \right) = \sum_{k=0}^{\infty} \langle w_k, v \rangle_{  }   
+  \]
+\end{itemize}
+
+p
+\end{propositionbox}
+
+
+\begin{oppgavebox}{5.3.8}{}
+Assume $ \left( u_n \right) \to u $ and $ \left( v_n \right) \to v $. Show that $ \langle u_n, v_n \rangle_{  } \to \langle u, v \rangle_{  }   $  
+\begin{proofbox}{5.3.8}{}
+  We use the cauchy-schwartz inequality
+  \[
+      \left| \langle x, y \rangle_{  }  \right| \leq \left| x \right| \left| y \right|  
+  \]
+  given $ \epsilon > 0 $, we have to find $ N \in \mathbb{N} $ such that for all preceding elements in the sequence $ \left( \left| \langle u_n, v_n \rangle_{  } \right| \right)  $ then $ \left| \langle u_n, v_n \rangle_{  } -  \langle u, v  \rangle_{  }   \right|  < \epsilon  $. 
+
+
+  Given $ \epsilon _1 > 0, \epsilon _2 > 0 $ we have that for all $ n \geq N_1 \in  \mathbb{N} $ then $ \left\lVert u - u_n \right\rVert < \epsilon_1   $ and for all $ n \geq N_2 \in \mathbb{N} $ then $ \left\lVert v - v_n \right\rVert < \epsilon_2  $.
+
+  So $ \left| \langle u_n, v_n \rangle_{  } - \langle u, v \rangle_{  }   \right| = \left| \langle u_n, v_n \rangle_{  } - \langle u, v_n \rangle_{  } + \langle u, v_n \rangle_{  } - \langle u, v \rangle_{  } \right| \leq \left| \langle u_n, v_n \rangle_{  } - \langle u, v_n \rangle_{  }   \right| + \left| \langle u, v_n \rangle_{  } - \langle u, v \rangle_{  }   \right|  = \left| \langle u_n-u, v_n \rangle_{  }  \right| + \left| \langle v_n-v, u \rangle_{  }  \right| \leq \left\lVert u_n - u \right\rVert \left\lVert v_n \right\rVert  + \left\lVert v_n - v \right\rVert \left\lVert u \right\rVert  < \epsilon _1 \left\lVert v_n \right\rVert + \epsilon _2 \left\lVert u \right\rVert    $. Since u is a fixed vector, we can bound it, and since $ v_n $ is a convergent sequence of vectors, we can also bound it for large enough $ n $. Hence,
+  \[
+      \left| \langle u_n, v_n \rangle_{  } - \langle u, v \rangle_{  }   \right| < \epsilon  := \epsilon _1 C + \epsilon _2 M 
+  \]
+    
+  
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{5.3.9}{}
+Show that if the norm $ \left\lVert \cdot \right\rVert  $ defined from an inner product $ \left\lVert u \right\rVert = \langle u, u \rangle_{  }^{ \frac{ 1 }{ 2 }}  $, we have the parallellogram law
+\[
+    \left\lVert u+v \right\rVert ^{2} + \left\lVert u-v \right\rVert ^{2} = 2 \left\lVert u \right\rVert ^{2} + 2\left\lVert  2\right\rVert ^{2}    
+\]
+for all $ u, v \in V $. Show that the norms on $ \mathbb{R}^2 $ defined by $ \left\lVert \left( x, y \right)  \right\rVert = max \left\{ \left| x \right| , \left| y \right|  \right\}   $ and $ \left\lVert \left( x, y \right)  \right\rVert = \left| x \right| + \left| y \right|   $ do not come from inner products
+
+\begin{proofbox}{5.3.9}{}
+  We have that $ \left\lVert u+v \right\rVert ^{2} = \langle u+v, u+v \rangle_{  }   $ and $ \left\lVert u-v \right\rVert = \langle u-v, u-v \rangle_{  }  $.Then
+
+  \[
+      \langle u+v, u+v \rangle_{  } = \langle u, u \rangle_{  } + \langle u, v \rangle_{  }  + \langle v, u \rangle_{  } + \langle v, v \rangle_{  } = \left\lVert u \right\rVert ^{2} + 2 \langle u, v \rangle_{  }  + \left\lVert v \right\rVert ^{2} 
+  \]
+  and
+  \[
+      \langle u-v, u-v \rangle_{  } = \langle u, u \rangle_{  } - \langle u, v \rangle_{  } - \langle v, u \rangle_{  } + \langle v, v \rangle_{  } = \left\lVert u \right\rVert ^{2} - 2 \langle u, v \rangle_{  }  + \left\lVert v \right\rVert ^{2} 
+  \]
+  then
+  \[
+      \left\lVert u+v \right\rVert ^{2} + \left\lVert u - v \right\rVert ^{2}   = \left\lVert u \right\rVert ^{2} + 2 \langle u, v \rangle_{  }  + \left\lVert v \right\rVert ^{2} + \left\lVert u \right\rVert ^{2} - 2 \langle u, v \rangle_{  }   + \left\lVert v \right\rVert ^{2} = 2 \left\lVert u \right\rVert ^{2} + 2 \left\lVert v \right\rVert ^{2}.
+  \]
+  Hence the parallellogram law.
+  
+  
+
+
+  For the inner product induced norms, assume that $ u \in \mathbb{R}^2 $ given by $ u = \left( x, y \right)  $, and that $ \left| x \right| > \left| y \right|  $. Then $ \left\lVert u \right\rVert = max \left\{ \left| x \right| , \left| y \right|  \right\} = \left| x \right| \neq \left( \left| x \right| + \left| y \right|  \right) ^{ \frac{ 1 }{ 2 }}   $, and same argument for $ \left\lVert u \right\rVert = \left| x \right| + \left| y \right|  $  
+  
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.3.10}{}
+Let $ \left\{ e_1, ..., e_n \right\}  $ be an orthonormal set in an inner product space V. Show  that the projection $ P = P_{e_1, ..., e_n} $ is linear in the sense that $ P \left( \alpha_{}^{} u \right) = \alpha_{}^{} P \left( u \right)   $  and $ P \left( u+v \right) ? P \left( u \right) + P \left( v \right)   $
+
+\begin{proofbox}{5.3.10}{}
+  We have that for a vector space $ u \in V $, then the projection onto the set of orthonormal vector $ \left\{ e_1, ..., e_n \right\}  $ is given by
+  \[
+      P_{e_1, ..., e_n} \left( u \right) = \sum_{k=1}^{n} \langle u, e_k \rangle_{  } e_k.
+  \]
+
+
+  So 
+  \[
+      P \left( \alpha_{}^{} u \right) = \sum_{k=1}^{n} \langle \alpha_{}^{}u , e_k \rangle_{  }   e_k = \sum_{k=1}^{n} \alpha_{}^{} \langle u, e_k \rangle_{  }  e_k = \alpha_{}^{} \sum_{k=1}^{n} \langle u, e_k \rangle_{  }  e_k = \alpha_{}^{}  P \left( u\right).
+  \]
+
+  Second, 
+  \[
+      P \left( u +v\right) = \sum_{k=1}^{n} \langle u+v, e_k \rangle_{  } e_k = \sum_{k=1}^{n} \left( \langle u, e_k \rangle_{  } + \langle v, e_k \rangle_{  }     \right) e_k = \sum_{k=1}^{n} \langle u, e_k \rangle_{  }  e_k + \langle v, e_k \rangle_{  } e_k = P \left( u \right) + P \left( v \right).
+  \]
+  
+  Hence, the orthogonal projection is a linear operator.
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{5.3.12}{}
+If S is a nonempty subset of an inner product space V, let
+\[
+    S ^{\perp} = \left\{ u \in V : \langle u, s \rangle_{  } = 0 \; \forall s \in S \right\} 
+\]
+
+\begin{itemize}
+  \item[a)] Show that $ S ^{\perp}  $ is a closed subspace of V
+  \begin{proofbox}{5.3.12 a)}{}
+
+    We can prove a set is closed, if its complement is open
+    We have that the set $ S ^{\perp} = \left\{ u \in  V : \langle u, s \rangle_{  } =0 \; \forall  s \in S \right\}   $. So the complement would be  
+    $$ \left( S ^{\perp}  \right) ^{\perp} = \left\{ u \in V : \exists s \in  S, \langle u, s \rangle_{  } \neq 0 \right\}.    $$
+    This means that we can at least one vector in S such that for all vectors $ u \in V $ then $ \langle u, s \rangle_{  } \neq 0 $. In fact, this only vector is the zero vector. So if we choose a point in the neighbourhood of 0, we can find a radius, such that this neighborhood is completely contained within S.
+  \end{proofbox}
+  \item[b)] Show that if $ S \subseteq T $  then $ T ^{\perp} \subseteq S ^{\perp}   $.
+  \begin{proofbox}{5.3.12 b)}{}
+    Assume that $ t \in  T ^{\perp}  $, then $ \langle t, s  \rangle_{  } = 0 \; \forall s \in T $. Since $ S \subseteq T $, then also $ \langle t, s^* \rangle_{  } = 0 \; \forall s^* \in S $. Hence, $ \langle t, s^* \rangle_{  } = 0 \; \forall s^* \in S \Rightarrow t \in S^{\perp} $. Hence
+    \[
+        T^{\perp} \subseteq S ^{\perp} 
+    \]
+  \end{proofbox}
+\end{itemize}
+\end{oppgavebox}
+
+
+\section*{5.4 Linear Operators}
+\addcontentsline{toc}{section}{5.4 Linear Operators}
+
+In linear algebra, we dealt with functions that are linear. This can be integration, differentiation, or matrices. 
+
+
+\begin{definitionbox}{5.4.1}{}
+Assume V and W are two vector spaces over $ \mathbb{K}  $. A function $ A : V \to W $ is called linear if $ \forall u, v \in V, \alpha_{}^{} \in \mathbb{K}  $ 
+\begin{itemize}
+  \item[i)] $ A \left( \alpha_{}^{} u \right) = \alpha_{}^{} A \left( u \right)   $ 
+  \item[ii)] $ A \left( u + v \right) = A \left( u \right) + A \left( v \right)  $ 
+\end{itemize}
+
+ALSO, note that $ A \left( \textbf{0} \right) = A \left( 0 \textbf{0} \right) = 0 A \left( \textbf{0} \right) = \textbf{0}   $ for all linear operators.
+\end{definitionbox}
+
+
+\begin{definitionbox}{5.4.2}{}
+Assume $ \left( V, \left\lVert \cdot \right\rVert  \right)  $ and $ \left( W, \left\lVert \cdot \right\rVert  \right)  $ are two normed vector spaces. A linear operator $ A : V \to W $ is bounded, if there is a constant $ M \in R $ such that 
+\[
+    \left\lVert Au \right\rVert _{W} \leq M \left\lVert u \right\rVert _V
+\]
+for all $ u \in V $ 
+\end{definitionbox}
+
+
+You should note that bounded linear operators, does not mean the same as we defined in metric spaces, where boundedness, means that its finitely stretched. For linear operators, boundedness means continuous. We shall see this later on.
+
+
+Note that if $ A \left( u \right) \neq 0 $, then we can make $ \left\lVert A \left( \alpha_{}^{} u \right)  \right\rVert_W = \left| \alpha_{}^{}  \right| \left\lVert A \left( u \right)   \right\rVert_W     $ which we can make as large as we possibly want. What this means, is that if we can only stretch a vector up to a limit, then the space itself is not a vector space.
+
+
+
+The smallest constant M in the definition 5.4.2 is denoted $ \left\lVert A \right\rVert  $ 
+
+\[
+    \left\lVert A  \right\rVert = \sup \left\{ \frac{ \left\lVert A u \right\rVert _W }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} 
+\]
+alternatively
+\[
+    \left\lVert A \right\rVert = \sup \left\{ \left\lVert A u \right\rVert _W : \left\lVert u \right\rVert _V = 1 \right\} 
+\]
+
+$ \left\lVert A \right\rVert  $ is called the \textit{operator norm}. Note that $ \left\lVert A u \right\rVert _W \leq \left\lVert A \right\rVert \left\lVert u \right\rVert _V $ 
+
+
+
+We have seen that integration is linear. Define $ A : V \to \mathbb{R} $ where $ V = C \left( \left[ a, b \right] , \mathbb{R} \right)  $ as
+\[
+    A (u) = \int_{a}^{b} u(x) dx.
+\]
+A is a linear functional, while $ B : V \to V $ defined as
+
+\[
+    B (u)(x) = \int_{a}^{x} u(t) dt 
+\]
+is a linear operator. Its easy to check this is linear. Difference between a linear functional and a linear operator, is that a functional is a function of x, it takes an input, and spits out an output. An opearator, is something we do to for example a function, or a vector, or a number. Taking the supremum of a set, is an operator. 
+
+
+
+
+Now look at differentiation: $ D : V \to U $ where $ U = C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ and $ V = \left\{ g : \left[ 0, 1 \right] \to \mathbb{R} : \text{ g is differentiable with } g' \in U \right\}  $ as 
+\[
+    D (f) = f'
+\]
+
+This is also a linear operator.
+
+
+
+
+
+The A and B operators are also bounded, if we consider the usual supremum norm on V. To see this for B, note that
+\[
+    \left| B(u)(x) \right| = \left| \int_{a}^{x} u(t)dt  \right| \leq \int_{a}^{x} \left| u(t) \right| dt \leq \int_{a}^{x} \left\lVert u \right\rVert dt = \left\lVert u \right\rVert \left( x-a \right) \leq \left\lVert u \right\rVert \left( b-a \right)    
+\]
+
+which implies that $ \left\lVert B(u) \right\rVert \leq  \left\lVert u \right\rVert \left( b-a \right)  $ for all $ u \in  V $ 
+
+
+\begin{lemmabox}{5.4.3}{}
+A bounded linear operator A is uniformly continuous.
+
+\begin{proofbox}{5.4.3}{}
+  If $ \left\lVert A \right\rVert = 0 $, A is constant zero, and nothing to prove. For $ \left\lVert A \right\rVert \neq 0 $, we may given $ \epsilon > 0 $ choose $ \delta  := \frac{ \epsilon    }{ \left\lVert A \right\rVert  } $ and get that when $ \left\lVert x-y \right\rVert < \delta  $, then 
+  \[
+      \left\lVert A(x) - A(y) \right\rVert = \left\lVert A \left( x-y \right)  \right\rVert \leq \left\lVert A \right\rVert \left\lVert x-y \right\rVert < \left\lVert A \right\rVert \frac{ \epsilon    }{ \left\lVert A \right\rVert  } = \epsilon 
+  \]
+
+  which shows that A is uniformly continuous.
+\end{proofbox}
+\end{lemmabox}
+
+\begin{lemmabox}{5.4.4}{}
+If a linear operator A is continuous at \textbf{0}, its bounded.
+\begin{proofbox}{5.4.4}{}
+  Assume that A is continuous at 0. Let $ u = 0, \epsilon =1 $ as in the definition of continuity. Then we find that there is a $ \delta > 0 $ such that 
+  \[
+      \left\lVert 0-v \right\rVert < \delta \Rightarrow \left\lVert A(0) - A(v) \right\rVert < 1
+  \]
+
+  i.e.
+  \[
+      \left\lVert v \right\rVert < \delta \Rightarrow \left\lVert Av \right\rVert < 1
+  \]
+    Let $ u \in V  $ be arbitrary. Then if $ v := \frac{ \delta      }{ 2 \left\lVert u \right\rVert  } u $ has norm 
+    \[
+        \left\lVert v \right\rVert = \left\lVert \frac{ \delta  }{ 2 \left\lVert u \right\rVert  } u \right\rVert = \frac{ \delta  }{ 2 } < \delta.
+    \]
+    This implies that $ \left\lVert Av  \right\rVert < 1 $. But then
+    \[
+        \left\lVert Au \right\rVert = \left\lVert A \left( \frac{ 2 \left\lVert u \right\rVert   }{ \delta  } v \right)  \right\rVert =  \frac{ 2 \left\lVert u \right\rVert  }{ \delta  } \left\lVert Av \right\rVert = c \left\lVert u \right\rVert \left\lVert Av \right\rVert  < c \left\lVert u \right\rVert \cdot 1
+    \] 
+    
+    So there is a $ c \in \mathbb{R} $ such that 
+    \[
+        \left\lVert Au \right\rVert \leq c \left\lVert u \right\rVert \; \forall  u \in V
+    \]
+\end{proofbox} 
+\end{lemmabox}
+
+
+\begin{theorembox}{5.4.5}{}
+For linear operators $ A : V \to W $ between normed spaces, the following are equivalent
+\begin{itemize}
+    \item[i)] A is bounded
+    \item[ii)] A is uniformly continuous
+    \item[iii)] A is continuous at \textbf{0}  
+\end{itemize}
+\end{theorembox}
+
+
+\begin{definitionbox}{5.4.6}{}
+Ig V and W are normed spaces, we let $ \mathcal{L} \left( V, W \right)  $ denote the set of all bounded linear maps $ A : V \to W $.
+\end{definitionbox}
+
+\begin{propositionbox}{5.4.7}{}
+If V and W are normed spaces, the operator norm is a norm on $\mathcal{L} \left( V, W \right)  $
+
+\begin{proofbox}{5.4.7}{}
+    We must check the def of a norm.
+    \begin{itemize}
+        \item[i)] $ \left\lVert A \right\rVert \geq 0 $ 
+        We must show that $ \left\lVert A \right\rVert  $ is greater than 0, and is equal to 0 $ \iff $ A is zero.
+        \[
+            \left\lVert A \right\rVert = \sup \left\{ \frac{ \left\lVert Au \right\rVert _W }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} 
+        \]
+        which is clearly non negative, because a norm of something nonnegative
+        \item[ii)] $ \left\lVert \alpha_{}^{} A \right\rVert  = \left| \alpha_{}^{}      \right| \left\lVert A \right\rVert   $ 
+        We have that 
+        \begin{align*}
+            \left\lVert \alpha_{}^{} A \right\rVert = \sup \left\{ \frac{ \left\lVert \alpha_{}^{} Au \right\rVert_W  }{ \left\lVert u \right\rVert_V } : u \neq 0 \right\} = \sup \left\{ \frac{ \left| \alpha_{}^{}  \right| \left\lVert Au \right\rVert_W   }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} \\
+            = \left| \alpha_{}^{}  \right| \sup \left\{ \frac{ \left\lVert Au \right\rVert _W }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\}  = \left| \alpha_{}^{}  \right| \left\lVert A \right\rVert  
+        \end{align*}
+
+        \item[iii)] For $ A, B \in  \mathcal{L} \left( V, W \right)  $ then $ \left\lVert A+B \right\rVert \leq \left\lVert A \right\rVert + \left\lVert B \right\rVert  $ 
+        \begin{align*}
+            \left\lVert A + B \right\rVert = \sup \left\{ \frac{ \left\lVert \left( A+B \right) \left( u \right)  \right\rVert_W  }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} = \sup \left\{ \frac{ \left\lVert A \left( u \right) + B \left( u \right)   \right\rVert_W  }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} \\
+            \leq  \sup \left\{ \frac{ \left\lVert A \left( u \right)  \right\rVert_W }{ \left\lVert u \right\rVert _V } + \frac{ \left\lVert B \left( u \right)  \right\rVert_W  }{ \left\lVert u \right\rVert _V } : u \neq 0  \right\} \leq  \sup \left\{ \frac{ \left\lVert A \left( u \right)  \right\rVert_W  }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} + \sup \left\{ \frac{ \left\lVert B \left( u \right)  \right\rVert_W  }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} \\
+            = \left\lVert A\right\rVert + \left\lVert B \right\rVert 
+        \end{align*}
+        
+        
+        I will explain the last inequality conceptually. Say we have a set. We take the max of that set, its a single number. Lets say we split the set now, and take the max of each new separate sets. Then at least one of the sets must contain the previous max. But we also have to add the new max thats lower, but still a number. This is why 
+        \[
+            \sup \left( A + B \right) \leq \sup \left( A \right) + \sup \left( B \right) 
+        \]
+    \end{itemize}
+
+    Hence, the operator norm, is a norm on the set $ \mathcal{L} \left( V, W \right)  $ 
+\end{proofbox}
+\end{propositionbox}
+
+
+\begin{theorembox}{5.4.8}{}
+Assume V and W are two normed spaces. If W is complete, so is $ \mathcal{L} \left( V, W \right)  $ 
+
+\begin{proofbox}{5.4.8}{}
+    We must prove that any cauchy sequence $ \left( A_n \right) \in  \mathcal{L} \left( V, W \right)  $ converges to an element $ A \in \mathcal{L} \left( V, W \right)  $- First observe for any $ u \in V $, then
+    \[
+        \left\lVert A_n \left( u \right) - A_m \left( u \right)  \right\rVert = \left\lVert \left( A_n - A_m \right) \left( u \right)  \right\rVert \leq \left\lVert A_n - A_m \right\rVert \left\lVert u \right\rVert 
+    \]
+    which implies that $ \left( A_n \left( u \right)  \right)  $ is a cauchy sequence in W. Since W is complete, the sequence converges to a point we shall call $ A \left( u \right)  $ 
+    \[
+        A \left( u \right) = \lim_{n \to \infty} A_n \left( u \right) \; \forall u \in V
+    \]
+    
+    This defines a function A from V to W. We need to prove its a bounded linear operator, and that $ \left( A_n \right)  $ converges to $ A $  in operator norm.
+
+    \[
+        A \left( \alpha_{}^{} u \right) = \lim_{n \to \infty} A_n \left( \alpha_{}^{} u \right) = \lim_{n \to \infty} \alpha_{}^{} A_n \left( u \right)   = \alpha_{}^{} \lim_{n \to \infty} A_n(u) = \alpha_{}^{} A \left( u \right) 
+    \]
+
+    and 
+    \[
+        A \left( u+v \right) = \lim_{n \to \infty} A_n \left( u+v \right) = \lim_{n \to \infty} A_n \left( u \right) + A_n \left( v \right) = \lim_{n \to \infty} A_n \left( u \right) + \lim_{n \to \infty} A_n \left( v \right)  = A(u) + A(v)
+    \]
+
+    where we have used that the $ A_n $'s are linear operators.
+    
+    
+    Next step is to prove A is bounded. Note that by the inverse triangle inequality of norms, $ \left| \left\lVert A_n \right\rVert - \left\lVert A_m \right\rVert  \right| \leq  \left\lVert A_n - A_m \right\rVert  $, which shows that $ \left( \left\lVert A_n \right\rVert  \right)  $ is a cauchy sequence, because $ \left( A_n \right)  $ is. This means the sequence $ \left( \left\lVert A_n \right\rVert  \right)  $ is bounded, and hence, there is a constant $ M \in \mathbb{R} $  such that $ M \geq \left\lVert A_n \right\rVert  $ for all n. Thus $ \forall u \neq 0 $  
+    \[
+        \frac{ \left\lVert A_n \left( u \right)  \right\rVert_W  }{ \left\lVert u \right\rVert_V  } \leq M
+    \]
+    and by the definition of A, then also
+    \[
+        \frac{ \left\lVert A \left( u \right) \right\rVert_W  }{ \left\lVert u \right\rVert _V } \leq M
+    \]
+    which shows that A is bounded. 
+
+
+    It remains to show that $ \left( A_n \right)  $ converges to A in operator norm. Since $ \left( A_n \right)  $ is a cauchy sequence, there is given $ \epsilon > 0 $ an $ N \in \mathbb{N} $ such that 
+    \[
+        \left\lVert A_n - A_m \right\rVert < \epsilon \; \forall n, m \geq N.
+    \]
+    This means that 
+    \[
+        \left\lVert A_n \left( u \right) - A_m \left( u \right)  \right\rVert \leq \epsilon \left\lVert u \right\rVert \; \forall u \in V.
+    \]
+    
+    If we let $ m \to \infty $, we get that 
+    \[
+        \left\lVert A_n \left( u \right) - A \left( u \right)  \right\rVert \leq \epsilon \left\lVert u \right\rVert  \; \forall u \in V,
+    \]
+     which means that $ \left\lVert A_n - A \right\rVert < \epsilon  $. This shows that $ \left( A_n \right)  $ converges to A.
+\end{proofbox}
+\end{theorembox}
+
+
+\begin{oppgavebox}{5.4.2}{}
+Check that the map A in ex 1, is a linear functional, and that B is a linear operator.
+\begin{proofbox}{5.4.2}{}
+    \begin{itemize}
+        \item[Operator A] Let $ V = C \left( \left[ a, b \right] , \mathbb{R} \right)  $ and $ A : V \to \mathbb{R} $ defined by
+        \[
+            A(u) = \int_{a}^{b} u(x) dx     
+        \]
+        
+        A linear functional is a linear map such that $ A : V \to \mathbb{R} $. Since the definite integral is a function
+        \[
+            \int_{a}^{b} : V \to \mathbb{R} 
+        \]
+        I just need to check that A is linear. 
+
+        \begin{align*}
+            A \left( \alpha_{}^{} u + \beta v \right) = \int_{a}^{b} \left( \alpha_{}^{} u + \beta v \right)  (x) dx = \int_{a}^{b} \alpha_{}^{} u(x) + \beta v(x) dx = \int_{a}^{b} \alpha_{}^{} u(x) dx + \int_{a}^{b} \beta  v(x) dx \\
+            = \alpha_{}^{} \int_{a}^{b} u(x) dx +  \beta \int_{a}^{b}    v(x) dx = \alpha_{}^{} A(u) + \beta A(v)
+        \end{align*}
+        
+        so it is in fact linear.
+
+
+        \item[Operator B]
+        
+    \end{itemize}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.4.3}{}
+Check that the map D in ex 2 is a linear operator
+\begin{proofbox}{5.4.3}{}
+    I have the linear operator $ D : V \to U $ defined by
+    \[
+        D(f) = f'
+    \]
+    
+    where $ U = C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ and $ V = \left\{ g : \left[ 0, 1 \right] \to \mathbb{R} : \text{ g is differentiable with } g' \in U \right\}  $ 
+
+
+
+    I have for $ f, g \in V$ 
+    \begin{align*}
+        D \left( f + g \right) = \left( f+g \right)' = \left( f' \right) + \left( g \right) ' = D(f) + D(g)
+    \end{align*}
+
+
+    And for $ \alpha_{}^{} \in \mathbb{K} $ 
+    \begin{align*}
+        D \left( \alpha_{}^{} f \right) = \left( \alpha_{}^{} f \right) ' = \alpha_{}^{} \left( f \right) ' = \alpha_{}^{} D (f)
+    \end{align*}
+    
+    So D is a linear operator.
+    
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.4.4}{}
+Show that the formula 
+\[
+    \left\lVert A \right\rVert = \sup \left\{ \left\lVert A \left( u \right)  \right\rVert_W : \left\lVert u \right\rVert _V = 1  \right\} 
+\]
+
+is an equivalent definition of the operator norm
+\begin{proofbox}{5.4.4}{}
+    I have the operator norm of an $ A \in \mathcal{L} \left( V, W \right)  $ where V and W are normed spaces given by
+    \[
+        \left\lVert A  \right\rVert = \sup \left\{ \frac{ \left\lVert A \left( u \right)  \right\rVert_W  }{ \left\lVert u \right\rVert _V } : u \neq 0 \right\} 
+    \]
+
+    We can rewrite
+    \[
+        \frac{ \left\lVert A (u) \right\rVert_W  }{ \left\lVert u \right\rVert_V  } = \frac{ 1 }{ \left\lVert u \right\rVert _V } \left\lVert A (u) \right\rVert _W = \left\lVert \frac{ 1 }{ \left\lVert u \right\rVert _V A(u) } \right\rVert_W = \left\lVert A \left( \frac{ u }{ \left\lVert u \right\rVert_V  } \right)  \right\rVert_W = \left\lVert A(v) \right\rVert_W   
+    \]
+    where $ v := \frac{ u }{ \left\lVert u \right\rVert_V } $. So
+    \begin{align*}
+        \sup \left\{ \left\lVert A(v) \right\rVert_W : v = \frac{ u }{ \left\lVert u \right\rVert _V }, u \neq 0  \right\} = \sup \left\{ \left\lVert A(v) \right\rVert_W : \left\lVert v \right\rVert = 1  \right\} 
+    \end{align*}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.4.5}{}
+Define $ F : C \left( \left[ 0, 1 \right] , \mathbb{R} \right) \to \mathbb{R} $ by $ F(u) = u(0) $. Show that F is a linear functional. Is F continuous?
+
+\begin{proofbox}{5.4.5}{}
+    We have for $ u, v \in C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ that
+    \[
+        F \left( u+v \right) = \left( u+v \right) (0) = u(0) + v(0) = F(u) + F(v)
+    \]
+    
+    and for $ \alpha_{}^{} \in  \mathbb{K}  $ that
+    \[
+        F \left( \alpha_{}^{} u \right) = \left( \alpha_{}^{} u \right) (0) = \alpha_{}^{} u(0) = \alpha_{}^{} F(u).
+    \]
+
+    So F is a linear functional.
+
+
+    Is F continuosu?
+
+    F is continuous if its bounded. That is $ \exists M \in \mathbb{R} $ such that
+    \[
+        \left| F(u) \right| \leq M \left\lVert u \right\rVert \; \forall u \in C \left( \left[ 0, 1 \right] , \mathbb{R} \right) 
+    \]
+
+    Let $ u \in C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $. We have that since $ \left[ 0, 1 \right]  $ is a compact set, then the supremum norm of u is finite.
+    \[
+        \left\lVert u \right\rVert < \infty
+    \]
+
+    So we get that $ u(0) \leq \left\lVert u \right\rVert  $. Hence
+    \[
+        \left| F(u) \right| = \left| u(0) \right| \leq \left\lVert u \right\rVert 
+    \]
+    where $ M := 1 $. Hence, F is bounded, which implies its continuous.
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.4.7}{}
+Check that $ \mathcal{L} \left( V, W \right)  $ is a linear space
+\begin{proofbox}{5.4.7}{}
+    Let $ A, B, C \in  \mathcal{L} \left( V, W \right)  $ and $ \alpha_{}^{} , \beta \in \mathbb{K}  $. Then we define the algebraic operations
+    \begin{itemize}
+        \item[i)] $ \left( A + B \right) (u) = A(u) + B(u) $  
+        \item[ii)] $ \left( \alpha_{}^{} A \right)(u) = \alpha_{}^{} A(u)  $  
+    \end{itemize}
+
+    We have eight points to cover
+    \begin{itemize}
+        \item[i)] $ \left( A + B \right) (u) = A(u) + B(u) = B(u) + A(u) = \left( B+A \right) (u) $ 
+        \item[ii)] $ \left( A + B \right) (u) + C(u) = A(u) + B(u) + C(u) = A(u) + \left( B + C \right)(u)  $  
+        \item[iii)] there is a zero operator $ \textbf{0} \in \mathcal{L}(V, W) $ such that $ \left( A + textbf{0} \right)(u) = A(u)  $. We have that $ \left( A + \textbf{0} \right) (u) =A(u) + \textbf{0}(u) = A(u) $ 
+        \item[iv)] $ \left( A + \left( -A \right)  \right)(u)  = A(u) + \left( -A \right)(u) = A(u) - A(u) = \textbf{0}  $ 
+        \item[v)] $ \left( \alpha_{}^{} \left( A + B \right)  \right)(u) =  \left( \alpha_{}^{} A + \alpha_{}^{} B \right)(u) = \left( \alpha_{}^{} A \right)(u) + \left( \alpha_{}^{} B \right)(u) = \alpha_{}^{} A(u) + \alpha_{}^{} B(u)     $  
+        \item[vi)] $ \left( \left( \alpha_{}^{} + \beta \right)A  \right)(u) = \left( \alpha_{}^{} A + \beta A \right)(u) = \left( \alpha_{}^{} A \right)(u) + \left( \beta A \right)(u) = \alpha_{}^{} A(u) + \beta A(u)     $  
+        \item[vii)] $ \left( \alpha_{}^{}  \left( \beta A \right)  \right)(u) = \alpha_{}^{} \left( \beta A \right)(u) = \beta \left( \alpha_{}^{} A \right) (u) = \left( \beta \left( \alpha_{}^{} A \right)  \right)(u)     $  
+        \item[viii)] $ \left( 1 A \right)(u) = \left( A \right) (u) = A(u)   $  
+    \end{itemize}
+    So $ \mathcal{L} \left( V, W \right)  $ is in fact a linear space.
+\end{proofbox}
+\end{oppgavebox}
+
+\section*{5.5 Inverse operators and Neumann series}
+\addcontentsline{toc}{section}{5.5 Inverse operators and Neumann series}
+
+\begin{definitionbox}{5.5.1}{}
+If $ A : U \to V, B : V \to W $ are two linear operators, we write $ BA $ as their composition
+\[
+    BA = B \circ A
+\]
+
+If $ C : U \to U $ is a linear map from a space to the same space, we write
+\[
+    C ^{n} = C \circ C \circ ... \circ C
+\]
+for the result of composing C with itself, n times.
+\end{definitionbox}
+
+
+\begin{lemmabox}{5.5.2}{}
+Assume $ U, V, W $ are normed spaces and that $ A : U \to V $ and $ B : V \to W $ are two bounded linear operators. Then the composition $ BA $ is bounded and 
+\[
+    \left\lVert BA \right\rVert \leq \left\lVert B \right\rVert \left\lVert A \right\rVert 
+\]
+For $ C : U \to U $ we have
+\[
+    \left\lVert C^n \right\rVert \leq \left\lVert C \right\rVert ^{n} 
+\]
+
+
+\begin{proofbox}{5.5.2}{}
+    For any $ u \in U $ we have
+    \[
+        \left\lVert BA(u) \right\rVert _W \leq \left\lVert B \right\rVert \left\lVert A(u) \right\rVert _V \leq \left\lVert B \right\rVert \left\lVert A \right\rVert \left\lVert u \right\rVert _U
+    \]
+    and $ \left\lVert C^n \right\rVert \leq \left\lVert C \right\rVert ^{n}  $ follows from induction.
+\end{proofbox}
+\end{lemmabox}
+
+
+
+If U is a linear space, we let $ I_U  $ denote the identity operator on U. 
+\[
+    I_U : U \to U
+\]
+defined by
+\[
+    I_U(u) = u \; \forall  u \in U
+\]
+
+ 
+\begin{definitionbox}{5.5.3}{}
+Assume $ V, W $ are normed spaces. A bounded linear operator $ A V /to W $ is invertible if there is a bounded linear operator $ B : W /to V $ such that
+\[
+    BA = I_V, \; AB = I_W.
+\]
+We call B the inverse operator of A and denote it $ A ^{-1}  $ 
+\end{definitionbox}
+
+\begin{propositionbox}{5.5.4}{}
+Assume $ U, V, W $ are linear spaces, and that $ A : U \to V $ and $ B: V \to W $ are two ivertible linear operators. Then $ BA $ is invertible and $ \left( BA \right) ^{-1} = A ^{-1} B ^{-1}    $ 
+
+\begin{proofbox}{5.5.4}{}
+    $ \left( BA \right) \left( BA\right) ^{-1} = BA A ^{-1} B ^{-1} = B I B ^{-1} = B B ^{-1} = I_W       $ 
+\end{proofbox}
+\end{propositionbox}
+
+\begin{propositionbox}{5.5.5}{}
+Assume V and W are vector spaces and that $ A : V \to W $ is a bijective, linear operator. THen the inverse $ B : W \to V $  is linear
+\begin{proofbox}{5.5.5}{}
+    $ A \left( B \left( \alpha_{}^{} u + \beta v \right)  \right) = \alpha_{}^{} u + \beta v  $. But on the other hand,
+
+    \[
+        A \left( \alpha_{}^{} Bu + \beta Bv \right) = \alpha_{}^{} A \left( Bu \right) + \beta A \left( Bv \right) = \alpha_{}^{} u + \beta v
+    \]
+
+    as A is injective, this means that $ B \left( \alpha_{}^{} u + \beta v \right) = \alpha_{}^{} Bu + \beta B v  $ and hence, B is linear.
+\end{proofbox}
+\end{propositionbox}
+
+
+So if a linear map has an inverse, the inverse is automatically linear. But if a bounded linear map has an inverse, then the inverse is not necessarily bounded.
+
+
+Consider $ U = C \left( \left[ 0, 1 \right] , \mathbb{R} \right)  $ with supremum norm $ \left\lVert \cdot \right\rVert  $, and put $ V = \left\{ g : \left[ 0, 1 \right] \to \mathbb{R} : \text{ g is differentiable with } g' \in U, g(0) = 0 \right\}  $ and give it the supremum norm as well. Define $ A: U \to V $ by
+\[
+    A(f)(t) = \int_{0}^{t} f(s) ds.
+\]
+As $ \left| A(f)(t) \right| \leq \int_{0}^{t} \left| f(s) \right| ds \leq \int_{0}^{1} \left\lVert f \right\rVert ds = \left\lVert  f\right\rVert    $, A is bounded. If $ g \in V $ then
+\[
+    g(t) = g(0) + \int_{0}^{t} g'(s) ds = \int_{0}^{t} g(s) ds = A \left( g' \right) (t)  
+\]
+by the fundamental theorem of calculus, and hence A is surjective ( $ A(f) = A(d) \iff f=d $ ). To see this, just note that if $ A(f) = A(h) $ then $ \int_{0}^{t} f(s) ds = \int_{0}^{t} h(s) ds \; \forall  t   $, and if we differentiate both sides, we get $ f(s) = h(s) \; \forall  s$.
+
+
+Using the fundamental theorem of calculus again, we see that the inverse of A is the operator $ D : V \to U $ given by $ D(f) = f' $. The problem is that differentiation is not bounded. To see this, let $ f(x) = \sin((nx)  $. THen $ f'(x) = n \sin(nx)  $ and we get $ \left\lVert f \right\rVert = 1 $ and $ \left\lVert Df \right\rVert = n $. Since n can be arbitrarily large, D is not bounded.
+
+
+This problem, doesnt occur if we are in complete spaces, we will see this in theorem 5.7.5. For now, we will compute the inverse of an operator as a power series. The starting point is familiar.
+\[
+    \frac{ 1 }{ 1-x } = \sum_{n=0}^{\infty} x ^{n} \text{ for } \left| x \right| < 1   
+\]
+
+(REMARK:
+
+We have that $ \sum_{n=1}^{\infty} x^n = \frac{ x }{ 1-x }   $ 
+)
+
+
+for the sum of a geometric series. It turns out that this generalises well to a formula
+\[
+    \left( I - A \right) ^{-1} = \sum_{n=0}^{\infty} A ^{n} \text{ for } \left\lVert A \right\rVert < 1.
+\]
+
+And
+\[
+    \frac{ A }{ I - A } = \sum_{n=1}^{\infty} A^n  
+\]
+for $ \left\lVert A \right\rVert < 1 $ 
+
+
+for operators $ A : U \to U $ for U normed space. This is called a \textit{Neumann Series}
+
+\begin{lemmabox}{5.5.6}{}
+Assume U, V, W normed spaces, and $ A_n : U \to V $ and $ B_n : V \to W $ are bounded linear operators for all n. If $ \left( A_n \right), \left( B_n \right)   $ converge to A and B respectively in operator norm, then $ \left( B_n A_n \right)  $ converges to $ BA $ in operator norm.
+
+\begin{proofbox}{5.5.6}{}
+    We have that given $ \epsilon _1, \epsilon _2 $ that $ \forall n \geq N_1 \in \mathbb{N} $ that
+    \[
+        \left\lVert A_n - A \right\rVert < \epsilon _1 
+    \]
+    and $ \forall n \geq N_2 \in \mathbb{N} $ that
+    \[
+        \left\lVert B_n - B \right\rVert < \epsilon _2
+    \]
+
+    Hence, we have for all $ n \geq N := max(N_1, N_2) $ that 
+    \begin{align*}
+        \left\lVert B_nA_n - BA \right\rVert = \left\lVert B_nA_n - BA_n + BA_n - BA \right\rVert \leq \left\lVert B_nA_n - BA_n \right\rVert + \left\lVert BA_n - BA \right\rVert \\
+        \leq  \left\lVert A_n \right\rVert \left\lVert B_n - B \right\rVert + \left\lVert B \right\rVert \left\lVert A_n - A \right\rVert
+    \end{align*}
+    
+    Since a vector space is closed (closed under vector addition and multiplication), and $ \left( B_n \right) \to B  $, then $ B \in \mathcal{L} \left( V, W \right)  $ is a bounded linear operator, and since $ \left( A_n \right) \to A  $, then $ \left( A_n \right)  $ is bounded, hence 
+    \[
+        \left\lVert A_n \right\rVert \left\lVert B_n - B \right\rVert + \left\lVert B \right\rVert \left\lVert A_n - A \right\rVert < M_1 \epsilon _2 + M_2 \epsilon _1 := \epsilon 
+    \]
+
+    hence, we have proved that given $ \epsilon > 0 $ there is a $ N \in \mathbb{N} $ such that for all $ n \geq N $ then
+    \[
+        \left\lVert B_nA_n - BA \right\rVert < \epsilon 
+    \]
+    which proves that $ \left( B_n A_n \right) \to BA  $ 
+\end{proofbox}
+\end{lemmabox}
+
+
+
+\begin{theorembox}{5.5.7 Neumann Series}{}
+    Assume U is complete, normed space and $ A : U \to U $ is a bounded linear operator with $ \left\lVert A \right\rVert < 1  $. Then $ I - A $ is invertible and
+    \[
+        \left( I- A \right) ^{-1}  = \sum_{n=0}^{\infty} A^n  
+    \]
+    
+    where the series converges in operator norm. Moreover, $ \left\lVert \left( I - A \right) ^{-1}  \right\rVert \leq \frac{ 1 }{ 1 - \left\lVert A \right\rVert  } $ 
+
+    \begin{proofbox}{5.5.7}{}
+        From thm 5.4.8 the space $ \mathcal{L}(U) $ is complete, and the partial sums are
+        \[
+            S_n = \sum_{j=0}^{n} A^j.
+        \]
+    
+        Note that 
+        \[
+            \left\lVert S_{n+k} - S_n \right\rVert = \left\lVert \sum_{i=0}^{k-1} A^{n+1+i}  \right\rVert \leq \left\lVert A ^{n+1}  \right\rVert \sum_{i=0}^{k-1} \left\lVert A \right\rVert ^{k}  \leq \frac{ \left\lVert A \right\rVert ^{n+1}  }{ 1 - \left\lVert A \right\rVert  }
+        \]
+
+        because $ S_{n+k} = \sum_{j=0}^{n+k} A^j  $ and $ S_n = \sum_{j=0}^{n} A^j  $ and 
+        \[
+            S_{n+k} - S_n = \sum_{j=0}^{n+k} A^j - \sum_{j=0}^{n} A^j  = \sum_{j=n+1}^{n+k} A^j  
+        \]
+        now introduce $ i = j - (n+1) \Rightarrow j = n+1+i $. When $ j = n+1 $, then $ i = 0 $, and when $ j = n+k $, then $ i = k-1 $. Hence
+
+        \[
+            \sum_{j=n+1}^{n+k} A^j  = \sum_{i=0}^{k-1} A ^{n+1+i}.
+        \]
+        
+
+
+        As $ \left\lVert A \right\rVert < 1 $ we can get this expression as small as we want by choosing n large enough. And hence $ \left( S_n \right)  $ is a cauchy sequence. SInce $ \mathcal{L}(U) $ is complete, the partial sums must converge to a sum 
+        \[
+            S = \sum_{n=0}^{\infty} A^n.
+        \]
+
+        To see that $ S = \left( I-A \right) ^{-1}   $, note that by the lemma, 
+        \begin{align*}
+            S \left( I - A \right) = \lim_{n \to \infty} S_n \left( I - A \right) = \lim_{n \to \infty} \left( \sum_{i=0}^{n} A^i  \right) \left( I - A \right) \\
+            = \lim_{n \to \infty} \left( \sum_{i=0}^{n} A ^{i} - \sum_{i=1}^{n+1} A ^{i} \right) = \lim_{n \to \infty} \left( I - A ^{n+1}  \right)  = I
+        \end{align*}
+                
+        where the last step uses that $ \left\lVert A \right\rVert < 1 $. A totally similar calculation shows that $ \left( I-A \right) S = I $. Hence $ S = \left( I - A \right) ^{-1}  $.
+
+        To estimate the norm, note that
+        \[
+            \left\lVert \left( I - A \right) ^{-1}  \right\rVert = \lim_{n \to \infty}  \left\lVert S_n \right\rVert 
+        \]
+        and that
+        \[
+            \left\lVert S_n \right\rVert \leq \sum_{j=0 }^{n} \left\lVert A \right\rVert ^{j} \leq \frac{ 1 }{ 1- \left\lVert A \right\rVert  }.
+        \]
+
+        Hence, $ \left\lVert \left( I - A \right) ^{-1}  \right\rVert  = \lim_{n \to \infty} \left\lVert S_n \right\rVert  \leq \frac{ 1 }{ 1- \left\lVert A \right\rVert  } $ 
+    \end{proofbox}
+\end{theorembox}
+
+
+Remark:
+
+If we let $k \to \infty $ in the inequality,
+\[
+    \left\lVert S_{n+k} - S_n \right\rVert \leq \frac{ \left\lVert A \right\rVert ^{n+1}  }{ 1 - \left\lVert A \right\rVert  }
+\]
+and we get $ \left\lVert S - S_n \right\rVert \leq \frac{ \left\lVert A \right\rVert ^{n+1}  }{ 1 - \left\lVert A \right\rVert  } $ 
+and we get excellent control over the rate of convergence. This is important for numerical applications of Neumann series
+
+
+\begin{corollarybox}{5.5.8}{}
+Assume U is complete normed space and $ B : U \to U $ is a boudned linear operator, with $ \left\lVert I - B \right\rVert < 1 $. Then B is invertible and
+\[
+    B ^{-1} = \sum_{n=0}^{\infty} \left( I - B \right) ^{n}.
+\]
+Moreover, $ \left\lVert B ^{-1}  \right\rVert \leq \frac{ 1 }{ 1 - \left\lVert I - B \right\rVert  }  $ 
+\end{corollarybox}
+
+\begin{theorembox}{5.5.9 Banachs lemma}{}
+Assume U is complete normed space and that $ C, D : U \to U $ are two bounded linear operators. If C is invertible and $ \left\lVert C - D \right\rVert \leq \frac{ 1 }{ \left\lVert C ^{-1}  \right\rVert  } $, then D is invertible and
+\[
+    \left\lVert D ^{-1}  \right\rVert \leq  \frac{ \left\lVert C ^{-1}  \right\rVert  }{ 1 - \left\lVert C ^{-1}  \right\rVert \left\lVert C - D \right\rVert   }
+\]
+
+\begin{proofbox}{5.5.9}{}
+    Put $ B = C ^{-1} D  $ then $ I - B =  C ^{-1} C - C ^{-1} D  = C ^{-1} \left( C - D \right)    $ and hence
+    \[
+        \left\lVert I - B \right\rVert \leq \left\lVert C ^{-1}  \right\rVert \left\lVert C - D \right\rVert < 1
+    \]
+    by previous theorem, B is invertible and $ \left\lVert B ^{-1}   \right\rVert \leq \frac{ 1 }{ 1 - \left\lVert I - B \right\rVert  }  $. SInce $ B = C ^{-1} D  $, we have that $ D = CB $ and hence by prop 5.5.4, D is invertible with $ D ^{-1} = B ^{-1} C ^{-1}    $. Also
+    \[
+        \left\lVert D ^{-1}  \right\rVert \leq \left\lVert B ^{-1} \right\rVert  \left\lVert C ^{-1}  \right\rVert \leq \frac{ 1 }{ 1 - \left\lVert I - B \right\rVert  } \left\lVert C ^{-1}  \right\rVert = \frac{ \left\lVert C ^{-1}  \right\rVert  }{ 1 - \left\lVert I - C ^{-1} D  \right\rVert  }.
+    \]
+    
+    As $ \left\lVert I - C ^{-1} D  \right\rVert = \left\lVert C ^{-1} \left( C - D \right)   \right\rVert \leq \left\lVert C ^{-1}   \right\rVert \left\lVert C - D \right\rVert    $, we get
+    \[
+        \left\lVert D ^{-1}  \right\rVert \leq \frac{ \left\lVert C ^{-1}  \right\rVert  }{ 1 - \left\lVert C ^{-1}  \right\rVert \left\lVert C - D \right\rVert   }
+    \]
+    and the theorem is proved.
+\end{proofbox}
+\end{theorembox}
+
+
+\begin{oppgavebox}{5.5.1}{}
+Assume U, V, W are linear spaces and that $ A : U \to V, B : V \to W $ are linear operators. SHow that BA is a linear operator.
+
+\begin{proofbox}{5.5.1}{}
+    \begin{itemize}
+        \item[i)] We have for $ \alpha_{}^{} \in \mathbb{K}  $ and $ u \in U $ that
+        \[
+            \left( BA \right) \left( \alpha_{}^{} u \right) = B \left( A \left( \alpha_{}^{} u \right)  \right) = B \left( \alpha_{}^{} A (u) \right) = \alpha_{}^{} B \left( A(u) \right) = \alpha_{}^{} BA(u)
+        \]
+        \item[ii)] For $ u, v \in U $ we have that
+        \[
+            \left( BA \right) \left( u+v \right) = B \left( A \left( u+v \right)  \right) = B \left( A(u) + A(v) \right) = B (A(u)) + B(A(v)) = BA(u) + BA(v)
+        \]
+    \end{itemize}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.5.2}{}
+Assume U is a normed space and that $ C : U \to U $ is a bounded linear operator. SHow that $ \left\lVert C ^{n}  \right\rVert \leq \left\lVert C \right\rVert ^{n}  $ 
+\begin{proofbox}{5.5.2}{}
+    For $ n=0$ its obvious, because $ \left\lVert 1 ^{1}  \right\rVert  = \left\lVert 1 \right\rVert ^{1}  $. 
+    
+    \begin{itemize}
+        \item[ $ n=k $ ] we assume our induction hypothesis
+        \[
+            \left\lVert C ^{k}  \right\rVert \leq \left\lVert C \right\rVert ^{k}  
+        \]
+        \item[ $ n=k+1 $ ] here we have that 
+        \[
+            \left\lVert C ^{k+1}   \right\rVert = \left\lVert C ^{k} C \right\rVert  \leq \left\lVert C ^{k}  \right\rVert \left\lVert C \right\rVert 
+        \]
+        and since we assume $ \left\lVert C ^{k}  \right\rVert \leq \left\lVert C \right\rVert ^{k}  $ we get that
+        \[
+            \left\lVert C ^{k+1}  \right\rVert \leq \left\lVert C  \right\rVert ^{k} \left\lVert C \right\rVert  = \left\lVert C \right\rVert ^{k+1} 
+        \]
+        and our proof is complete
+    \end{itemize}
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.5.3}{}
+Assume $ U, V $ are normed spaces and that $ A : U \to V $ is an invertible linear operator whose inverse $ A ^{-1}  $ is bounded. Show that 
+\[
+    \left\lVert A(u) \right\rVert _V \geq \frac{ 1 }{ \left\lVert A ^{-1} \right\rVert } \left\lVert u \right\rVert _U \; \forall  u \in U
+\]
+\begin{proofbox}{5.5.3}{}
+    We have for $ u \in U $ that
+    \[
+        \left\lVert u \right\rVert _U = \left\lVert A ^{-1} \left( A(u) \right)   \right\rVert _U \leq \left\lVert A ^{-1}  \right\rVert \left\lVert A(u) \right\rVert _V.
+    \]
+
+    Hence, we get that 
+    \[
+        \left\lVert u \right\rVert _U \frac{ 1 }{ \left\lVert A ^{-1}  \right\rVert  } \leq \left\lVert A(u) \right\rVert _V
+    \]
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{5.5.4}{}
+Assume U, V are normed spaces and that $ A : U \to V $ is a surjective, bounded linear operator. SHow that if there is a $ c > 0 $ such that $ \left\lVert A(u) \right\rVert _V \geq c \left\lVert u \right\rVert_U  $ for all $ u \in U $ , then A is invertible.
+
+\begin{proofbox}{5.5.4}{}
+    If A is bounded, then its uniformly continuous, and $ \left\lVert A \right\rVert < \infty $. If A is surjective, then $ \forall v \in V $ there is a $ u \in U $ such that $ A(u) = v $. A is invertible when there is a bounded linear operator $ B : V \to U $ such that
+    \[
+        BA = I_U
+    \]
+
+    Let $ u \in U $. Assume that there is a $ c > 0 $ such that
+    \[
+        \left\lVert A(u) \right\rVert_V \geq c \left\lVert u \right\rVert _U.
+    \]
+
+    Have to show that A is invertible. We have to show that A is injective. A is injective if $ Au = 0 \iff u = 0 $. Since 
+    \[
+        \left\lVert Au \right\rVert _V \geq c \left\lVert u \right\rVert _U
+    \]
+    then $ \left\lVert A(u) \right\rVert _V = 0 \geq c \left\lVert u \right\rVert_U  $. Since $ c > 0 $, then $ \left\lVert u \right\rVert _U = 0 \iff u = 0 $. So $ Ker(A) = \left\{ 0 \right\}  $. 
+
+
+    Since A is injective and surjective, its bijective, hence its invertible. I.e. there is a $ A ^{-1} : V \to U  $ such that $ A ^{-1} A = I  $
+
+
+    Have to now show that its a bounded operator. Introduce $ Au = v \Rightarrow u = A ^{-1} v  $.Substitute this and get
+    \[
+        \left\lVert v  \right\rVert _V \geq c \left\lVert A ^{-1} v  \right\rVert_U.
+    \]
+    Since $ c > 0 $, then $ \frac{ 1 }{ c }> 0 $ and
+    \[
+        \left\lVert A ^{-1} v  \right\rVert _U \leq \frac{ 1 }{ c } \left\lVert v \right\rVert_V \; \forall v \in V.
+    \]
+    Hence, A is invertible.
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{5.5.5}{}
+Assume U is complete normed space. SHow that the set of inverible operators $ A : U \to U $ is open in $ \mathcal{L}(U) $.
+
+\begin{proofbox}{5.5.5}{}
+    A set C is open if for all elements $ u \in C $ there is a $ r > 0 $ such that $ B(u, r) \subseteq C $
+    \[
+        B(u, r) = \left\{ \left\lVert u - v \right\rVert < r : v \in C  \right\} 
+    \]
+     
+
+    Since U is complete, then $ \mathcal{L}(U) $ is complete as well, i.e. all cauchy sequences converge. That is for $ \left( A_n \right)  $ in $ \mathcal{L}(U) $  then given $ \epsilon > 0 \; \exists N \in \mathbb{N} $ such that
+    \[
+        \left\lVert A_n - A_m \right\rVert < \epsilon \; \forall n, m \geq N
+    \]
+
+    Let $ A \in GL(U) $ where $ GL(U) $ is the set of invertible operators. This means that A is invertible. Suppose $ B \in \mathcal{L}(U) $ satisfies $ \left\lVert B - A \right\rVert < \epsilon := \frac{ 1 }{ 2 \left\lVert A^-1 \right\rVert  } $. Then 
+    \[
+        \left\lVert A ^{-1} \left( B - a \right)   \right\rVert \leq \left\lVert A ^{-1}  \right\rVert  \left\lVert B - A \right\rVert < \left\lVert A ^{-1}  \right\rVert \epsilon = \frac{ 1 }{ 2 } < 1
+    \]
+    Define $ C := -A ^{-1} \left( B - A \right)   $, since $ \left\lVert C \right\rVert < 1 $ then $ I - C $ is invertible. But $ B = A + \left( B - A \right) = A - A A^-1 \left( B-A \right) = A + A C = A \left( I - C \right)$. Since $ A $  and $ I - C $ are invertible, then $ B $ is also invertible. Hence $ B \in GL(U) $ and $ B \left( A, \epsilon  \right) \subseteq GL(U)  $ which proves that $ GL(U) $, the set of invertible operators is open in $ \mathcal{L}(U) $.
+\end{proofbox}
+\end{oppgavebox}
+
+
+\begin{oppgavebox}{5.5.6}{}
+Assume U is a complete normed space and that $ A : U \to U $ is an invertible operator. Show that if $ \left( A_n \right)  $ is a sequence of bounded linear operators converging to A in operator norm, then $ A_n $ is invertible for all sufficiently large n, and the resulting sequence $ \left( A_n ^{-1}  \right)  $ converges to $ A ^{-1}  $ 
+
+\begin{proofbox}{5.5.6}{}
+    To first prove that $ A_n $ are inversable, we let $ \epsilon > 0 $ and $ N \in \mathbb{N} $. Then, since $ \left( A_n \right) \to A  $, we have that $ \forall n \geq N $  that $ \left\lVert A_n - A \right\rVert < \epsilon  $ . From Banachs lemma, we have that if A is inversible, and 
+    \[
+        \left\lVert A_n - A \right\rVert < \frac{ 1 }{ \left\lVert A ^{-1}  \right\rVert  },
+    \]
+    then $ A_n $ is inversable as well. So now we just put $ \epsilon  := \frac{ 1 }{ \left\lVert A ^{-1}  \right\rVert  } $. Since we assume A is inversable to begin with, this works just fine. So $ A_n $ is inversable for all $ n \geq N $
+
+
+
+    Now to prove that the sequence $ \left( A_n ^{-1}  \right) \to A ^{-1}   $. We have to prove that for the same N, then for all $ n \geq N, \left\lVert A_n ^{-1 } - A ^{-1}   \right\rVert < \epsilon _2  $ for some other $ \epsilon _2 > 0 $. 
+    \begin{align*}
+        A_n  = A + \left( A_n - A \right) = A \left( I + A ^{-1} \left( A_n + A \right)   \right) 
+    \end{align*}
+    Define $ T_n := A ^{-1} \left( A_n + A \right) $, so $ A_n = A \left( I + T_n \right)  $. Since $ \left( A_n  \right) \to A $ in operator norm, then
+    \[
+        \left\lVert T_n \right\rVert = \left\lVert A ^{-1} \left( A_n - A \right)   \right\rVert \leq \left\lVert A ^{-1}  \right\rVert \left\lVert A_n - A \right\rVert <  \left\lVert A ^{-1}  \right\rVert \epsilon  = \left\lVert A ^{-1}  \right\rVert \frac{ 1 }{ \left\lVert A ^{-1}  \right\rVert }  = 1
+    \]
+    So $ \left\lVert T_n \right\rVert < 1 $ and this makes $ I - T_n $ invertible. We get that
+    \[
+        \left\lVert \left( I - T_n \right) ^{-1}  \right\rVert \leq \left\lVert T_n - I \right\rVert ^{-1} = \frac{ 1 }{ 1 - \left\lVert T_n \right\rVert  }.
+    \]
+
+    Now compute $ A_n ^{-1} - A ^{-1}   $. 
+    \begin{align*}
+        A_n ^{-1} - A ^{-1} = A ^{-1}  \left( I + T_n \right) ^{-1}   - A ^{-1} = A ^{-1} \left( \left( I + T_n \right) ^{-1} - I  \right)   
+    \end{align*}
+    We have from neumann seires that 
+    \[
+        \left\lVert \left( I + T_n \right) ^{-1} - I  \right\rVert \leq \frac{ \left\lVert T_n \right\rVert  }{ 1 - \left\lVert T_n \right\rVert  }.
+    \]
+
+    The reason we get this identity, is the following. We have that $ \left\lVert T_n \right\rVert < 1 $, and from 5.5.7,
+    \[
+        \left( I - T_n \right) ^{-1} = \sum_{k=0}^{\infty} T_n^k = I + T_n ^{1}   +   T_n ^{2} + ... 
+    \]
+    So $ \left( I - T_n \right) ^{-2} - I = \left( I + T_n ^{1} + T_n ^{2} + ...   \right) - I = T_n ^{1} + T_n ^{2} + ... = \frac{ \left\lVert T_n \right\rVert  }{ 1 - \left\lVert T_n \right\rVert  }  = \sum_{k=1}^{\infty} \left\lVert T_n \right\rVert ^{k}     $ 
+    
+    
+
+    Since $ \left\lVert T_n \right\rVert \leq \left\lVert A ^{-1}  \right\rVert \left\lVert A_n - A \right\rVert \to 0    $, then 
+    \begin{align*}
+        \left\lVert A_n ^{-1} - A ^{-1}   \right\rVert = \left\lVert \left( \left( I + T_n \right) ^{-1} - I  \right) A ^{-1}   \right\rVert \leq  \left\lVert \left( I + T_n \right) ^{-1} - I  \right\rVert \left\lVert A ^{-1}  \right\rVert  \\
+        \leq \frac{ \left\lVert T_n \right\rVert  }{ 1 - \left\lVert T_n \right\rVert  } \left\lVert A ^{-1}  \right\rVert \to 0
+    \end{align*}
+     
+    by the same logic. Hence, there exists a $ N \in \mathbb{N} $  such that given $ \epsilon _ 2 > 0 $, then $ \forall n \geq N $ we have that
+    \[
+        \left\lVert A_n ^{-1} - A ^{-1}   \right\rVert < \epsilon _2
+    \]
+\end{proofbox}
+
+\begin{proofbox}{5.5.6}{}
+    Alternatively observe that 
+    \[
+        \left\lVert A_n ^{-1} - A ^{-1}   \right\rVert = \left\lVert A_n ^{-1} \left( A - A_n \right) A ^{-1}   \right\rVert \leq \left\lVert A_n ^{-1}  \right\rVert \left\lVert A - A_n \right\rVert \left\lVert A ^{-1}  \right\rVert < \left\lVert A_n ^{-1}  \right\rVert \left\lVert A ^{-1}  \right\rVert \epsilon.
+    \]
+    Now we just need to prove that $ \left\lVert A_n ^{-1}  \right\rVert  $ and $ \left\lVert A ^{-1}  \right\rVert  $ are bounded linear operators. We are guaranteed linearity, but boundedness comes from Banachs lemma, where
+    \[
+        \left\lVert A_n ^{-1}  \right\rVert \leq \frac{ \left\lVert A ^{-1}  \right\rVert  }{ 1 - \left\lVert A ^{-1}  \right\rVert \left\lVert A - A_n \right\rVert   }
+    \]
+
+    Note that we are able to bound $ \left\lVert A_n ^{-1}  \right\rVert  $ and $ \left\lVert A ^{-1}  \right\rVert  $ because we are dealing with complete spaces. This is not generally true!
+    
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{5.5.7}{}
+Assume $ a, b \in  \mathbb{R} $ with $ a < b $ and that $ K : \left[ a, b \right] \times \left[ a, b \right] \to \mathbb{R}  $ is a continuous function. Show that
+\[
+    A(y)(t) = \int_{a}^{b} K(t, s) y(s) ds 
+\]
+defines a bounded linear operator $ A : C \left( \left[ a, b \right] , \mathbb{R} \right) \to C \left( \left[ a, b \right] , \mathbb{R} \right)   $ when $ C \left( \left[ a, b \right] , \mathbb{R} \right)  $ is given the usual supremum norm
+
+\begin{proofbox}{5.5.7}{}
+    We have to show that $ A : C \left( \left[ a, b \right] , \mathbb{R} \right) \to C \left( \left[ a, b \right] , \mathbb{R} \right) $ is bounded and linar
+    \begin{itemize}
+        \item[\textbf{Linear}] 
+        \begin{itemize}
+            \item For $ f \in C \left( \left[ a, b \right] , \mathbb{R} \right)  $ and $ \alpha_{}^{} \in  \mathbb{R} $ we have that
+            \[
+                A(\alpha_{}^{} f)(t) = \int_{a}^{b} K(t, s) \left( \alpha_{}^{} f \right) (s) ds = \int_{a}^{b} \alpha_{}^{} K(t, s) f(s) ds = \alpha_{}^{} \int_{a}^{b} K(t, s) f(s) ds = \alpha_{}^{} A(f)(t)        
+            \]
+            \item For $ f, g \in C \left( \left[ a, b \right] , \mathbb{R} \right)  $ that
+            \[
+                A(f + g)(t) = \int_{a}^{b} K(t, s) \left( f+g \right) (s) ds = \int_{a}^{b} K(t, s) f(s) ds + \int_{a}^{b} K(t, s) g(s) ds = A(f)(t) + A(g)(t)   
+            \]
+            
+            
+        \end{itemize}
+        \item[\textbf{Bounded}]
+        A is bounded if $ \left\lVert A \right\rVert < \infty $ or if $ \left\lVert A(f)  \right\rVert \leq c \left\lVert f \right\rVert \; \forall f \in  C \left( \left[ a, b \right] , \mathbb{R} \right)   $. Since $ K : \left[ a, b \right] \times \left[ a, b \right] \to \mathbb{R} $ is continuous and defined on a compact set, then
+        \[
+            \overline{K} = \sup \left\{ \left| K(t, s) \right| : t, s \in \left[ a, b \right]   \right\} 
+        \]
+        and $ K(t, x) \leq \overline{K} $.
+        
+        Furthermore, we also have that d
+        \[
+            \left| f(t) \right|  \leq \sup \left\{ \left| f(t) \right| : t \in \left[ a, b \right]  \right\} =: \left\lVert f \right\rVert 
+        \]
+        
+        Therefore, 
+        \begin{align*}
+            \left\lVert A(f)(t) \right\rVert = \left\lVert \int_{a}^{b} K(t, s) f(s) ds  \right\rVert \leq \int_{a}^{b} \left| K(t, s) f(s) \right|  ds \leq \int_{a}^{b} \left| K(t, s) \right| \left| f(t) \right| ds \\
+            \leq \int_{a}^{b} \overline{K} \left\lVert f \right\rVert ds = \overline{K} \left\lVert f \right\rVert \left( b-a \right)  
+        \end{align*}
+
+
+        Hence, A is bounded, and its linear.
+        
+        
+    \end{itemize} 
+\end{proofbox}
+\end{oppgavebox}
+
+\begin{oppgavebox}{Extraoppgave fra Ulrik}{}
+Let $ A : \ell ^{\infty} \to \ell ^{\infty}   $ be the function 
+\[
+    A \left( (a_1, a_2, ...) \right) = \left( 0, a_1, a_2, ... \right) 
+\]
+\begin{itemize}
+    \item[a)] Show that A is a bounded linear operator
+    \begin{proofbox}{a)}{}
+        A LINEAR:
+
+        For $ a, b \in \ell ^{\infty}  $ where $ a = \left( a_1, a_2, ... \right), b = \left( b_1, b_2, ... \right)   $  
+        \[
+            A \left( a + b \right) = A \left( a_1 + b_1, a_2 + b_2, ... \right) = \left( 0, a_1 + b_1, a_1 + b_2 \right) =   \left( 0, a_1, a_2, ... \right)  + \left(0, b_1, b_2, ... \right) = A(a) + A(b) 
+        \]
+
+        For $ a \in \ell ^{\infty}  $ and $ \alpha_{}^{} \in  \mathbb{R} $ 
+        \[
+            A \left( \alpha_{}^{} a \right) = A\left( \alpha_{}^{} a_1, \alpha_{}^{} a_2, ... \right) = \left( \alpha_{}^{} \cdot 0, \alpha a_1, \alpha_{}^{} a_2, ...  \right)  = \alpha_{}^{} \left(0,  a_1, a_2, ... \right) = \alpha_{}^{} A(a)
+        \]
+        
+
+        A BOUNDED:
+        The norm of an infinite vector in $ \ell ^{\infty}  $  is given by $ \left\lVert a \right\rVert = \sup \left\{ \left| a_i \right| : i \in \mathbb{N} \right\} =: M  $. This is because every vector in $ \ell ^{\infty}  $ is bounded by a number.
+        \[
+            \left\lVert A \right\rVert = \sup \left\{ \frac{ \left\lVert A a \right\rVert  }{ \left\lVert a \right\rVert  } : a \in \ell ^{\infty}, a \neq 0  \right\}.
+        \]
+
+        We have that
+        \[
+            \left\lVert Aa \right\rVert = \left\lVert A \left( \left( a_1, a_2, ... \right)  \right)  \right\rVert = \left\lVert \left( 0, a_1, a_2, ... \right)  \right\rVert \leq M
+        \]
+        and 
+        \[
+            \left\lVert a \right\rVert \leq M
+        \]
+        So $ \left\lVert A \right\rVert = 1 $.
+    \end{proofbox}
+    \item[b)] Find a bounded linear operator $ B : \ell ^{\infty} \to \ell ^{\infty}   $  such that $ BA = I $
+    \begin{proofbox}{b)}{}
+        Define $ B : \ell  ^{\infty} \to \ell ^{\infty}   $ as
+        \[
+            B \left( b \right) = B \left( \left( b_1, b_2, ... \right)  \right) = \left( b_2, b_3, ... \right).
+        \]
+        We then get that
+        \[
+            BA(a) = B(A(a)) = B(A( \left( a_1, a_2, ... \right)) = B(0, a_1, a_2, ...) = \left( a_1, a_2, ... \right).
+        \]
+        Hence, $ BA(a) = a $, hence $ BA = I $.
+    \end{proofbox}
+    \item[c)] Show that $ AB \neq I $   
+    \begin{proofbox}{c)}{}
+        We have that
+        \[
+            BA(a) = a
+        \]
+        but 
+
+        \[
+            A(B(a)) = A(B( \left( a_1, a_2, ... \right))) = A( \left( a_2, a_3, ... \right) )  = \left( 0, a_2, a_3, ... \right).
+        \]
+        Hence, $ AB \neq I $ 
+    \end{proofbox}
+\end{itemize}
+
+\end{oppgavebox}
+
+\end{document}
